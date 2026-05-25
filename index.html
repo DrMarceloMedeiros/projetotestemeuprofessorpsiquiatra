@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Meu Professor Psiquiatra - Assistente Clínico com IA para tomada de decisão em psiquiatria">
+    <meta name="description" content="Meu Professor Psiquiatra - Assistente Clínico com protocolos atualizados e IA">
     <meta name="author" content="Dr. Marcelo Medeiros">
-    <title>Meu Professor Psiquiatra | Assistente IA para Médicos</title>
+    <title>Meu Professor Psiquiatra | Assistente Clínico</title>
     
-    <!-- Fontes profissionais -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
@@ -27,7 +24,6 @@
             color: #1e293b;
         }
 
-        /* Header com gradiente profissional */
         .header {
             background: linear-gradient(135deg, #0f2b3d 0%, #1a4a6f 100%);
             color: white;
@@ -63,9 +59,10 @@
         }
 
         .logo p {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             opacity: 0.9;
             margin-top: 5px;
+            max-width: 500px;
         }
 
         .badge {
@@ -76,17 +73,11 @@
             border: 1px solid #6ee7b7;
         }
 
-        .badge i {
-            margin-right: 8px;
-            color: #6ee7b7;
-        }
-
-        /* Cards e seções */
         .main-content {
             padding: 40px 0;
         }
 
-        /* Banner principal - Área de anamnese */
+        /* Cards */
         .hero-card {
             background: white;
             border-radius: 24px;
@@ -125,6 +116,97 @@
             outline: none;
             border-color: #6ee7b7;
             box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.2);
+        }
+
+        /* Seção de medicações */
+        .medicacoes-section {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #0f2b3d;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-label input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #1a4a6f;
+        }
+
+        .medicamentos-lista {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .medicamentos-lista.show {
+            display: block;
+        }
+
+        .med-search {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .med-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .med-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .med-item:hover {
+            background: #e0f2fe;
+            border-color: #6ee7b7;
+        }
+
+        .med-item input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .med-item label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 0.85rem;
+        }
+
+        .med-selecionados {
+            margin-top: 15px;
+            padding: 10px;
+            background: #dcfce7;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #166534;
         }
 
         .button-group {
@@ -174,7 +256,7 @@
             color: white;
         }
 
-        /* Grid de atalhos rápidos */
+        /* Atalhos */
         .shortcuts-section {
             margin-bottom: 40px;
         }
@@ -187,48 +269,74 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
-        .shortcuts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        .shortcut-card {
-            background: white;
-            border-radius: 20px;
-            padding: 24px;
-            transition: all 0.3s;
+        .tab-btn {
+            padding: 10px 24px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 50px;
             cursor: pointer;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            font-weight: 600;
+            transition: all 0.3s;
         }
 
-        .shortcut-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            border-color: #6ee7b7;
+        .tab-btn.active {
+            background: #1a4a6f;
+            color: white;
         }
 
-        .shortcut-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
+        .tab-content {
+            display: none;
         }
 
-        .shortcut-card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 8px;
-            color: #0f2b3d;
+        .tab-content.active {
+            display: block;
         }
 
-        .shortcut-card p {
-            color: #64748b;
+        .search-box {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .items-grid {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .cid-item, .med-item-full {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .cid-item:hover, .med-item-full:hover {
+            background: #e0f2fe;
+        }
+
+        .cid-code {
+            font-weight: 700;
+            color: #1a4a6f;
+        }
+
+        .cid-desc {
             font-size: 0.9rem;
-            line-height: 1.4;
+            color: #475569;
         }
 
-        /* Seção de resultado */
+        /* Resultado */
         .result-section {
             background: white;
             border-radius: 24px;
@@ -273,44 +381,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Footer */
-        .footer {
-            background: #0f2b3d;
-            color: white;
-            padding: 30px 0;
-            margin-top: 60px;
-            text-align: center;
-        }
-
-        .footer a {
-            color: #6ee7b7;
-            text-decoration: none;
-        }
-
-        /* Responsivo */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 20px;
-            }
-            
-            .hero-title {
-                font-size: 1.4rem;
-            }
-            
-            .shortcuts-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .button-group {
-                flex-direction: column;
-            }
-            
-            .btn-primary, .btn-secondary {
-                justify-content: center;
-            }
-        }
-
-        /* Accordion para resultados */
         .accordion {
             background: #f8fafc;
             margin-bottom: 15px;
@@ -327,7 +397,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background 0.2s;
         }
 
         .accordion-header:hover {
@@ -352,45 +421,73 @@
             padding: 15px;
             margin-bottom: 12px;
             border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .footer {
+            background: #0f2b3d;
+            color: white;
+            padding: 30px 0;
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .hero-title { font-size: 1.4rem; }
+            .button-group { flex-direction: column; }
+            .btn-primary, .btn-secondary { justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
     <div class="header">
         <div class="container">
             <div class="header-content">
                 <div class="logo">
                     <h1><i class="fas fa-brain"></i> Meu Professor Psiquiatra</h1>
-                    <p>Assistente Clínico com Inteligência Artificial</p>
+                    <p>Assistente Clínico com o que mais existe de moderno em protocolos atuais e vigentes, auxiliado com a Inteligência Artificial</p>
                 </div>
                 <div class="badge">
-                    <i class="fas fa-robot"></i> DeepSeek IA | Em desenvolvimento
+                    <i class="fas fa-robot"></i> DeepSeek | Protocolos CANMAT/APA/NICE
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Conteúdo principal -->
     <div class="main-content">
         <div class="container">
 
-            <!-- Card principal - Anamnese -->
+            <!-- Card principal -->
             <div class="hero-card">
                 <div class="hero-title">
                     <i class="fas fa-stethoscope" style="color: #6ee7b7;"></i> Anamnese Clínica
                 </div>
                 <div class="hero-subtitle">
-                    Descreva o caso do paciente em texto livre. Nossa IA analisará e retornará hipóteses, tratamentos e condutas.
+                    Descreva o caso do paciente em texto livre.
                 </div>
                 
-                <textarea id="anamnese" class="textarea-anamnese" rows="8" placeholder="Exemplo: Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora significativa. Nega comorbidades clínicas..."></textarea>
+                <textarea id="anamnese" class="textarea-anamnese" rows="6" placeholder="Exemplo: Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa..."></textarea>
+                
+                <!-- Seção de medicações -->
+                <div class="medicacoes-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="checkMedicacoes" onchange="toggleMedicacoes()">
+                        <span><i class="fas fa-pills"></i> Faz uso de outras medicações?</span>
+                    </label>
+                    
+                    <div id="medicamentosLista" class="medicamentos-lista">
+                        <input type="text" id="medSearch" class="med-search" placeholder="Buscar medicamento..." onkeyup="filtrarMedicamentos()">
+                        <div id="medGrid" class="med-grid"></div>
+                        <div id="medSelecionados" class="med-selecionados" style="display:none;">
+                            <i class="fas fa-check-circle"></i> Medicamentos selecionados: <span id="listaSelecionados"></span>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="button-group">
-                    <button class="btn-primary" onclick="analisarCaso()">
-                        <i class="fas fa-microphone-alt"></i> Analisar com IA
+                    <button class="btn-primary" onclick="perguntarProfessor()">
+                        <i class="fas fa-chalkboard-user"></i> PERGUNTE AO PROFESSOR
                     </button>
                     <button class="btn-secondary" onclick="limparAnamnese()">
                         <i class="fas fa-eraser"></i> Limpar
@@ -401,107 +498,52 @@
                 </div>
             </div>
 
-            <!-- Atalhos rápidos -->
+            <!-- Atalhos com abas -->
             <div class="shortcuts-section">
                 <div class="section-title">
-                    <i class="fas fa-bolt" style="color: #6ee7b7;"></i> Atalhos Rápidos
-                    <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">(em breve integração completa)</span>
+                    <i class="fas fa-bolt" style="color: #6ee7b7;"></i> Ferramentas de Apoio
                 </div>
-                <div class="shortcuts-grid">
-                    
-                    <div class="shortcut-card" onclick="alert('🔍 CID-10: Em breve integração com banco de dados de classificações psiquiátricas')">
-                        <div class="shortcut-icon">
-                            <i class="fas fa-book-medical" style="color: #1a4a6f;"></i>
-                        </div>
-                        <h3>CID-10 Psiquiatria</h3>
-                        <p>Classificação internacional de transtornos mentais e comportamentais. Busca rápida por código ou diagnóstico.</p>
-                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
-                    </div>
-
-                    <div class="shortcut-card" onclick="alert('💊 Bulário: Futura base com todas medicações psiquiátricas, dosagens, apresentações e interações')">
-                        <div class="shortcut-icon">
-                            <i class="fas fa-capsules" style="color: #1a4a6f;"></i>
-                        </div>
-                        <h3>Bulário Digital</h3>
-                        <p>Consulta de medicamentos: nomes comerciais, genéricos, dosagens, vias de administração e bula.</p>
-                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
-                    </div>
-
-                    <div class="shortcut-card" onclick="alert('📋 Condutas Rápidas: Diretrizes CANMAT, APA e NICE em breve disponíveis')">
-                        <div class="shortcut-icon">
-                            <i class="fas fa-chalkboard-user" style="color: #1a4a6f;"></i>
-                        </div>
-                        <h3>Condutas Rápidas</h3>
-                        <p>Algoritmos de tratamento baseados em evidência para TDM, TAG, TAB, TOC, etc.</p>
-                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
-                    </div>
-
-                    <div class="shortcut-card" onclick="alert('⚠️ Interações: Ferramenta de checagem de interações medicamentosas em psiquiatria')">
-                        <div class="shortcut-icon">
-                            <i class="fas fa-exclamation-triangle" style="color: #1a4a6f;"></i>
-                        </div>
-                        <h3>Interações</h3>
-                        <p>Alertas de interações medicamentosas graves, moderadas e leves.</p>
-                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
-                    </div>
-
-                    <div class="shortcut-card" onclick="alert('📊 Escalas: Ferramentas de avaliação psicométrica (HAM-D, YMRS, PANSS, etc.)')">
-                        <div class="shortcut-icon">
-                            <i class="fas fa-chart-line" style="color: #1a4a6f;"></i>
-                        </div>
-                        <h3>Escalas Validadas</h3>
-                        <p>Aplicação e interpretação de escalas psiquiátricas.</p>
-                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
-                    </div>
-
-                    <div class="shortcut-card" onclick="alert('📚 Referências: Biblioteca de artigos, diretrizes e estudos atualizados')">
-                        <div class="shortcut-icon">
-                            <i class="fas fa-graduation-cap" style="color: #1a4a6f;"></i>
-                        </div>
-                        <h3>Referências</h3>
-                        <p>Acesso a PubMed, Diretrizes CANMAT/APA/NICE e estudos recentes.</p>
-                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
-                    </div>
-
+                
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="abrirTab('cid')">📋 CID-10 Psiquiatria</button>
+                    <button class="tab-btn" onclick="abrirTab('bula')">💊 Bulário Digital</button>
+                </div>
+                
+                <!-- Aba CID-10 -->
+                <div id="tab-cid" class="tab-content active">
+                    <input type="text" id="searchCid" class="search-box" placeholder="Buscar CID-10 (código ou diagnóstico)...">
+                    <div id="cidList" class="items-grid"></div>
+                </div>
+                
+                <!-- Aba Bulário -->
+                <div id="tab-bula" class="tab-content">
+                    <input type="text" id="searchMed" class="search-box" placeholder="Buscar medicamento (nome ou princípio ativo)...">
+                    <div id="medList" class="items-grid"></div>
                 </div>
             </div>
 
-            <!-- Loading -->
             <div id="loading" class="loading">
                 <div class="spinner"></div>
-                <p style="color: #64748b;">🧠 DeepSeek IA está analisando o caso clínico...</p>
-                <p style="font-size: 0.85rem; color: #94a3b8;">Isso pode levar alguns segundos</p>
+                <p>🧠 Professor está analisando o caso clínico com os protocolos mais modernos...</p>
             </div>
 
-            <!-- Resultado -->
             <div id="resultado" class="result-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2><i class="fas fa-stethoscope"></i> Resultado da Análise</h2>
-                    <button class="btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="limparResultado()">
+                    <h2><i class="fas fa-stethoscope"></i> Orientações do Professor</h2>
+                    <button class="btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="fecharResultado()">
                         <i class="fas fa-times"></i> Fechar
                     </button>
                 </div>
                 <div id="resultado-conteudo"></div>
             </div>
 
-            <!-- Chamada para ação -->
-            <div style="background: linear-gradient(135deg, #dcfce7 0%, #e0f2fe 100%); border-radius: 20px; padding: 30px; text-align: center; margin-top: 30px;">
-                <i class="fas fa-heartbeat" style="font-size: 2rem; color: #1a4a6f;"></i>
-                <h3 style="margin: 10px 0; color: #0f2b3d;">Assistente clínico em evolução</h3>
-                <p style="color: #475569;">Futuramente: busca por CID-10, bulário completo, interações medicamentosas e muito mais.</p>
-                <div style="margin-top: 15px;">
-                    <span class="badge" style="background: #1a4a6f; color: white;">🚀 Próximo passo: Integração com DeepSeek IA</span>
-                </div>
-            </div>
-
         </div>
     </div>
 
-    <!-- Footer -->
     <div class="footer">
         <div class="container">
-            <p><i class="fas fa-brain"></i> Meu Professor Psiquiatra | Assistência médica com IA</p>
-            <p style="font-size: 0.85rem; margin-top: 10px;">Dr. Marcelo Medeiros © 2025 | Em desenvolvimento ativo</p>
+            <p><i class="fas fa-brain"></i> Meu Professor Psiquiatra | Baseado em diretrizes CANMAT, APA, NICE e protocolos vigentes</p>
+            <p style="font-size: 0.85rem; margin-top: 10px;">Dr. Marcelo Medeiros © 2025</p>
             <p style="font-size: 0.8rem; margin-top: 10px;">
                 <i class="fas fa-shield-alt"></i> Ferramenta de apoio clínico - Não substitui julgamento médico
             </p>
@@ -509,39 +551,306 @@
     </div>
 
     <script>
-        // URL do backend - temporariamente mockado até amanhã
-        const API_URL = 'https://meu-professor-psiquiatra.onrender.com'; // Será usado amanhã
-        
-        // Função de análise (hoje mostra mock, amanhã integra com backend)
-        async function analisarCaso() {
-            const texto = document.getElementById('anamnese').value;
+        // ==================== BANCO DE DADOS CID-10 ====================
+        const cid10Data = [
+            { codigo: "F00", descricao: "Demência na doença de Alzheimer" },
+            { codigo: "F01", descricao: "Demência vascular" },
+            { codigo: "F02", descricao: "Demência em outras doenças classificadas em outra parte" },
+            { codigo: "F03", descricao: "Demência não especificada" },
+            { codigo: "F04", descricao: "Síndrome amnésica orgânica não induzida por álcool ou outras substâncias psicoativas" },
+            { codigo: "F05", descricao: "Delirium não induzido por álcool ou outras substâncias psicoativas" },
+            { codigo: "F06", descricao: "Outros transtornos mentais devidos a lesão e disfunção cerebral e a doença física" },
+            { codigo: "F07", descricao: "Transtornos de personalidade e do comportamento devidos a doença, lesão ou disfunção cerebral" },
+            { codigo: "F09", descricao: "Transtorno mental orgânico ou sintomático não especificado" },
+            { codigo: "F10", descricao: "Transtornos mentais e comportamentais devidos ao uso de álcool" },
+            { codigo: "F11", descricao: "Transtornos mentais e comportamentais devidos ao uso de opióides" },
+            { codigo: "F12", descricao: "Transtornos mentais e comportamentais devidos ao uso de canabinóides" },
+            { codigo: "F13", descricao: "Transtornos mentais e comportamentais devidos ao uso de sedativos e hipnóticos" },
+            { codigo: "F14", descricao: "Transtornos mentais e comportamentais devidos ao uso da cocaína" },
+            { codigo: "F15", descricao: "Transtornos mentais e comportamentais devidos ao uso de outros estimulantes" },
+            { codigo: "F16", descricao: "Transtornos mentais e comportamentais devidos ao uso de alucinógenos" },
+            { codigo: "F17", descricao: "Transtornos mentais e comportamentais devidos ao uso de fumo" },
+            { codigo: "F18", descricao: "Transtornos mentais e comportamentais devidos ao uso de solventes voláteis" },
+            { codigo: "F19", descricao: "Transtornos mentais e comportamentais devidos ao uso de múltiplas drogas" },
+            { codigo: "F20", descricao: "Esquizofrenia" },
+            { codigo: "F20.0", descricao: "Esquizofrenia paranóide" },
+            { codigo: "F20.1", descricao: "Esquizofrenia hebefrênica" },
+            { codigo: "F20.2", descricao: "Esquizofrenia catatônica" },
+            { codigo: "F20.3", descricao: "Esquizofrenia indiferenciada" },
+            { codigo: "F20.5", descricao: "Esquizofrenia residual" },
+            { codigo: "F21", descricao: "Transtorno esquizotípico" },
+            { codigo: "F22", descricao: "Transtornos delirantes" },
+            { codigo: "F23", descricao: "Transtornos psicóticos agudos e transitórios" },
+            { codigo: "F24", descricao: "Transtorno delirante induzido" },
+            { codigo: "F25", descricao: "Transtornos esquizoafetivos" },
+            { codigo: "F28", descricao: "Outros transtornos psicóticos não orgânicos" },
+            { codigo: "F29", descricao: "Psicose não orgânica não especificada" },
+            { codigo: "F30", descricao: "Episódio maníaco" },
+            { codigo: "F30.0", descricao: "Hipomania" },
+            { codigo: "F30.1", descricao: "Mania sem sintomas psicóticos" },
+            { codigo: "F30.2", descricao: "Mania com sintomas psicóticos" },
+            { codigo: "F31", descricao: "Transtorno afetivo bipolar" },
+            { codigo: "F31.0", descricao: "Transtorno afetivo bipolar, episódio atual hipomaníaco" },
+            { codigo: "F31.1", descricao: "Transtorno afetivo bipolar, episódio atual maníaco" },
+            { codigo: "F31.3", descricao: "Transtorno afetivo bipolar, episódio atual depressivo leve/moderado" },
+            { codigo: "F31.4", descricao: "Transtorno afetivo bipolar, episódio atual depressivo grave" },
+            { codigo: "F31.5", descricao: "Transtorno afetivo bipolar, episódio atual misto" },
+            { codigo: "F32", descricao: "Episódio depressivo" },
+            { codigo: "F32.0", descricao: "Episódio depressivo leve" },
+            { codigo: "F32.1", descricao: "Episódio depressivo moderado" },
+            { codigo: "F32.2", descricao: "Episódio depressivo grave sem sintomas psicóticos" },
+            { codigo: "F32.3", descricao: "Episódio depressivo grave com sintomas psicóticos" },
+            { codigo: "F33", descricao: "Transtorno depressivo recorrente" },
+            { codigo: "F34", descricao: "Transtornos de humor persistentes" },
+            { codigo: "F34.0", descricao: "Ciclotimia" },
+            { codigo: "F34.1", descricao: "Distimia" },
+            { codigo: "F38", descricao: "Outros transtornos do humor" },
+            { codigo: "F39", descricao: "Transtorno do humor não especificado" },
+            { codigo: "F40", descricao: "Transtornos fóbico-ansiosos" },
+            { codigo: "F40.0", descricao: "Agorafobia" },
+            { codigo: "F40.1", descricao: "Fobias sociais" },
+            { codigo: "F40.2", descricao: "Fobias específicas" },
+            { codigo: "F41", descricao: "Outros transtornos ansiosos" },
+            { codigo: "F41.0", descricao: "Transtorno de pânico" },
+            { codigo: "F41.1", descricao: "Transtorno de ansiedade generalizada" },
+            { codigo: "F42", descricao: "Transtorno obsessivo-compulsivo" },
+            { codigo: "F43", descricao: "Reação ao stress severo e transtornos de adaptação" },
+            { codigo: "F43.0", descricao: "Reação aguda ao stress" },
+            { codigo: "F43.1", descricao: "Transtorno de stress pós-traumático" },
+            { codigo: "F43.2", descricao: "Transtornos de adaptação" },
+            { codigo: "F44", descricao: "Transtornos dissociativos" },
+            { codigo: "F45", descricao: "Transtornos somatoformes" },
+            { codigo: "F48", descricao: "Outros transtornos neuróticos" },
+            { codigo: "F50", descricao: "Transtornos alimentares" },
+            { codigo: "F50.0", descricao: "Anorexia nervosa" },
+            { codigo: "F50.2", descricao: "Bulimia nervosa" },
+            { codigo: "F51", descricao: "Transtornos não orgânicos do sono" },
+            { codigo: "F60", descricao: "Transtornos específicos da personalidade" },
+            { codigo: "F60.0", descricao: "Transtorno paranóide da personalidade" },
+            { codigo: "F60.1", descricao: "Transtorno esquizóide da personalidade" },
+            { codigo: "F60.2", descricao: "Transtorno dissocial da personalidade" },
+            { codigo: "F60.3", descricao: "Transtorno borderline da personalidade" },
+            { codigo: "F60.4", descricao: "Transtorno histriônico da personalidade" },
+            { codigo: "F60.5", descricao: "Transtorno anancástico da personalidade" },
+            { codigo: "F60.6", descricao: "Transtorno ansioso da personalidade" },
+            { codigo: "F60.7", descricao: "Transtorno dependente da personalidade" },
+            { codigo: "F70", descricao: "Deficiência intelectual leve" },
+            { codigo: "F71", descricao: "Deficiência intelectual moderada" },
+            { codigo: "F72", descricao: "Deficiência intelectual grave" },
+            { codigo: "F84", descricao: "Transtornos globais do desenvolvimento" },
+            { codigo: "F84.0", descricao: "Autismo infantil" },
+            { codigo: "F84.5", descricao: "Síndrome de Asperger" },
+            { codigo: "F90", descricao: "Transtornos hipercinéticos" },
+            { codigo: "F90.0", descricao: "Transtorno de déficit de atenção e hiperatividade" },
+            { codigo: "F91", descricao: "Transtornos de conduta" },
+            { codigo: "F98", descricao: "Outros transtornos emocionais e comportamentais" }
+        ];
+
+        // ==================== BANCO DE DADOS MEDICAMENTOS ====================
+        const medicamentosData = [
+            { nome: "Escitalopram", apresentacao: "Comprimidos 10mg, 20mg", classe: "ISRS" },
+            { nome: "Sertralina", apresentacao: "Comprimidos 50mg, 100mg", classe: "ISRS" },
+            { nome: "Fluoxetina", apresentacao: "Comprimidos 20mg, 40mg", classe: "ISRS" },
+            { nome: "Paroxetina", apresentacao: "Comprimidos 20mg, 40mg", classe: "ISRS" },
+            { nome: "Citalopram", apresentacao: "Comprimidos 20mg, 40mg", classe: "ISRS" },
+            { nome: "Fluvoxamina", apresentacao: "Comprimidos 50mg, 100mg", classe: "ISRS" },
+            { nome: "Vortioxetina", apresentacao: "Comprimidos 5mg, 10mg, 20mg", classe: "ISRS" },
+            { nome: "Desvenlafaxina", apresentacao: "Comprimidos 50mg, 100mg", classe: "IRSN" },
+            { nome: "Venlafaxina", apresentacao: "Comprimidos 37,5mg, 75mg, 150mg", classe: "IRSN" },
+            { nome: "Duloxetina", apresentacao: "Cápsulas 30mg, 60mg", classe: "IRSN" },
+            { nome: "Bupropiona", apresentacao: "Comprimidos 150mg, 300mg", classe: "NDRI" },
+            { nome: "Mirtazapina", apresentacao: "Comprimidos 15mg, 30mg", classe: "NaSSA" },
+            { nome: "Trazodona", apresentacao: "Comprimidos 50mg, 100mg", classe: "SARI" },
+            { nome: "Agomelatina", apresentacao: "Comprimidos 25mg", classe: "Melatonérgico" },
+            { nome: "Lítio", apresentacao: "Comprimidos 300mg, 450mg", classe: "Estabilizador humor" },
+            { nome: "Valproato", apresentacao: "Comprimidos 250mg, 500mg", classe: "Estabilizador humor" },
+            { nome: "Carbamazepina", apresentacao: "Comprimidos 200mg, 400mg", classe: "Estabilizador humor" },
+            { nome: "Lamotrigina", apresentacao: "Comprimidos 25mg, 50mg, 100mg", classe: "Estabilizador humor" },
+            { nome: "Oxcarbazepina", apresentacao: "Comprimidos 300mg, 600mg", classe: "Estabilizador humor" },
+            { nome: "Risperidona", apresentacao: "Comprimidos 1mg, 2mg, 3mg", classe: "Antipsicótico" },
+            { nome: "Olanzapina", apresentacao: "Comprimidos 2,5mg, 5mg, 10mg", classe: "Antipsicótico" },
+            { nome: "Quetiapina", apresentacao: "Comprimidos 25mg, 50mg, 100mg, 200mg", classe: "Antipsicótico" },
+            { nome: "Aripiprazol", apresentacao: "Comprimidos 5mg, 10mg, 15mg, 20mg", classe: "Antipsicótico" },
+            { nome: "Clozapina", apresentacao: "Comprimidos 25mg, 100mg", classe: "Antipsicótico" },
+            { nome: "Ziprasidona", apresentacao: "Cápsulas 40mg, 80mg", classe: "Antipsicótico" },
+            { nome: "Paliperidona", apresentacao: "Comprimidos 3mg, 6mg, 9mg", classe: "Antipsicótico" },
+            { nome: "Haloperidol", apresentacao: "Comprimidos 1mg, 5mg", classe: "Antipsicótico típico" },
+            { nome: "Clonazepam", apresentacao: "Comprimidos 0,5mg, 2mg", classe: "Benzodiazepínico" },
+            { nome: "Alprazolam", apresentacao: "Comprimidos 0,25mg, 0,5mg, 1mg, 2mg", classe: "Benzodiazepínico" },
+            { nome: "Diazepam", apresentacao: "Comprimidos 5mg, 10mg", classe: "Benzodiazepínico" },
+            { nome: "Lorazepam", apresentacao: "Comprimidos 1mg, 2mg", classe: "Benzodiazepínico" },
+            { nome: "Zolpidem", apresentacao: "Comprimidos 5mg, 10mg", classe: "Hipnótico" },
+            { nome: "Zopiclona", apresentacao: "Comprimidos 7,5mg", classe: "Hipnótico" },
+            { nome: "Metilfenidato", apresentacao: "Comprimidos 10mg", classe: "Estimulante" },
+            { nome: "Lisdexanfetamina", apresentacao: "Cápsulas 30mg, 50mg, 70mg", classe: "Estimulante" },
+            { nome: "Propranolol", apresentacao: "Comprimidos 10mg, 40mg", classe: "Beta-bloqueador" },
+            { nome: "Pregabalina", apresentacao: "Cápsulas 75mg, 150mg", classe: "Anticonvulsivante" },
+            { nome: "Gabapentina", apresentacao: "Cápsulas 300mg, 400mg", classe: "Anticonvulsivante" }
+        ];
+
+        // Variáveis para medicamentos selecionados
+        let medicamentosSelecionados = [];
+
+        // ==================== FUNÇÕES DE INICIALIZAÇÃO ====================
+        function inicializarCID() {
+            renderizarCID(cid10Data);
+            document.getElementById('searchCid').addEventListener('input', function(e) {
+                const termo = e.target.value.toLowerCase();
+                const filtrados = cid10Data.filter(item => 
+                    item.codigo.toLowerCase().includes(termo) || 
+                    item.descricao.toLowerCase().includes(termo)
+                );
+                renderizarCID(filtrados);
+            });
+        }
+
+        function renderizarCID(data) {
+            const container = document.getElementById('cidList');
+            container.innerHTML = data.map(item => `
+                <div class="cid-item" onclick="selecionarCID('${item.codigo} - ${item.descricao}')">
+                    <div class="cid-code">${item.codigo}</div>
+                    <div class="cid-desc">${item.descricao}</div>
+                </div>
+            `).join('');
+        }
+
+        function selecionarCID(texto) {
+            alert(`📋 CID-10 selecionado:\n${texto}\n\n(Em breve: integração com a análise clínica)`);
+        }
+
+        function inicializarBulario() {
+            renderizarBulario(medicamentosData);
+            document.getElementById('searchMed').addEventListener('input', function(e) {
+                const termo = e.target.value.toLowerCase();
+                const filtrados = medicamentosData.filter(item => 
+                    item.nome.toLowerCase().includes(termo) || 
+                    item.classe.toLowerCase().includes(termo)
+                );
+                renderizarBulario(filtrados);
+            });
+        }
+
+        function renderizarBulario(data) {
+            const container = document.getElementById('medList');
+            container.innerHTML = data.map(item => `
+                <div class="cid-item" onclick="selecionarMedicamentoBulario('${item.nome}')">
+                    <div class="cid-code">💊 ${item.nome}</div>
+                    <div class="cid-desc">${item.apresentacao} | ${item.classe}</div>
+                </div>
+            `).join('');
+        }
+
+        function selecionarMedicamentoBulario(nome) {
+            alert(`💊 ${nome}\n\n(Em breve: bula completa, posologia, interações e contraindicações)`);
+        }
+
+        // ==================== FUNÇÕES DE MEDICAÇÕES NA ANAMNESE ====================
+        function toggleMedicacoes() {
+            const check = document.getElementById('checkMedicacoes');
+            const div = document.getElementById('medicamentosLista');
+            div.classList.toggle('show', check.checked);
+            if (!check.checked) {
+                medicamentosSelecionados = [];
+                atualizarMedGrid();
+                document.getElementById('medSelecionados').style.display = 'none';
+            }
+        }
+
+        function atualizarMedGrid() {
+            const grid = document.getElementById('medGrid');
+            grid.innerHTML = medicamentosData.map(med => `
+                <div class="med-item">
+                    <input type="checkbox" value="${med.nome}" id="med_${med.nome.replace(/\s/g, '_')}" 
+                        ${medicamentosSelecionados.includes(med.nome) ? 'checked' : ''}
+                        onchange="toggleMedicamentoSelecionado('${med.nome}')">
+                    <label for="med_${med.nome.replace(/\s/g, '_')}">
+                        <strong>${med.nome}</strong><br>
+                        <small>${med.apresentacao}</small>
+                    </label>
+                </div>
+            `).join('');
+        }
+
+        function toggleMedicamentoSelecionado(nome) {
+            const index = medicamentosSelecionados.indexOf(nome);
+            if (index === -1) {
+                medicamentosSelecionados.push(nome);
+            } else {
+                medicamentosSelecionados.splice(index, 1);
+            }
             
-            if (texto.length < 20) {
+            const divSelecionados = document.getElementById('medSelecionados');
+            const span = document.getElementById('listaSelecionados');
+            
+            if (medicamentosSelecionados.length > 0) {
+                divSelecionados.style.display = 'block';
+                span.innerText = medicamentosSelecionados.join(', ');
+            } else {
+                divSelecionados.style.display = 'none';
+            }
+        }
+
+        function filtrarMedicamentos() {
+            const termo = document.getElementById('medSearch').value.toLowerCase();
+            const filtrados = medicamentosData.filter(med => 
+                med.nome.toLowerCase().includes(termo)
+            );
+            const grid = document.getElementById('medGrid');
+            grid.innerHTML = filtrados.map(med => `
+                <div class="med-item">
+                    <input type="checkbox" value="${med.nome}" id="med_${med.nome.replace(/\s/g, '_')}" 
+                        ${medicamentosSelecionados.includes(med.nome) ? 'checked' : ''}
+                        onchange="toggleMedicamentoSelecionado('${med.nome}')">
+                    <label for="med_${med.nome.replace(/\s/g, '_')}">
+                        <strong>${med.nome}</strong><br>
+                        <small>${med.apresentacao}</small>
+                    </label>
+                </div>
+            `).join('');
+        }
+
+        // ==================== FUNÇÃO PRINCIPAL ====================
+        function perguntarProfessor() {
+            const anamnese = document.getElementById('anamnese').value;
+            
+            if (anamnese.length < 20) {
                 alert('⚠️ Por favor, insira uma anamnese mais detalhada (mínimo 20 caracteres)');
                 return;
             }
             
-            // Mostrar loading
+            const checkMed = document.getElementById('checkMedicacoes').checked;
+            if (checkMed && medicamentosSelecionados.length === 0) {
+                alert('⚠️ Você informou que o paciente faz uso de outras medicações. Por favor, selecione pelo menos um medicamento na lista.');
+                return;
+            }
+            
+            // Montar texto completo para enviar à IA (futuramente)
+            let textoCompleto = anamnese;
+            if (checkMed && medicamentosSelecionados.length > 0) {
+                textoCompleto += `\n\nMedicações em uso: ${medicamentosSelecionados.join(', ')}.`;
+            }
+            
+            console.log("Texto a ser enviado para o Professor:", textoCompleto);
+            
             document.getElementById('loading').classList.add('show');
             document.getElementById('resultado').classList.remove('show');
             
-            // Simular tempo de processamento da IA
             setTimeout(() => {
-                // Mock da resposta (amanhã substituiremos pela chamada real à DeepSeek)
                 const mockResultado = {
                     hipoteses: [
-                        { diagnostico: "Transtorno Depressivo Maior", porcentagem: 85, justificativa: "Presença de anedonia, humor deprimido, insônia e fadiga por >2 semanas" },
-                        { diagnostico: "Transtorno de Adaptação", porcentagem: 15, justificativa: "Possível gatilho estressor não detalhado na anamnese" }
+                        { diagnostico: "Transtorno Depressivo Maior", porcentagem: 85, justificativa: "Presença de anedonia, humor deprimido, alterações de sono e fadiga por >2 semanas" },
+                        { diagnostico: "Transtorno de Adaptação", porcentagem: 15, justificativa: "Possível relação com estressores psicossociais não detalhados" }
                     ],
                     tratamentos: [
                         { tipo: "Monoterapia", descricao: "Escitalopram 10-20mg/dia", evidencia: "1ª linha - diretriz CANMAT" },
-                        { tipo: "Combinação", descricao: "Escitalopram + Bupropiona", evidencia: "Para casos com pouca resposta ou fadiga intensa" }
+                        { tipo: "Combinação", descricao: "Escitalopram + Bupropiona", evidencia: "Para casos com fadiga intensa ou falta de resposta" }
                     ],
-                    interacoes: [
-                        { medicamentos: "Escitalopram + AINEs", risco: "moderado", recomendacao: "Aumento risco de sangramento gastrointestinal" }
-                    ],
+                    interacoes: medicamentosSelecionados.length > 0 ? [
+                        { medicamentos: `${medicamentosSelecionados.join(', ')} + Escitalopram`, risco: "moderado", recomendacao: "Monitorizar efeitos colaterais e possíveis interações" }
+                    ] : [],
                     exames: [
-                        { nome: "TSH, T4 livre", justificativa: "Excluir disfunção tireoidiana como causa secundária" }
+                        { nome: "TSH, T4 livre", justificativa: "Excluir disfunção tireoidiana" },
+                        { nome: "Vitaminas B12 e D", justificativa: "Deficiências podem mimetizar sintomas depressivos" }
                     ],
                     referencias: [
                         { titulo: "Diretriz CANMAT 2023 para TDM", link: "https://www.canmat.org/guidelines" }
@@ -549,7 +858,6 @@
                 };
                 
                 renderizarResultado(mockResultado);
-                
                 document.getElementById('loading').classList.remove('show');
                 document.getElementById('resultado').classList.add('show');
             }, 2000);
@@ -558,7 +866,6 @@
         function renderizarResultado(data) {
             let html = '';
             
-            // Hipóteses
             if (data.hipoteses && data.hipoteses.length) {
                 html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📋 Hipóteses Diagnósticas <span>▼</span></div><div class="accordion-content">';
                 data.hipoteses.forEach(h => {
@@ -567,36 +874,32 @@
                 html += '</div></div>';
             }
             
-            // Tratamentos
             if (data.tratamentos && data.tratamentos.length) {
-                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">💊 Tratamentos <span>▼</span></div><div class="accordion-content">';
+                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">💊 Tratamentos Sugeridos <span>▼</span></div><div class="accordion-content">';
                 data.tratamentos.forEach(t => {
                     html += `<div class="result-card"><strong>${t.tipo}:</strong> ${t.descricao}<br><small>${t.evidencia ? '📖 ' + t.evidencia : ''}</small></div>`;
                 });
                 html += '</div></div>';
             }
             
-            // Interações
             if (data.interacoes && data.interacoes.length) {
-                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">⚠️ Interações <span>▼</span></div><div class="accordion-content">';
+                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">⚠️ Interações Medicamentosas <span>▼</span></div><div class="accordion-content">';
                 data.interacoes.forEach(i => {
                     html += `<div class="result-card"><strong>${i.medicamentos}</strong><br>Risco: ${i.risco}<br><small>${i.recomendacao}</small></div>`;
                 });
                 html += '</div></div>';
             }
             
-            // Exames
             if (data.exames && data.exames.length) {
-                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">🔬 Exames <span>▼</span></div><div class="accordion-content">';
+                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">🔬 Exames Complementares <span>▼</span></div><div class="accordion-content">';
                 data.exames.forEach(e => {
                     html += `<div class="result-card"><strong>${e.nome}</strong><br><small>${e.justificativa}</small></div>`;
                 });
                 html += '</div></div>';
             }
             
-            // Referências
             if (data.referencias && data.referencias.length) {
-                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📚 Referências <span>▼</span></div><div class="accordion-content">';
+                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📚 Referências Bibliográficas <span>▼</span></div><div class="accordion-content">';
                 data.referencias.forEach(r => {
                     html += `<div class="result-card"><strong>${r.titulo}</strong><br><a href="${r.link}" target="_blank">🔗 Acessar</a></div>`;
                 });
@@ -610,24 +913,43 @@
             const content = header.nextElementSibling;
             content.classList.toggle('active');
             const arrow = header.querySelector('span');
-            if (content.classList.contains('active')) {
-                arrow.innerHTML = '▲';
+            arrow.innerHTML = content.classList.contains('active') ? '▲' : '▼';
+        }
+        
+        function abrirTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tab === 'cid') {
+                document.querySelector('.tab-btn:first-child').classList.add('active');
+                document.getElementById('tab-cid').classList.add('active');
             } else {
-                arrow.innerHTML = '▼';
+                document.querySelector('.tab-btn:last-child').classList.add('active');
+                document.getElementById('tab-bula').classList.add('active');
             }
         }
         
         function limparAnamnese() {
             document.getElementById('anamnese').value = '';
-        }
-        
-        function limparResultado() {
-            document.getElementById('resultado').classList.remove('show');
+            document.getElementById('checkMedicacoes').checked = false;
+            medicamentosSelecionados = [];
+            document.getElementById('medicamentosLista').classList.remove('show');
+            document.getElementById('medSelecionados').style.display = 'none';
+            atualizarMedGrid();
         }
         
         function exemploAnamnese() {
             document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora significativa. Nega comorbidades clínicas. Antecedentes familiares: mãe com TAG.';
         }
+        
+        function fecharResultado() {
+            document.getElementById('resultado').classList.remove('show');
+        }
+        
+        // Inicializar tudo
+        inicializarCID();
+        inicializarBulario();
+        atualizarMedGrid();
     </script>
 </body>
 </html>
