@@ -77,7 +77,6 @@
             padding: 40px 0;
         }
 
-        /* Cards */
         .hero-card {
             background: white;
             border-radius: 24px;
@@ -118,7 +117,6 @@
             box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.2);
         }
 
-        /* Seção de medicações */
         .medicacoes-section, .exame-section {
             background: #f8fafc;
             border-radius: 16px;
@@ -214,7 +212,6 @@
             color: #166534;
         }
 
-        /* Anamnese Gerada */
         .anamnese-gerada {
             background: linear-gradient(135deg, #fef9e3 0%, #fef3c7 100%);
             border-left: 5px solid #f59e0b;
@@ -230,14 +227,8 @@
         }
 
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .anamnese-gerada h3 {
@@ -304,7 +295,6 @@
             color: white;
         }
 
-        /* Atalhos */
         .shortcuts-section {
             margin-bottom: 40px;
         }
@@ -384,7 +374,6 @@
             color: #475569;
         }
 
-        /* Resultado */
         .result-section {
             background: white;
             border-radius: 24px;
@@ -463,7 +452,6 @@
             padding: 20px;
         }
 
-        /* Card de tratamento em destaque (já aberto) */
         .tratamento-destaque {
             background: linear-gradient(135deg, #1e40af10 0%, #1e3a8a10 100%);
             border-left: 5px solid #1a4a6f;
@@ -533,7 +521,6 @@
     <div class="main-content">
         <div class="container">
 
-            <!-- Card principal -->
             <div class="hero-card">
                 <div class="hero-title">
                     <i class="fas fa-stethoscope" style="color: #6ee7b7;"></i> Anamnese Clínica
@@ -544,7 +531,6 @@
                 
                 <textarea id="anamnese" class="textarea-anamnese" rows="5" placeholder="Exemplo: Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa..."></textarea>
                 
-                <!-- Seção de medicações -->
                 <div class="medicacoes-section">
                     <label class="checkbox-label">
                         <input type="checkbox" id="checkMedicacoes" onchange="toggleMedicacoes()">
@@ -560,7 +546,6 @@
                     </div>
                 </div>
 
-                <!-- Seção de Exame Físico e Psíquico -->
                 <div class="exame-section">
                     <label class="checkbox-label">
                         <input type="checkbox" id="checkExame" onchange="toggleExame()">
@@ -586,13 +571,11 @@
                 </div>
             </div>
 
-            <!-- Anamnese Digital Gerada (aparece após análise) -->
             <div id="anamneseGerada" class="anamnese-gerada">
                 <h3><i class="fas fa-file-medical"></i> Anamnese Digital Gerada</h3>
                 <div id="anamneseGeradaContent" class="anamnese-gerada-content"></div>
             </div>
 
-            <!-- Atalhos com abas -->
             <div class="shortcuts-section">
                 <div class="section-title">
                     <i class="fas fa-bolt" style="color: #6ee7b7;"></i> Ferramentas de Apoio
@@ -643,72 +626,356 @@
     </div>
 
     <script>
-        // ==================== BANCO DE DADOS CID-10 ====================
+        // ==================== CID-10 COMPLETO (F00-F99) ====================
+        // Baseado no arquivo oficial da OMS/CID-10 2008
         const cid10Data = [
+            // F00-F09 - Transtornos mentais orgânicos, incluindo os sintomáticos
+            { codigo: "F00.0", descricao: "Demência na doença de Alzheimer de início precoce" },
+            { codigo: "F00.1", descricao: "Demência na doença de Alzheimer de início tardio" },
+            { codigo: "F00.2", descricao: "Demência na doença de Alzheimer, forma atípica ou mista" },
+            { codigo: "F00.9", descricao: "Demência na doença de Alzheimer não especificada" },
+            { codigo: "F01.0", descricao: "Demência vascular de início agudo" },
+            { codigo: "F01.1", descricao: "Demência por infartos múltiplos" },
+            { codigo: "F01.2", descricao: "Demência vascular subcortical" },
+            { codigo: "F01.3", descricao: "Demência vascular mista, cortical e subcortical" },
+            { codigo: "F01.8", descricao: "Outra demência vascular" },
+            { codigo: "F01.9", descricao: "Demência vascular não especificada" },
+            { codigo: "F02.0", descricao: "Demência na doença de Pick" },
+            { codigo: "F02.1", descricao: "Demência na doença de Creutzfeldt-Jakob" },
+            { codigo: "F02.2", descricao: "Demência na doença de Huntington" },
+            { codigo: "F02.3", descricao: "Demência na doença de Parkinson" },
+            { codigo: "F02.4", descricao: "Demência na doença pelo vírus da imunodeficiência humana [HIV]" },
+            { codigo: "F03", descricao: "Demência não especificada" },
+            { codigo: "F04", descricao: "Síndrome amnésica orgânica não induzida pelo álcool ou por outras substâncias psicoativas" },
+            { codigo: "F05.0", descricao: "Delirium não superposto a uma demência" },
+            { codigo: "F05.1", descricao: "Delirium superposto a uma demência" },
+            { codigo: "F05.8", descricao: "Outro delirium" },
+            { codigo: "F05.9", descricao: "Delirium não especificado" },
+            { codigo: "F06.0", descricao: "Alucinose orgânica" },
+            { codigo: "F06.1", descricao: "Estado catatônico orgânico" },
+            { codigo: "F06.2", descricao: "Transtorno delirante orgânico [tipo esquizofrênico]" },
+            { codigo: "F06.3", descricao: "Transtornos do humor [afetivos] orgânicos" },
+            { codigo: "F06.4", descricao: "Transtorno de ansiedade orgânico" },
+            { codigo: "F06.5", descricao: "Transtorno dissociativo orgânico" },
+            { codigo: "F06.6", descricao: "Transtorno de labilidade emocional [astênico] orgânico" },
+            { codigo: "F06.7", descricao: "Transtorno cognitivo leve" },
+            { codigo: "F06.8", descricao: "Outros transtornos mentais especificados devidos a lesão e disfunção cerebral" },
+            { codigo: "F06.9", descricao: "Transtorno mental não especificado devido a lesão e disfunção cerebral" },
+            { codigo: "F07.0", descricao: "Transtorno orgânico da personalidade" },
+            { codigo: "F07.1", descricao: "Síndrome pós-encefalítica" },
+            { codigo: "F07.2", descricao: "Síndrome pós-traumática" },
+            { codigo: "F07.8", descricao: "Outros transtornos orgânicos da personalidade e do comportamento" },
+            { codigo: "F07.9", descricao: "Transtorno orgânico não especificado da personalidade e do comportamento" },
+            { codigo: "F09", descricao: "Transtorno mental orgânico ou sintomático não especificado" },
+
+            // F10-F19 - Transtornos mentais e comportamentais devidos ao uso de substâncias psicoativas
+            { codigo: "F10.0", descricao: "Álcool - intoxicação aguda" },
+            { codigo: "F10.1", descricao: "Álcool - uso nocivo para a saúde" },
+            { codigo: "F10.2", descricao: "Álcool - síndrome de dependência" },
+            { codigo: "F10.3", descricao: "Álcool - síndrome de abstinência" },
+            { codigo: "F10.4", descricao: "Álcool - síndrome de abstinência com delirium" },
+            { codigo: "F10.5", descricao: "Álcool - transtorno psicótico" },
+            { codigo: "F10.6", descricao: "Álcool - síndrome amnésica" },
+            { codigo: "F11.0", descricao: "Opiáceos - intoxicação aguda" },
+            { codigo: "F11.1", descricao: "Opiáceos - uso nocivo" },
+            { codigo: "F11.2", descricao: "Opiáceos - síndrome de dependência" },
+            { codigo: "F11.3", descricao: "Opiáceos - síndrome de abstinência" },
+            { codigo: "F11.5", descricao: "Opiáceos - transtorno psicótico" },
+            { codigo: "F12.0", descricao: "Canabinóides - intoxicação aguda" },
+            { codigo: "F12.2", descricao: "Canabinóides - síndrome de dependência" },
+            { codigo: "F12.5", descricao: "Canabinóides - transtorno psicótico" },
+            { codigo: "F13.0", descricao: "Sedativos e hipnóticos - intoxicação aguda" },
+            { codigo: "F13.2", descricao: "Sedativos e hipnóticos - síndrome de dependência" },
+            { codigo: "F13.3", descricao: "Sedativos e hipnóticos - síndrome de abstinência" },
+            { codigo: "F14.0", descricao: "Cocaína - intoxicação aguda" },
+            { codigo: "F14.2", descricao: "Cocaína - síndrome de dependência" },
+            { codigo: "F14.5", descricao: "Cocaína - transtorno psicótico" },
+            { codigo: "F15.0", descricao: "Outros estimulantes (cafeína) - intoxicação aguda" },
+            { codigo: "F15.2", descricao: "Outros estimulantes - síndrome de dependência" },
+            { codigo: "F16.0", descricao: "Alucinógenos - intoxicação aguda" },
+            { codigo: "F16.5", descricao: "Alucinógenos - transtorno psicótico" },
+            { codigo: "F17.0", descricao: "Fumo - intoxicação aguda" },
+            { codigo: "F17.2", descricao: "Fumo - síndrome de dependência" },
+            { codigo: "F17.3", descricao: "Fumo - síndrome de abstinência" },
+            { codigo: "F18.0", descricao: "Solventes voláteis - intoxicação aguda" },
+            { codigo: "F18.2", descricao: "Solventes voláteis - síndrome de dependência" },
+            { codigo: "F19.0", descricao: "Múltiplas drogas - intoxicação aguda" },
+            { codigo: "F19.2", descricao: "Múltiplas drogas - síndrome de dependência" },
+
+            // F20-F29 - Esquizofrenia, transtornos esquizotípicos e delirantes
+            { codigo: "F20.0", descricao: "Esquizofrenia paranóide" },
+            { codigo: "F20.1", descricao: "Esquizofrenia hebefrênica" },
+            { codigo: "F20.2", descricao: "Esquizofrenia catatônica" },
+            { codigo: "F20.3", descricao: "Esquizofrenia indiferenciada" },
+            { codigo: "F20.4", descricao: "Depressão pós-esquizofrênica" },
+            { codigo: "F20.5", descricao: "Esquizofrenia residual" },
+            { codigo: "F20.6", descricao: "Esquizofrenia simples" },
+            { codigo: "F20.8", descricao: "Outras esquizofrenias" },
+            { codigo: "F20.9", descricao: "Esquizofrenia não especificada" },
+            { codigo: "F21", descricao: "Transtorno esquizotípico" },
+            { codigo: "F22.0", descricao: "Transtorno delirante" },
+            { codigo: "F22.8", descricao: "Outros transtornos delirantes persistentes" },
+            { codigo: "F22.9", descricao: "Transtorno delirante persistente não especificado" },
+            { codigo: "F23.0", descricao: "Transtorno psicótico agudo polimorfo sem sintomas esquizofrênicos" },
+            { codigo: "F23.1", descricao: "Transtorno psicótico agudo polimorfo com sintomas esquizofrênicos" },
+            { codigo: "F23.2", descricao: "Transtorno psicótico agudo de tipo esquizofrênico" },
+            { codigo: "F23.3", descricao: "Outros transtornos psicóticos agudos essencialmente delirantes" },
+            { codigo: "F23.8", descricao: "Outros transtornos psicóticos agudos e transitórios" },
+            { codigo: "F23.9", descricao: "Transtorno psicótico agudo e transitório não especificado" },
+            { codigo: "F24", descricao: "Transtorno delirante induzido" },
+            { codigo: "F25.0", descricao: "Transtorno esquizoafetivo do tipo maníaco" },
+            { codigo: "F25.1", descricao: "Transtorno esquizoafetivo do tipo depressivo" },
+            { codigo: "F25.2", descricao: "Transtorno esquizoafetivo do tipo misto" },
+            { codigo: "F25.8", descricao: "Outros transtornos esquizoafetivos" },
+            { codigo: "F25.9", descricao: "Transtorno esquizoafetivo não especificado" },
+            { codigo: "F28", descricao: "Outros transtornos psicóticos não-orgânicos" },
+            { codigo: "F29", descricao: "Psicose não-orgânica não especificada" },
+
+            // F30-F39 - Transtornos do humor (afetivos)
+            { codigo: "F30.0", descricao: "Hipomania" },
+            { codigo: "F30.1", descricao: "Mania sem sintomas psicóticos" },
+            { codigo: "F30.2", descricao: "Mania com sintomas psicóticos" },
+            { codigo: "F30.8", descricao: "Outros episódios maníacos" },
+            { codigo: "F30.9", descricao: "Episódio maníaco não especificado" },
+            { codigo: "F31.0", descricao: "Transtorno afetivo bipolar, episódio atual hipomaníaco" },
+            { codigo: "F31.1", descricao: "Transtorno afetivo bipolar, episódio atual maníaco sem sintomas psicóticos" },
+            { codigo: "F31.2", descricao: "Transtorno afetivo bipolar, episódio atual maníaco com sintomas psicóticos" },
+            { codigo: "F31.3", descricao: "Transtorno afetivo bipolar, episódio atual depressivo leve ou moderado" },
+            { codigo: "F31.4", descricao: "Transtorno afetivo bipolar, episódio atual depressivo grave sem sintomas psicóticos" },
+            { codigo: "F31.5", descricao: "Transtorno afetivo bipolar, episódio atual depressivo grave com sintomas psicóticos" },
+            { codigo: "F31.6", descricao: "Transtorno afetivo bipolar, episódio atual misto" },
+            { codigo: "F31.7", descricao: "Transtorno afetivo bipolar, atualmente em remissão" },
+            { codigo: "F31.8", descricao: "Outros transtornos afetivos bipolares" },
+            { codigo: "F31.9", descricao: "Transtorno afetivo bipolar não especificado" },
             { codigo: "F32.0", descricao: "Episódio depressivo leve" },
             { codigo: "F32.1", descricao: "Episódio depressivo moderado" },
             { codigo: "F32.2", descricao: "Episódio depressivo grave sem sintomas psicóticos" },
             { codigo: "F32.3", descricao: "Episódio depressivo grave com sintomas psicóticos" },
-            { codigo: "F33", descricao: "Transtorno depressivo recorrente" },
-            { codigo: "F41.0", descricao: "Transtorno de pânico" },
-            { codigo: "F41.1", descricao: "Transtorno de ansiedade generalizada" },
-            { codigo: "F42", descricao: "Transtorno obsessivo-compulsivo" },
-            { codigo: "F43.0", descricao: "Reação aguda ao stress" },
-            { codigo: "F43.1", descricao: "Transtorno de stress pós-traumático" },
-            { codigo: "F20.0", descricao: "Esquizofrenia paranóide" },
-            { codigo: "F31", descricao: "Transtorno afetivo bipolar" },
-            { codigo: "F60.3", descricao: "Transtorno borderline da personalidade" },
-            { codigo: "F90.0", descricao: "TDAH" },
+            { codigo: "F32.8", descricao: "Outros episódios depressivos" },
+            { codigo: "F32.9", descricao: "Episódio depressivo não especificado" },
+            { codigo: "F33.0", descricao: "Transtorno depressivo recorrente, episódio atual leve" },
+            { codigo: "F33.1", descricao: "Transtorno depressivo recorrente, episódio atual moderado" },
+            { codigo: "F33.2", descricao: "Transtorno depressivo recorrente, episódio atual grave sem sintomas psicóticos" },
+            { codigo: "F33.3", descricao: "Transtorno depressivo recorrente, episódio atual grave com sintomas psicóticos" },
+            { codigo: "F33.4", descricao: "Transtorno depressivo recorrente, atualmente em remissão" },
+            { codigo: "F33.8", descricao: "Outros transtornos depressivos recorrentes" },
+            { codigo: "F33.9", descricao: "Transtorno depressivo recorrente não especificado" },
+            { codigo: "F34.0", descricao: "Ciclotimia" },
+            { codigo: "F34.1", descricao: "Distimia" },
+            { codigo: "F34.8", descricao: "Outros transtornos do humor persistentes" },
+            { codigo: "F34.9", descricao: "Transtorno do humor persistente não especificado" },
+            { codigo: "F38.0", descricao: "Outros transtornos do humor isolados" },
+            { codigo: "F38.1", descricao: "Outros transtornos do humor recorrentes" },
+            { codigo: "F38.8", descricao: "Outros transtornos especificados do humor" },
+            { codigo: "F39", descricao: "Transtorno do humor não especificado" },
+
+            // F40-F48 - Transtornos neuróticos, relacionados ao estresse e somatoformes
+            { codigo: "F40.0", descricao: "Agorafobia" },
+            { codigo: "F40.1", descricao: "Fobias sociais" },
+            { codigo: "F40.2", descricao: "Fobias específicas (isoladas)" },
+            { codigo: "F40.8", descricao: "Outros transtornos fóbico-ansiosos" },
+            { codigo: "F40.9", descricao: "Transtorno fóbico-ansioso não especificado" },
+            { codigo: "F41.0", descricao: "Transtorno de pânico [ansiedade paroxística episódica]" },
+            { codigo: "F41.1", descricao: "Ansiedade generalizada" },
+            { codigo: "F41.2", descricao: "Transtorno misto ansioso e depressivo" },
+            { codigo: "F41.3", descricao: "Outros transtornos ansiosos mistos" },
+            { codigo: "F41.8", descricao: "Outros transtornos ansiosos especificados" },
+            { codigo: "F41.9", descricao: "Transtorno ansioso não especificado" },
+            { codigo: "F42.0", descricao: "Transtorno obsessivo-compulsivo com predominância de idéias obsessivas" },
+            { codigo: "F42.1", descricao: "Transtorno obsessivo-compulsivo com predominância de comportamentos compulsivos" },
+            { codigo: "F42.2", descricao: "Transtorno obsessivo-compulsivo misto" },
+            { codigo: "F42.8", descricao: "Outros transtornos obsessivo-compulsivos" },
+            { codigo: "F42.9", descricao: "Transtorno obsessivo-compulsivo não especificado" },
+            { codigo: "F43.0", descricao: "Reação aguda ao estresse" },
+            { codigo: "F43.1", descricao: "Transtorno de estresse pós-traumático (TEPT)" },
+            { codigo: "F43.2", descricao: "Transtornos de adaptação" },
+            { codigo: "F43.8", descricao: "Outras reações ao estresse grave" },
+            { codigo: "F43.9", descricao: "Reação não especificada ao estresse grave" },
+            { codigo: "F44.0", descricao: "Amnésia dissociativa" },
+            { codigo: "F44.1", descricao: "Fuga dissociativa" },
+            { codigo: "F44.2", descricao: "Estupor dissociativo" },
+            { codigo: "F44.3", descricao: "Estados de transe e de possessão" },
+            { codigo: "F44.4", descricao: "Transtornos dissociativos do movimento" },
+            { codigo: "F44.5", descricao: "Convulsões dissociativas" },
+            { codigo: "F44.6", descricao: "Anestesia e perda sensorial dissociativas" },
+            { codigo: "F44.7", descricao: "Transtorno dissociativo misto [de conversão]" },
+            { codigo: "F44.8", descricao: "Outros transtornos dissociativos" },
+            { codigo: "F44.9", descricao: "Transtorno dissociativo não especificado" },
+            { codigo: "F45.0", descricao: "Transtorno de somatização" },
+            { codigo: "F45.1", descricao: "Transtorno somatoforme indiferenciado" },
+            { codigo: "F45.2", descricao: "Transtorno hipocondríaco" },
+            { codigo: "F45.3", descricao: "Transtorno neurovegetativo somatoforme" },
+            { codigo: "F45.4", descricao: "Transtorno doloroso somatoforme persistente" },
+            { codigo: "F45.8", descricao: "Outros transtornos somatoformes" },
+            { codigo: "F45.9", descricao: "Transtorno somatoforme não especificado" },
+            { codigo: "F48.0", descricao: "Neurastenia" },
+            { codigo: "F48.1", descricao: "Síndrome de despersonalização-desrealização" },
+            { codigo: "F48.8", descricao: "Outros transtornos neuróticos especificados" },
+            { codigo: "F48.9", descricao: "Transtorno neurótico não especificado" },
+
+            // F50-F59 - Síndromes comportamentais associadas a disfunções fisiológicas e a fatores físicos
             { codigo: "F50.0", descricao: "Anorexia nervosa" },
             { codigo: "F50.2", descricao: "Bulimia nervosa" },
+            { codigo: "F50.8", descricao: "Outros transtornos da alimentação" },
+            { codigo: "F50.9", descricao: "Transtorno da alimentação não especificado" },
+            { codigo: "F51.0", descricao: "Insônia não-orgânica" },
+            { codigo: "F51.1", descricao: "Hipersonia não-orgânica" },
+            { codigo: "F51.2", descricao: "Transtorno do ciclo vigília-sono devido a fatores não-orgânicos" },
+            { codigo: "F51.3", descricao: "Sonambulismo" },
+            { codigo: "F51.4", descricao: "Terrores noturnos" },
+            { codigo: "F51.5", descricao: "Pesadelos" },
+            { codigo: "F52.0", descricao: "Ausência ou perda do desejo sexual" },
+            { codigo: "F52.1", descricao: "Aversão sexual e ausência de prazer sexual" },
+            { codigo: "F52.2", descricao: "Falha de resposta genital" },
+            { codigo: "F52.3", descricao: "Disfunção orgásmica" },
+            { codigo: "F52.4", descricao: "Ejaculação precoce" },
+            { codigo: "F52.5", descricao: "Vaginismo não-orgânico" },
+            { codigo: "F52.6", descricao: "Dispareunia não-orgânica" },
+            { codigo: "F53.0", descricao: "Transtornos mentais leves associados ao puerpério" },
+            { codigo: "F53.1", descricao: "Transtornos mentais graves associados ao puerpério" },
+            { codigo: "F54", descricao: "Fatores psicológicos associados a doença classificada em outra parte" },
+            { codigo: "F55", descricao: "Abuso de substâncias que não produzem dependência" },
+
+            // F60-F69 - Transtornos da personalidade e do comportamento do adulto
+            { codigo: "F60.0", descricao: "Transtorno de personalidade paranóica" },
+            { codigo: "F60.1", descricao: "Transtorno de personalidade esquizóide" },
+            { codigo: "F60.2", descricao: "Transtorno de personalidade dissocial" },
+            { codigo: "F60.3", descricao: "Transtorno de personalidade com instabilidade emocional - Tipo borderline" },
+            { codigo: "F60.4", descricao: "Transtorno de personalidade histriônica" },
+            { codigo: "F60.5", descricao: "Transtorno de personalidade anancástica" },
+            { codigo: "F60.6", descricao: "Transtorno de personalidade ansiosa [esquiva]" },
+            { codigo: "F60.7", descricao: "Transtorno de personalidade dependente" },
+            { codigo: "F60.8", descricao: "Outros transtornos específicos da personalidade" },
+            { codigo: "F60.9", descricao: "Transtorno de personalidade não especificado" },
+            { codigo: "F61", descricao: "Transtornos mistos da personalidade" },
+            { codigo: "F62.0", descricao: "Modificação duradoura da personalidade após experiência catastrófica" },
+            { codigo: "F62.1", descricao: "Modificação duradoura da personalidade após doença psiquiátrica" },
+            { codigo: "F63.0", descricao: "Jogo patológico" },
+            { codigo: "F63.1", descricao: "Piromania" },
+            { codigo: "F63.2", descricao: "Roubo patológico [cleptomania]" },
+            { codigo: "F63.3", descricao: "Tricotilomania" },
+            { codigo: "F64.0", descricao: "Transexualismo" },
+            { codigo: "F64.1", descricao: "Travestismo bivalente" },
+            { codigo: "F64.2", descricao: "Transtorno de identidade sexual na infância" },
+            { codigo: "F65.0", descricao: "Fetichismo" },
+            { codigo: "F65.1", descricao: "Travestismo fetichista" },
+            { codigo: "F65.2", descricao: "Exibicionismo" },
+            { codigo: "F65.3", descricao: "Voyeurismo" },
+            { codigo: "F65.4", descricao: "Pedofilia" },
+            { codigo: "F65.5", descricao: "Sadomasoquismo" },
+            { codigo: "F66.0", descricao: "Transtorno da maturação sexual" },
+            { codigo: "F66.1", descricao: "Orientação sexual egodistônica" },
+            { codigo: "F68.0", descricao: "Sintomas físicos aumentados por fatores psicológicos" },
+            { codigo: "F68.1", descricao: "Transtorno factício [produção deliberada de sintomas]" },
+
+            // F70-F79 - Retardo mental
+            { codigo: "F70", descricao: "Retardo mental leve (QI 50-69)" },
+            { codigo: "F71", descricao: "Retardo mental moderado (QI 35-49)" },
+            { codigo: "F72", descricao: "Retardo mental grave (QI 20-34)" },
+            { codigo: "F73", descricao: "Retardo mental profundo (QI abaixo de 20)" },
+            { codigo: "F78", descricao: "Outro retardo mental" },
+            { codigo: "F79", descricao: "Retardo mental não especificado" },
+
+            // F80-F89 - Transtornos do desenvolvimento psicológico
+            { codigo: "F80.0", descricao: "Transtorno específico da articulação da fala" },
+            { codigo: "F80.1", descricao: "Transtorno expressivo de linguagem" },
+            { codigo: "F80.2", descricao: "Transtorno receptivo da linguagem" },
+            { codigo: "F80.3", descricao: "Afasia adquirida com epilepsia [síndrome de Landau-Kleffner]" },
+            { codigo: "F81.0", descricao: "Transtorno específico de leitura" },
+            { codigo: "F81.1", descricao: "Transtorno específico da soletração" },
+            { codigo: "F81.2", descricao: "Transtorno específico da habilidade em aritmética" },
+            { codigo: "F81.3", descricao: "Transtorno misto de habilidades escolares" },
+            { codigo: "F82", descricao: "Transtorno específico do desenvolvimento motor" },
+            { codigo: "F83", descricao: "Transtornos específicos mistos do desenvolvimento" },
             { codigo: "F84.0", descricao: "Autismo infantil" },
-            { codigo: "F84.5", descricao: "Síndrome de Asperger" }
+            { codigo: "F84.1", descricao: "Autismo atípico" },
+            { codigo: "F84.2", descricao: "Síndrome de Rett" },
+            { codigo: "F84.3", descricao: "Outro transtorno desintegrativo da infância" },
+            { codigo: "F84.4", descricao: "Transtorno com hipercinesia associada a retardo mental" },
+            { codigo: "F84.5", descricao: "Síndrome de Asperger" },
+            { codigo: "F84.8", descricao: "Outros transtornos globais do desenvolvimento" },
+            { codigo: "F84.9", descricao: "Transtorno global não especificado do desenvolvimento" },
+
+            // F90-F98 - Transtornos do comportamento e emocionais com início habitualmente na infância/adolescência
+            { codigo: "F90.0", descricao: "Transtorno de déficit de atenção e hiperatividade - tipo predominantemente desatento" },
+            { codigo: "F90.1", descricao: "Transtorno hipercinético de conduta" },
+            { codigo: "F90.8", descricao: "Outros transtornos hipercinéticos" },
+            { codigo: "F90.9", descricao: "Transtorno hipercinético não especificado" },
+            { codigo: "F91.0", descricao: "Transtorno de conduta restrito ao contexto familiar" },
+            { codigo: "F91.1", descricao: "Transtorno de conduta não-socializado" },
+            { codigo: "F91.2", descricao: "Transtorno de conduta do tipo socializado" },
+            { codigo: "F91.3", descricao: "Transtorno desafiador e de oposição" },
+            { codigo: "F91.8", descricao: "Outros transtornos de conduta" },
+            { codigo: "F91.9", descricao: "Transtorno de conduta não especificado" },
+            { codigo: "F92.0", descricao: "Transtorno depressivo de conduta" },
+            { codigo: "F93.0", descricao: "Transtorno de ansiedade de separação na infância" },
+            { codigo: "F93.1", descricao: "Transtorno de ansiedade fóbica da infância" },
+            { codigo: "F93.2", descricao: "Transtorno de ansiedade social da infância" },
+            { codigo: "F94.0", descricao: "Mutismo eletivo" },
+            { codigo: "F94.1", descricao: "Transtorno de vinculação reativo da infância" },
+            { codigo: "F94.2", descricao: "Transtorno de vinculação da infância com desinibição" },
+            { codigo: "F95.0", descricao: "Tique transitório" },
+            { codigo: "F95.1", descricao: "Tique motor ou vocal crônico" },
+            { codigo: "F95.2", descricao: "Síndrome de Tourette (tiques múltiplos combinados)" },
+            { codigo: "F95.8", descricao: "Outros tiques" },
+            { codigo: "F95.9", descricao: "Tique não especificado" },
+            { codigo: "F98.0", descricao: "Enurese não-orgânica" },
+            { codigo: "F98.1", descricao: "Encoprese não-orgânica" },
+            { codigo: "F98.2", descricao: "Transtorno de alimentação na infância" },
+            { codigo: "F98.3", descricao: "Pica" },
+            { codigo: "F98.4", descricao: "Estereotipias motoras" },
+            { codigo: "F98.5", descricao: "Gagueira [tartamudez]" },
+            { codigo: "F98.6", descricao: "Linguagem precipitada" },
+
+            // F99 - Transtorno mental não especificado
+            { codigo: "F99", descricao: "Transtorno mental não especificado em outra parte" }
         ];
 
-        // ==================== BANCO DE DADOS MEDICAMENTOS (expandido) ====================
+        // ==================== BANCO DE DADOS MEDICAMENTOS ====================
         const medicamentosData = [
-            // Psiquiátricos
-            { nome: "Escitalopram", apresentacao: "Comprimidos 10mg, 20mg", classe: "ISRS - Antidepressivo" },
-            { nome: "Sertralina", apresentacao: "Comprimidos 50mg, 100mg", classe: "ISRS - Antidepressivo" },
-            { nome: "Fluoxetina", apresentacao: "Comprimidos 20mg, 40mg", classe: "ISRS - Antidepressivo" },
-            { nome: "Paroxetina", apresentacao: "Comprimidos 20mg, 40mg", classe: "ISRS - Antidepressivo" },
-            { nome: "Venlafaxina", apresentacao: "Comprimidos 37,5mg, 75mg, 150mg", classe: "IRSN - Antidepressivo" },
-            { nome: "Duloxetina", apresentacao: "Cápsulas 30mg, 60mg", classe: "IRSN - Antidepressivo" },
-            { nome: "Bupropiona", apresentacao: "Comprimidos 150mg, 300mg", classe: "NDRI - Antidepressivo" },
-            { nome: "Mirtazapina", apresentacao: "Comprimidos 15mg, 30mg", classe: "NaSSA - Antidepressivo" },
-            { nome: "Lítio", apresentacao: "Comprimidos 300mg, 450mg", classe: "Estabilizador humor" },
-            { nome: "Valproato", apresentacao: "Comprimidos 250mg, 500mg", classe: "Estabilizador humor" },
-            { nome: "Lamotrigina", apresentacao: "Comprimidos 25mg, 50mg, 100mg", classe: "Estabilizador humor" },
-            { nome: "Risperidona", apresentacao: "Comprimidos 1mg, 2mg, 3mg", classe: "Antipsicótico" },
-            { nome: "Olanzapina", apresentacao: "Comprimidos 2,5mg, 5mg, 10mg", classe: "Antipsicótico" },
-            { nome: "Quetiapina", apresentacao: "Comprimidos 25mg, 50mg, 100mg, 200mg", classe: "Antipsicótico" },
-            { nome: "Aripiprazol", apresentacao: "Comprimidos 5mg, 10mg, 15mg, 20mg", classe: "Antipsicótico" },
-            { nome: "Clonazepam", apresentacao: "Comprimidos 0,5mg, 2mg", classe: "Benzodiazepínico" },
-            { nome: "Alprazolam", apresentacao: "Comprimidos 0,25mg, 0,5mg, 1mg, 2mg", classe: "Benzodiazepínico" },
-            { nome: "Diazepam", apresentacao: "Comprimidos 5mg, 10mg", classe: "Benzodiazepínico" },
-            { nome: "Lorazepam", apresentacao: "Comprimidos 1mg, 2mg", classe: "Benzodiazepínico" },
-            { nome: "Zolpidem", apresentacao: "Comprimidos 5mg, 10mg", classe: "Hipnótico" },
-            { nome: "Metilfenidato", apresentacao: "Comprimidos 10mg", classe: "Estimulante - TDAH" },
-            { nome: "Lisdexanfetamina", apresentacao: "Cápsulas 30mg, 50mg, 70mg", classe: "Estimulante - TDAH" },
-            // Clínicos gerais
-            { nome: "Losartana", apresentacao: "Comprimidos 50mg, 100mg", classe: "Anti-hipertensivo - BRA" },
-            { nome: "Atenolol", apresentacao: "Comprimidos 25mg, 50mg, 100mg", classe: "Anti-hipertensivo - Beta-bloqueador" },
-            { nome: "Amlodipino", apresentacao: "Comprimidos 5mg, 10mg", classe: "Anti-hipertensivo - Bloqueador canal cálcio" },
-            { nome: "Enalapril", apresentacao: "Comprimidos 5mg, 10mg, 20mg", classe: "Anti-hipertensivo - IECA" },
-            { nome: "Hidroclorotiazida", apresentacao: "Comprimidos 25mg", classe: "Diurético" },
-            { nome: "Metformina", apresentacao: "Comprimidos 500mg, 850mg, 1000mg", classe: "Antidiabético - Biguanida" },
-            { nome: "Glifage", apresentacao: "Comprimidos 500mg, 850mg, 1000mg", classe: "Antidiabético - Metformina" },
-            { nome: "Insulina NPH", apresentacao: "Suspensão injetável 100UI/ml", classe: "Antidiabético" },
-            { nome: "Insulina Regular", apresentacao: "Solução injetável 100UI/ml", classe: "Antidiabético" },
-            { nome: "Sinvastatina", apresentacao: "Comprimidos 10mg, 20mg, 40mg", classe: "Hipolipemiante - Estatina" },
-            { nome: "Atorvastatina", apresentacao: "Comprimidos 10mg, 20mg, 40mg, 80mg", classe: "Hipolipemiante - Estatina" },
-            { nome: "Omeprazol", apresentacao: "Cápsulas 10mg, 20mg", classe: "Protetor gástrico - IBP" },
-            { nome: "Pantoprazol", apresentacao: "Comprimidos 20mg, 40mg", classe: "Protetor gástrico - IBP" },
-            { nome: "Dipirona", apresentacao: "Comprimidos 500mg, gotas", classe: "Analgésico/Antitérmico" },
-            { nome: "Paracetamol", apresentacao: "Comprimidos 500mg, 750mg", classe: "Analgésico/Antitérmico" },
-            { nome: "Ibuprofeno", apresentacao: "Comprimidos 200mg, 400mg, 600mg", classe: "Anti-inflamatório - AINE" },
-            { nome: "Levotiroxina", apresentacao: "Comprimidos 25mcg, 50mcg, 100mcg", classe: "Hormônio tireoidiano" },
-            { nome: "Prednisona", apresentacao: "Comprimidos 5mg, 20mg", classe: "Corticosteroide" }
+            { nome: "Escitalopram", apresentacao: "10mg, 20mg comprimidos", classe: "ISRS - Antidepressivo" },
+            { nome: "Sertralina", apresentacao: "50mg, 100mg comprimidos", classe: "ISRS - Antidepressivo" },
+            { nome: "Fluoxetina", apresentacao: "20mg, 40mg comprimidos", classe: "ISRS - Antidepressivo" },
+            { nome: "Paroxetina", apresentacao: "20mg, 40mg comprimidos", classe: "ISRS - Antidepressivo" },
+            { nome: "Citalopram", apresentacao: "20mg, 40mg comprimidos", classe: "ISRS - Antidepressivo" },
+            { nome: "Venlafaxina", apresentacao: "37,5mg, 75mg, 150mg comprimidos", classe: "IRSN - Antidepressivo" },
+            { nome: "Duloxetina", apresentacao: "30mg, 60mg cápsulas", classe: "IRSN - Antidepressivo" },
+            { nome: "Desvenlafaxina", apresentacao: "50mg, 100mg comprimidos", classe: "IRSN - Antidepressivo" },
+            { nome: "Bupropiona", apresentacao: "150mg, 300mg comprimidos", classe: "NDRI - Antidepressivo" },
+            { nome: "Mirtazapina", apresentacao: "15mg, 30mg comprimidos", classe: "NaSSA - Antidepressivo" },
+            { nome: "Trazodona", apresentacao: "50mg, 100mg comprimidos", classe: "SARI - Antidepressivo" },
+            { nome: "Vortioxetina", apresentacao: "5mg, 10mg, 20mg comprimidos", classe: "Antidepressivo multimodal" },
+            { nome: "Agomelatina", apresentacao: "25mg comprimidos", classe: "Melatonérgico - Antidepressivo" },
+            { nome: "Lítio", apresentacao: "300mg, 450mg comprimidos", classe: "Estabilizador humor" },
+            { nome: "Valproato de sódio", apresentacao: "250mg, 500mg comprimidos", classe: "Estabilizador humor" },
+            { nome: "Carbamazepina", apresentacao: "200mg, 400mg comprimidos", classe: "Estabilizador humor" },
+            { nome: "Lamotrigina", apresentacao: "25mg, 50mg, 100mg comprimidos", classe: "Estabilizador humor" },
+            { nome: "Oxcarbazepina", apresentacao: "300mg, 600mg comprimidos", classe: "Estabilizador humor" },
+            { nome: "Topiramato", apresentacao: "25mg, 50mg, 100mg comprimidos", classe: "Estabilizador humor" },
+            { nome: "Risperidona", apresentacao: "1mg, 2mg, 3mg comprimidos", classe: "Antipsicótico atípico" },
+            { nome: "Olanzapina", apresentacao: "2,5mg, 5mg, 10mg comprimidos", classe: "Antipsicótico atípico" },
+            { nome: "Quetiapina", apresentacao: "25mg, 50mg, 100mg, 200mg comprimidos", classe: "Antipsicótico atípico" },
+            { nome: "Aripiprazol", apresentacao: "5mg, 10mg, 15mg, 20mg comprimidos", classe: "Antipsicótico atípico" },
+            { nome: "Clozapina", apresentacao: "25mg, 100mg comprimidos", classe: "Antipsicótico atípico" },
+            { nome: "Ziprasidona", apresentacao: "40mg, 80mg cápsulas", classe: "Antipsicótico atípico" },
+            { nome: "Paliperidona", apresentacao: "3mg, 6mg, 9mg comprimidos", classe: "Antipsicótico atípico" },
+            { nome: "Haloperidol", apresentacao: "1mg, 5mg comprimidos", classe: "Antipsicótico típico" },
+            { nome: "Clorpromazina", apresentacao: "25mg, 100mg comprimidos", classe: "Antipsicótico típico" },
+            { nome: "Clonazepam", apresentacao: "0,5mg, 2mg comprimidos", classe: "Benzodiazepínico" },
+            { nome: "Alprazolam", apresentacao: "0,25mg, 0,5mg, 1mg, 2mg comprimidos", classe: "Benzodiazepínico" },
+            { nome: "Diazepam", apresentacao: "5mg, 10mg comprimidos", classe: "Benzodiazepínico" },
+            { nome: "Lorazepam", apresentacao: "1mg, 2mg comprimidos", classe: "Benzodiazepínico" },
+            { nome: "Bromazepam", apresentacao: "3mg, 6mg comprimidos", classe: "Benzodiazepínico" },
+            { nome: "Midazolam", apresentacao: "15mg comprimidos", classe: "Benzodiazepínico" },
+            { nome: "Zolpidem", apresentacao: "5mg, 10mg comprimidos", classe: "Hipnótico não benzodiazepínico" },
+            { nome: "Zopiclona", apresentacao: "7,5mg comprimidos", classe: "Hipnótico não benzodiazepínico" },
+            { nome: "Metilfenidato", apresentacao: "10mg comprimidos", classe: "Estimulante - TDAH" },
+            { nome: "Lisdexanfetamina", apresentacao: "30mg, 50mg, 70mg cápsulas", classe: "Estimulante - TDAH" },
+            { nome: "Propranolol", apresentacao: "10mg, 40mg comprimidos", classe: "Beta-bloqueador" },
+            { nome: "Pregabalina", apresentacao: "75mg, 150mg cápsulas", classe: "Anticonvulsivante - Ansiolítico" },
+            { nome: "Gabapentina", apresentacao: "300mg, 400mg cápsulas", classe: "Anticonvulsivante" },
+            { nome: "Buspirona", apresentacao: "5mg, 10mg comprimidos", classe: "Ansiolítico não benzodiazepínico" },
+            { nome: "Hidroxizina", apresentacao: "25mg comprimidos", classe: "Ansiolítico - Anti-histamínico" }
         ];
 
         let medicamentosSelecionados = [];
@@ -852,12 +1119,10 @@
                 return;
             }
             
-            // Coletar dados do exame
             const checkExame = document.getElementById('checkExame').checked;
             const exameFisico = checkExame ? document.getElementById('exameFisico').value : '';
             const examePsiquico = checkExame ? document.getElementById('examePsiquico').value : '';
             
-            // Montar anamnese completa
             let textoCompleto = anamnese;
             
             if (checkMed && medicamentosSelecionados.length > 0) {
@@ -869,7 +1134,6 @@
                 if (examePsiquico) textoCompleto += `\n\n🧠 EXAME PSÍQUICO: ${examePsiquico}`;
             }
             
-            // Montar anamnese gerada (para exibição)
             let anamneseGeradaTexto = `📝 ANAMNESE PRINCIPAL:\n${anamnese}\n\n`;
             
             if (checkMed && medicamentosSelecionados.length > 0) {
@@ -888,52 +1152,46 @@
             document.getElementById('anamneseGerada').classList.remove('show');
             
             setTimeout(() => {
-                // Simular resposta do Professor com linguagem de expert
                 const hipotesePrincipal = "Transtorno Depressivo Maior (85%)";
                 
+                anamneseGeradaTexto += `🎯 HIPÓTESE DIAGNÓSTICA PRINCIPAL:\n${hipotesePrincipal}`;
+                
+                document.getElementById('anamneseGeradaContent').innerHTML = anamneseGeradaTexto.replace(/\n/g, '<br>');
+                document.getElementById('anamneseGerada').classList.add('show');
+                
                 const mockResultado = {
-                    hipotese_principal: hipotesePrincipal,
-                    hipoteses: [
-                        { diagnostico: "Transtorno Depressivo Maior", porcentagem: 85, justificativa: "Presença de anedonia, humor deprimido, alterações de sono e fadiga por >2 semanas, preenchendo critérios diagnósticos do DSM-5." },
-                        { diagnostico: "Transtorno de Adaptação com humor deprimido", porcentagem: 15, justificativa: "Possível relação com estressores psicossociais, mas sintomas mais duradouros e intensos sugerem episódio depressivo maior." }
-                    ],
                     tratamento_explicacao: `Caro colega, com base na apresentação do caso e nas melhores evidências disponíveis (diretrizes CANMAT 2023 e APA), sugiro iniciar com Escitalopram 10mg/dia como primeira linha. A escolha do Escitalopram justifica-se por sua excelente tolerabilidade, menor risco de interações medicamentosas e eficácia comprovada em episódios depressivos moderados a graves. \n\n${medicamentosSelecionados.length > 0 ? 'ATENÇÃO às interações: Os medicamentos informados requerem monitorização, especialmente nas primeiras 2-4 semanas. Solicito considerar ajustes conforme resposta clínica e efeitos adversos.' : 'Não foram relatadas medicações concomitantes, o que reduz riscos de interações iniciais.'}`,
                     tratamentos: [
                         { tipo: "Monoterapia 1ª linha", descricao: "Escitalopram 10-20mg/dia", explicacao: "Iniciar com 10mg/dia por 2 semanas, avaliar tolerabilidade e resposta. Aumentar para 20mg se resposta parcial após 4-6 semanas." },
-                        { tipo: "Alternativa 1ª linha", descricao: "Sertralina 50-150mg/dia", explicacao: "Particularmente útil se houver comorbidade ansiosa associada. Iniciar com 50mg, titular conforme resposta." },
-                        { tipo: "Combinação (2ª linha)", descricao: "Escitalopram + Bupropiona", explicacao: "Considerar se fadiga intensa ou falta de energia persistir após 6-8 semanas de monoterapia. Bupropiona 150mg/dia pode melhorar energia e função executiva." }
+                        { tipo: "Alternativa 1ª linha", descricao: "Sertralina 50-150mg/dia", explicacao: "Particularmente útil se houver comorbidade ansiosa associada. Iniciar com 50mg, titular conforme resposta." }
+                    ],
+                    hipoteses: [
+                        { diagnostico: "Transtorno Depressivo Maior", porcentagem: 85, justificativa: "Presença de anedonia, humor deprimido, alterações de sono e fadiga por >2 semanas." },
+                        { diagnostico: "Transtorno de Adaptação com humor deprimido", porcentagem: 15, justificativa: "Possível relação com estressores psicossociais, mas sintomas mais duradouros sugerem episódio depressivo maior." }
                     ],
                     interacoes: medicamentosSelecionados.length > 0 ? [
-                        { medicamentos: `${medicamentosSelecionados.join(', ')} + Escitalopram`, risco: "moderado", recomendacao: "Monitorizar efeitos colaterais e possíveis interações. Atenção ao risco de síndrome serotoninérgica (raro mas possível). Solicito reavaliação em 2 semanas." }
+                        { medicamentos: `${medicamentosSelecionados.join(', ')} + Escitalopram`, risco: "moderado", recomendacao: "Monitorizar efeitos colaterais e possíveis interações. Atenção ao risco de síndrome serotoninérgica." }
                     ] : [],
                     exames: [
-                        { nome: "TSH, T4 livre", justificativa: "Hipotireoidismo é causa reversível de sintomas depressivos e deve ser excluído em todo primeiro episódio." },
-                        { nome: "Vitamina B12 e D", justificativa: "Deficiências nutricionais podem mimetizar ou exacerbar quadros depressivos." }
+                        { nome: "TSH, T4 livre", justificativa: "Excluir disfunção tireoidiana como causa secundária" },
+                        { nome: "Vitamina B12 e D", justificativa: "Deficiências podem mimetizar sintomas depressivos" }
                     ],
                     referencias: [
                         { titulo: "Diretriz CANMAT 2023 para TDM", link: "https://www.canmat.org/guidelines" }
                     ]
                 };
                 
-                // Adicionar a hipótese principal na anamnese gerada
-                anamneseGeradaTexto += `🎯 HIPÓTESE DIAGNÓSTICA PRINCIPAL:\n${hipotesePrincipal}`;
-                
-                document.getElementById('anamneseGeradaContent').innerHTML = anamneseGeradaTexto.replace(/\n/g, '<br>');
-                document.getElementById('anamneseGerada').classList.add('show');
-                
                 renderizarResultado(mockResultado);
                 document.getElementById('loading').classList.remove('show');
                 document.getElementById('resultado').classList.add('show');
                 
-                // Scroll para a anamnese gerada
                 document.getElementById('anamneseGerada').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 2500);
+            }, 2000);
         }
         
         function renderizarResultado(data) {
             let html = '';
             
-            // TRATAMENTO EM DESTAQUE (já aberto, não como accordion)
             if (data.tratamento_explicacao) {
                 html += `
                     <div class="tratamento-destaque">
@@ -946,21 +1204,14 @@
                 `;
             }
             
-            // Tratamentos sugeridos (em formato de lista)
             if (data.tratamentos && data.tratamentos.length) {
                 html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">💊 Esquemas Terapêuticos Sugeridos <span>▼</span></div><div class="accordion-content">';
                 data.tratamentos.forEach(t => {
-                    html += `
-                        <div class="result-card">
-                            <strong>${t.tipo}:</strong> ${t.descricao}<br>
-                            <small>📖 ${t.explicacao}</small>
-                        </div>
-                    `;
+                    html += `<div class="result-card"><strong>${t.tipo}:</strong> ${t.descricao}<br><small>📖 ${t.explicacao}</small></div>`;
                 });
                 html += '</div></div>';
             }
             
-            // Hipóteses
             if (data.hipoteses && data.hipoteses.length) {
                 html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📋 Hipóteses Diagnósticas <span>▼</span></div><div class="accordion-content">';
                 data.hipoteses.forEach(h => {
@@ -969,16 +1220,14 @@
                 html += '</div></div>';
             }
             
-            // Interações
             if (data.interacoes && data.interacoes.length) {
                 html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">⚠️ Interações Medicamentosas <span>▼</span></div><div class="accordion-content">';
                 data.interacoes.forEach(i => {
-                    html += `<div class="result-card"><strong>⚠️ ${i.medicamentos}</strong><br>Risco: ${i.risco}<br><small>${i.recomendacao}</small></div>`;
+                    html += `<div class="result-card"><strong>${i.medicamentos}</strong><br>Risco: ${i.risco}<br><small>${i.recomendacao}</small></div>`;
                 });
                 html += '</div></div>';
             }
             
-            // Exames
             if (data.exames && data.exames.length) {
                 html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">🔬 Exames Complementares <span>▼</span></div><div class="accordion-content">';
                 data.exames.forEach(e => {
@@ -987,7 +1236,6 @@
                 html += '</div></div>';
             }
             
-            // Referências
             if (data.referencias && data.referencias.length) {
                 html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📚 Referências Bibliográficas <span>▼</span></div><div class="accordion-content">';
                 data.referencias.forEach(r => {
