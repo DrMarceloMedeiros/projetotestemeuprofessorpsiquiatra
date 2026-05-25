@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Meu Professor Psiquiatra - Assistente Clínico com IA para tomada de decisão em psiquiatria">
+    <meta name="author" content="Dr. Marcelo Medeiros">
+    <title>Meu Professor Psiquiatra | Assistente IA para Médicos</title>
+    
+    <!-- Fontes profissionais -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #dcfce7 100%);
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        /* Header com gradiente profissional */
+        .header {
+            background: linear-gradient(135deg, #0f2b3d 0%, #1a4a6f 100%);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo h1 i {
+            color: #6ee7b7;
+            margin-right: 10px;
+        }
+
+        .logo p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .badge {
+            background: rgba(110, 231, 183, 0.2);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            border: 1px solid #6ee7b7;
+        }
+
+        .badge i {
+            margin-right: 8px;
+            color: #6ee7b7;
+        }
+
+        /* Cards e seções */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        /* Banner principal - Área de anamnese */
+        .hero-card {
+            background: white;
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(110, 231, 183, 0.3);
+        }
+
+        .hero-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0f2b3d;
+            margin-bottom: 10px;
+        }
+
+        .hero-subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+
+        .textarea-anamnese {
+            width: 100%;
+            padding: 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-family: 'Inter', monospace;
+            resize: vertical;
+            transition: all 0.3s;
+            background: #fafcff;
+        }
+
+        .textarea-anamnese:focus {
+            outline: none;
+            border-color: #6ee7b7;
+            box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0f2b3d 0%, #1a4a6f 100%);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(26, 74, 111, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #1a4a6f;
+            padding: 14px 32px;
+            border: 2px solid #1a4a6f;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #1a4a6f;
+            color: white;
+        }
+
+        /* Grid de atalhos rápidos */
+        .shortcuts-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #0f2b3d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shortcuts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .shortcut-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .shortcut-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-color: #6ee7b7;
+        }
+
+        .shortcut-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .shortcut-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            color: #0f2b3d;
+        }
+
+        .shortcut-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Seção de resultado */
+        .result-section {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            border: 1px solid #e2e8f0;
+        }
+
+        .result-section.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #1a4a6f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            background: #0f2b3d;
+            color: white;
+            padding: 30px 0;
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #6ee7b7;
+            text-decoration: none;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+            
+            .hero-title {
+                font-size: 1.4rem;
+            }
+            
+            .shortcuts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn-primary, .btn-secondary {
+                justify-content: center;
+            }
+        }
+
+        /* Accordion para resultados */
+        .accordion {
+            background: #f8fafc;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .accordion-header {
+            background: #f1f5f9;
+            padding: 16px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .accordion-header:hover {
+            background: #e2e8f0;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 20px;
+        }
+
+        .accordion-content.active {
+            max-height: 2000px;
+            padding: 20px;
+        }
+
+        .result-card {
+            background: white;
+            border-left: 4px solid #6ee7b7;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1><i class="fas fa-brain"></i> Meu Professor Psiquiatra</h1>
+                    <p>Assistente Clínico com Inteligência Artificial</p>
+                </div>
+                <div class="badge">
+                    <i class="fas fa-robot"></i> DeepSeek IA | Em desenvolvimento
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+        <div class="container">
+
+            <!-- Card principal - Anamnese -->
+            <div class="hero-card">
+                <div class="hero-title">
+                    <i class="fas fa-stethoscope" style="color: #6ee7b7;"></i> Anamnese Clínica
+                </div>
+                <div class="hero-subtitle">
+                    Descreva o caso do paciente em texto livre. Nossa IA analisará e retornará hipóteses, tratamentos e condutas.
+                </div>
+                
+                <textarea id="anamnese" class="textarea-anamnese" rows="8" placeholder="Exemplo: Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora significativa. Nega comorbidades clínicas..."></textarea>
+                
+                <div class="button-group">
+                    <button class="btn-primary" onclick="analisarCaso()">
+                        <i class="fas fa-microphone-alt"></i> Analisar com IA
+                    </button>
+                    <button class="btn-secondary" onclick="limparAnamnese()">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                    <button class="btn-secondary" onclick="exemploAnamnese()">
+                        <i class="fas fa-file-alt"></i> Exemplo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Atalhos rápidos -->
+            <div class="shortcuts-section">
+                <div class="section-title">
+                    <i class="fas fa-bolt" style="color: #6ee7b7;"></i> Atalhos Rápidos
+                    <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">(em breve integração completa)</span>
+                </div>
+                <div class="shortcuts-grid">
+                    
+                    <div class="shortcut-card" onclick="alert('🔍 CID-10: Em breve integração com banco de dados de classificações psiquiátricas')">
+                        <div class="shortcut-icon">
+                            <i class="fas fa-book-medical" style="color: #1a4a6f;"></i>
+                        </div>
+                        <h3>CID-10 Psiquiatria</h3>
+                        <p>Classificação internacional de transtornos mentais e comportamentais. Busca rápida por código ou diagnóstico.</p>
+                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
+                    </div>
+
+                    <div class="shortcut-card" onclick="alert('💊 Bulário: Futura base com todas medicações psiquiátricas, dosagens, apresentações e interações')">
+                        <div class="shortcut-icon">
+                            <i class="fas fa-capsules" style="color: #1a4a6f;"></i>
+                        </div>
+                        <h3>Bulário Digital</h3>
+                        <p>Consulta de medicamentos: nomes comerciais, genéricos, dosagens, vias de administração e bula.</p>
+                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
+                    </div>
+
+                    <div class="shortcut-card" onclick="alert('📋 Condutas Rápidas: Diretrizes CANMAT, APA e NICE em breve disponíveis')">
+                        <div class="shortcut-icon">
+                            <i class="fas fa-chalkboard-user" style="color: #1a4a6f;"></i>
+                        </div>
+                        <h3>Condutas Rápidas</h3>
+                        <p>Algoritmos de tratamento baseados em evidência para TDM, TAG, TAB, TOC, etc.</p>
+                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
+                    </div>
+
+                    <div class="shortcut-card" onclick="alert('⚠️ Interações: Ferramenta de checagem de interações medicamentosas em psiquiatria')">
+                        <div class="shortcut-icon">
+                            <i class="fas fa-exclamation-triangle" style="color: #1a4a6f;"></i>
+                        </div>
+                        <h3>Interações</h3>
+                        <p>Alertas de interações medicamentosas graves, moderadas e leves.</p>
+                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
+                    </div>
+
+                    <div class="shortcut-card" onclick="alert('📊 Escalas: Ferramentas de avaliação psicométrica (HAM-D, YMRS, PANSS, etc.)')">
+                        <div class="shortcut-icon">
+                            <i class="fas fa-chart-line" style="color: #1a4a6f;"></i>
+                        </div>
+                        <h3>Escalas Validadas</h3>
+                        <p>Aplicação e interpretação de escalas psiquiátricas.</p>
+                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
+                    </div>
+
+                    <div class="shortcut-card" onclick="alert('📚 Referências: Biblioteca de artigos, diretrizes e estudos atualizados')">
+                        <div class="shortcut-icon">
+                            <i class="fas fa-graduation-cap" style="color: #1a4a6f;"></i>
+                        </div>
+                        <h3>Referências</h3>
+                        <p>Acesso a PubMed, Diretrizes CANMAT/APA/NICE e estudos recentes.</p>
+                        <small style="color: #6ee7b7;">🔜 Em desenvolvimento</small>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p style="color: #64748b;">🧠 DeepSeek IA está analisando o caso clínico...</p>
+                <p style="font-size: 0.85rem; color: #94a3b8;">Isso pode levar alguns segundos</p>
+            </div>
+
+            <!-- Resultado -->
+            <div id="resultado" class="result-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2><i class="fas fa-stethoscope"></i> Resultado da Análise</h2>
+                    <button class="btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="limparResultado()">
+                        <i class="fas fa-times"></i> Fechar
+                    </button>
+                </div>
+                <div id="resultado-conteudo"></div>
+            </div>
+
+            <!-- Chamada para ação -->
+            <div style="background: linear-gradient(135deg, #dcfce7 0%, #e0f2fe 100%); border-radius: 20px; padding: 30px; text-align: center; margin-top: 30px;">
+                <i class="fas fa-heartbeat" style="font-size: 2rem; color: #1a4a6f;"></i>
+                <h3 style="margin: 10px 0; color: #0f2b3d;">Assistente clínico em evolução</h3>
+                <p style="color: #475569;">Futuramente: busca por CID-10, bulário completo, interações medicamentosas e muito mais.</p>
+                <div style="margin-top: 15px;">
+                    <span class="badge" style="background: #1a4a6f; color: white;">🚀 Próximo passo: Integração com DeepSeek IA</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <p><i class="fas fa-brain"></i> Meu Professor Psiquiatra | Assistência médica com IA</p>
+            <p style="font-size: 0.85rem; margin-top: 10px;">Dr. Marcelo Medeiros © 2025 | Em desenvolvimento ativo</p>
+            <p style="font-size: 0.8rem; margin-top: 10px;">
+                <i class="fas fa-shield-alt"></i> Ferramenta de apoio clínico - Não substitui julgamento médico
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // URL do backend - temporariamente mockado até amanhã
+        const API_URL = 'https://meu-professor-psiquiatra.onrender.com'; // Será usado amanhã
+        
+        // Função de análise (hoje mostra mock, amanhã integra com backend)
+        async function analisarCaso() {
+            const texto = document.getElementById('anamnese').value;
+            
+            if (texto.length < 20) {
+                alert('⚠️ Por favor, insira uma anamnese mais detalhada (mínimo 20 caracteres)');
+                return;
+            }
+            
+            // Mostrar loading
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('resultado').classList.remove('show');
+            
+            // Simular tempo de processamento da IA
+            setTimeout(() => {
+                // Mock da resposta (amanhã substituiremos pela chamada real à DeepSeek)
+                const mockResultado = {
+                    hipoteses: [
+                        { diagnostico: "Transtorno Depressivo Maior", porcentagem: 85, justificativa: "Presença de anedonia, humor deprimido, insônia e fadiga por >2 semanas" },
+                        { diagnostico: "Transtorno de Adaptação", porcentagem: 15, justificativa: "Possível gatilho estressor não detalhado na anamnese" }
+                    ],
+                    tratamentos: [
+                        { tipo: "Monoterapia", descricao: "Escitalopram 10-20mg/dia", evidencia: "1ª linha - diretriz CANMAT" },
+                        { tipo: "Combinação", descricao: "Escitalopram + Bupropiona", evidencia: "Para casos com pouca resposta ou fadiga intensa" }
+                    ],
+                    interacoes: [
+                        { medicamentos: "Escitalopram + AINEs", risco: "moderado", recomendacao: "Aumento risco de sangramento gastrointestinal" }
+                    ],
+                    exames: [
+                        { nome: "TSH, T4 livre", justificativa: "Excluir disfunção tireoidiana como causa secundária" }
+                    ],
+                    referencias: [
+                        { titulo: "Diretriz CANMAT 2023 para TDM", link: "https://www.canmat.org/guidelines" }
+                    ]
+                };
+                
+                renderizarResultado(mockResultado);
+                
+                document.getElementById('loading').classList.remove('show');
+                document.getElementById('resultado').classList.add('show');
+            }, 2000);
+        }
+        
+        function renderizarResultado(data) {
+            let html = '';
+            
+            // Hipóteses
+            if (data.hipoteses && data.hipoteses.length) {
+                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📋 Hipóteses Diagnósticas <span>▼</span></div><div class="accordion-content">';
+                data.hipoteses.forEach(h => {
+                    html += `<div class="result-card"><strong>${h.diagnostico}</strong> (${h.porcentagem}%)<br><small>${h.justificativa}</small></div>`;
+                });
+                html += '</div></div>';
+            }
+            
+            // Tratamentos
+            if (data.tratamentos && data.tratamentos.length) {
+                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">💊 Tratamentos <span>▼</span></div><div class="accordion-content">';
+                data.tratamentos.forEach(t => {
+                    html += `<div class="result-card"><strong>${t.tipo}:</strong> ${t.descricao}<br><small>${t.evidencia ? '📖 ' + t.evidencia : ''}</small></div>`;
+                });
+                html += '</div></div>';
+            }
+            
+            // Interações
+            if (data.interacoes && data.interacoes.length) {
+                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">⚠️ Interações <span>▼</span></div><div class="accordion-content">';
+                data.interacoes.forEach(i => {
+                    html += `<div class="result-card"><strong>${i.medicamentos}</strong><br>Risco: ${i.risco}<br><small>${i.recomendacao}</small></div>`;
+                });
+                html += '</div></div>';
+            }
+            
+            // Exames
+            if (data.exames && data.exames.length) {
+                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">🔬 Exames <span>▼</span></div><div class="accordion-content">';
+                data.exames.forEach(e => {
+                    html += `<div class="result-card"><strong>${e.nome}</strong><br><small>${e.justificativa}</small></div>`;
+                });
+                html += '</div></div>';
+            }
+            
+            // Referências
+            if (data.referencias && data.referencias.length) {
+                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📚 Referências <span>▼</span></div><div class="accordion-content">';
+                data.referencias.forEach(r => {
+                    html += `<div class="result-card"><strong>${r.titulo}</strong><br><a href="${r.link}" target="_blank">🔗 Acessar</a></div>`;
+                });
+                html += '</div></div>';
+            }
+            
+            document.getElementById('resultado-conteudo').innerHTML = html;
+        }
+        
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+            const arrow = header.querySelector('span');
+            if (content.classList.contains('active')) {
+                arrow.innerHTML = '▲';
+            } else {
+                arrow.innerHTML = '▼';
+            }
+        }
+        
+        function limparAnamnese() {
+            document.getElementById('anamnese').value = '';
+        }
+        
+        function limparResultado() {
+            document.getElementById('resultado').classList.remove('show');
+        }
+        
+        function exemploAnamnese() {
+            document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora significativa. Nega comorbidades clínicas. Antecedentes familiares: mãe com TAG.';
+        }
+    </script>
+</body>
+</html>
