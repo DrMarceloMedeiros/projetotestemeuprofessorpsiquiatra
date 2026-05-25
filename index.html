@@ -119,7 +119,7 @@
         }
 
         /* Seção de medicações */
-        .medicacoes-section {
+        .medicacoes-section, .exame-section {
             background: #f8fafc;
             border-radius: 16px;
             padding: 20px;
@@ -144,16 +144,16 @@
             accent-color: #1a4a6f;
         }
 
-        .medicamentos-lista {
+        .medicamentos-lista, .exame-lista {
             display: none;
             margin-top: 15px;
         }
 
-        .medicamentos-lista.show {
+        .medicamentos-lista.show, .exame-lista.show {
             display: block;
         }
 
-        .med-search {
+        .med-search, .exame-textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e2e8f0;
@@ -162,11 +162,16 @@
             margin-bottom: 15px;
         }
 
+        .exame-textarea {
+            font-family: 'Inter', monospace;
+            resize: vertical;
+        }
+
         .med-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 10px;
-            max-height: 200px;
+            max-height: 250px;
             overflow-y: auto;
             padding: 5px;
         }
@@ -207,6 +212,49 @@
             border-radius: 8px;
             font-size: 0.85rem;
             color: #166534;
+        }
+
+        /* Anamnese Gerada */
+        .anamnese-gerada {
+            background: linear-gradient(135deg, #fef9e3 0%, #fef3c7 100%);
+            border-left: 5px solid #f59e0b;
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            display: none;
+        }
+
+        .anamnese-gerada.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .anamnese-gerada h3 {
+            color: #b45309;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .anamnese-gerada-content {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
         }
 
         .button-group {
@@ -415,6 +463,32 @@
             padding: 20px;
         }
 
+        /* Card de tratamento em destaque (já aberto) */
+        .tratamento-destaque {
+            background: linear-gradient(135deg, #1e40af10 0%, #1e3a8a10 100%);
+            border-left: 5px solid #1a4a6f;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .tratamento-destaque h3 {
+            color: #1a4a6f;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .tratamento-destaque .professor-fala {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #1e293b;
+            font-style: italic;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
         .result-card {
             background: white;
             border-left: 4px solid #6ee7b7;
@@ -436,6 +510,7 @@
             .hero-title { font-size: 1.4rem; }
             .button-group { flex-direction: column; }
             .btn-primary, .btn-secondary { justify-content: center; }
+            .med-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -467,7 +542,7 @@
                     Descreva o caso do paciente em texto livre.
                 </div>
                 
-                <textarea id="anamnese" class="textarea-anamnese" rows="6" placeholder="Exemplo: Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa..."></textarea>
+                <textarea id="anamnese" class="textarea-anamnese" rows="5" placeholder="Exemplo: Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa..."></textarea>
                 
                 <!-- Seção de medicações -->
                 <div class="medicacoes-section">
@@ -484,6 +559,19 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Seção de Exame Físico e Psíquico -->
+                <div class="exame-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="checkExame" onchange="toggleExame()">
+                        <span><i class="fas fa-stethoscope"></i> Adicionar Exame Físico e Psíquico?</span>
+                    </label>
+                    
+                    <div id="exameLista" class="exame-lista">
+                        <textarea id="exameFisico" class="exame-textarea" rows="3" placeholder="Exame Físico: PA, FC, FR, ausculta cardiorrespiratória, exame neurológico básico..."></textarea>
+                        <textarea id="examePsiquico" class="exame-textarea" rows="3" placeholder="Exame Psíquico: Consciência, orientação, atenção, memória, humor, afeto, pensamento, percepção, juízo, crítica..."></textarea>
+                    </div>
+                </div>
                 
                 <div class="button-group">
                     <button class="btn-primary" onclick="perguntarProfessor()">
@@ -498,6 +586,12 @@
                 </div>
             </div>
 
+            <!-- Anamnese Digital Gerada (aparece após análise) -->
+            <div id="anamneseGerada" class="anamnese-gerada">
+                <h3><i class="fas fa-file-medical"></i> Anamnese Digital Gerada</h3>
+                <div id="anamneseGeradaContent" class="anamnese-gerada-content"></div>
+            </div>
+
             <!-- Atalhos com abas -->
             <div class="shortcuts-section">
                 <div class="section-title">
@@ -509,13 +603,11 @@
                     <button class="tab-btn" onclick="abrirTab('bula')">💊 Bulário Digital</button>
                 </div>
                 
-                <!-- Aba CID-10 -->
                 <div id="tab-cid" class="tab-content active">
                     <input type="text" id="searchCid" class="search-box" placeholder="Buscar CID-10 (código ou diagnóstico)...">
                     <div id="cidList" class="items-grid"></div>
                 </div>
                 
-                <!-- Aba Bulário -->
                 <div id="tab-bula" class="tab-content">
                     <input type="text" id="searchMed" class="search-box" placeholder="Buscar medicamento (nome ou princípio ativo)...">
                     <div id="medList" class="items-grid"></div>
@@ -524,12 +616,12 @@
 
             <div id="loading" class="loading">
                 <div class="spinner"></div>
-                <p>🧠 Professor está analisando o caso clínico com os protocolos mais modernos...</p>
+                <p>🧑‍🏫 Professor está analisando o caso clínico com os protocolos mais modernos...</p>
             </div>
 
             <div id="resultado" class="result-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2><i class="fas fa-stethoscope"></i> Orientações do Professor</h2>
+                    <h2><i class="fas fa-chalkboard-user"></i> Orientações do Professor</h2>
                     <button class="btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="fecharResultado()">
                         <i class="fas fa-times"></i> Fechar
                     </button>
@@ -553,142 +645,72 @@
     <script>
         // ==================== BANCO DE DADOS CID-10 ====================
         const cid10Data = [
-            { codigo: "F00", descricao: "Demência na doença de Alzheimer" },
-            { codigo: "F01", descricao: "Demência vascular" },
-            { codigo: "F02", descricao: "Demência em outras doenças classificadas em outra parte" },
-            { codigo: "F03", descricao: "Demência não especificada" },
-            { codigo: "F04", descricao: "Síndrome amnésica orgânica não induzida por álcool ou outras substâncias psicoativas" },
-            { codigo: "F05", descricao: "Delirium não induzido por álcool ou outras substâncias psicoativas" },
-            { codigo: "F06", descricao: "Outros transtornos mentais devidos a lesão e disfunção cerebral e a doença física" },
-            { codigo: "F07", descricao: "Transtornos de personalidade e do comportamento devidos a doença, lesão ou disfunção cerebral" },
-            { codigo: "F09", descricao: "Transtorno mental orgânico ou sintomático não especificado" },
-            { codigo: "F10", descricao: "Transtornos mentais e comportamentais devidos ao uso de álcool" },
-            { codigo: "F11", descricao: "Transtornos mentais e comportamentais devidos ao uso de opióides" },
-            { codigo: "F12", descricao: "Transtornos mentais e comportamentais devidos ao uso de canabinóides" },
-            { codigo: "F13", descricao: "Transtornos mentais e comportamentais devidos ao uso de sedativos e hipnóticos" },
-            { codigo: "F14", descricao: "Transtornos mentais e comportamentais devidos ao uso da cocaína" },
-            { codigo: "F15", descricao: "Transtornos mentais e comportamentais devidos ao uso de outros estimulantes" },
-            { codigo: "F16", descricao: "Transtornos mentais e comportamentais devidos ao uso de alucinógenos" },
-            { codigo: "F17", descricao: "Transtornos mentais e comportamentais devidos ao uso de fumo" },
-            { codigo: "F18", descricao: "Transtornos mentais e comportamentais devidos ao uso de solventes voláteis" },
-            { codigo: "F19", descricao: "Transtornos mentais e comportamentais devidos ao uso de múltiplas drogas" },
-            { codigo: "F20", descricao: "Esquizofrenia" },
-            { codigo: "F20.0", descricao: "Esquizofrenia paranóide" },
-            { codigo: "F20.1", descricao: "Esquizofrenia hebefrênica" },
-            { codigo: "F20.2", descricao: "Esquizofrenia catatônica" },
-            { codigo: "F20.3", descricao: "Esquizofrenia indiferenciada" },
-            { codigo: "F20.5", descricao: "Esquizofrenia residual" },
-            { codigo: "F21", descricao: "Transtorno esquizotípico" },
-            { codigo: "F22", descricao: "Transtornos delirantes" },
-            { codigo: "F23", descricao: "Transtornos psicóticos agudos e transitórios" },
-            { codigo: "F24", descricao: "Transtorno delirante induzido" },
-            { codigo: "F25", descricao: "Transtornos esquizoafetivos" },
-            { codigo: "F28", descricao: "Outros transtornos psicóticos não orgânicos" },
-            { codigo: "F29", descricao: "Psicose não orgânica não especificada" },
-            { codigo: "F30", descricao: "Episódio maníaco" },
-            { codigo: "F30.0", descricao: "Hipomania" },
-            { codigo: "F30.1", descricao: "Mania sem sintomas psicóticos" },
-            { codigo: "F30.2", descricao: "Mania com sintomas psicóticos" },
-            { codigo: "F31", descricao: "Transtorno afetivo bipolar" },
-            { codigo: "F31.0", descricao: "Transtorno afetivo bipolar, episódio atual hipomaníaco" },
-            { codigo: "F31.1", descricao: "Transtorno afetivo bipolar, episódio atual maníaco" },
-            { codigo: "F31.3", descricao: "Transtorno afetivo bipolar, episódio atual depressivo leve/moderado" },
-            { codigo: "F31.4", descricao: "Transtorno afetivo bipolar, episódio atual depressivo grave" },
-            { codigo: "F31.5", descricao: "Transtorno afetivo bipolar, episódio atual misto" },
-            { codigo: "F32", descricao: "Episódio depressivo" },
             { codigo: "F32.0", descricao: "Episódio depressivo leve" },
             { codigo: "F32.1", descricao: "Episódio depressivo moderado" },
             { codigo: "F32.2", descricao: "Episódio depressivo grave sem sintomas psicóticos" },
             { codigo: "F32.3", descricao: "Episódio depressivo grave com sintomas psicóticos" },
             { codigo: "F33", descricao: "Transtorno depressivo recorrente" },
-            { codigo: "F34", descricao: "Transtornos de humor persistentes" },
-            { codigo: "F34.0", descricao: "Ciclotimia" },
-            { codigo: "F34.1", descricao: "Distimia" },
-            { codigo: "F38", descricao: "Outros transtornos do humor" },
-            { codigo: "F39", descricao: "Transtorno do humor não especificado" },
-            { codigo: "F40", descricao: "Transtornos fóbico-ansiosos" },
-            { codigo: "F40.0", descricao: "Agorafobia" },
-            { codigo: "F40.1", descricao: "Fobias sociais" },
-            { codigo: "F40.2", descricao: "Fobias específicas" },
-            { codigo: "F41", descricao: "Outros transtornos ansiosos" },
             { codigo: "F41.0", descricao: "Transtorno de pânico" },
             { codigo: "F41.1", descricao: "Transtorno de ansiedade generalizada" },
             { codigo: "F42", descricao: "Transtorno obsessivo-compulsivo" },
-            { codigo: "F43", descricao: "Reação ao stress severo e transtornos de adaptação" },
             { codigo: "F43.0", descricao: "Reação aguda ao stress" },
             { codigo: "F43.1", descricao: "Transtorno de stress pós-traumático" },
-            { codigo: "F43.2", descricao: "Transtornos de adaptação" },
-            { codigo: "F44", descricao: "Transtornos dissociativos" },
-            { codigo: "F45", descricao: "Transtornos somatoformes" },
-            { codigo: "F48", descricao: "Outros transtornos neuróticos" },
-            { codigo: "F50", descricao: "Transtornos alimentares" },
+            { codigo: "F20.0", descricao: "Esquizofrenia paranóide" },
+            { codigo: "F31", descricao: "Transtorno afetivo bipolar" },
+            { codigo: "F60.3", descricao: "Transtorno borderline da personalidade" },
+            { codigo: "F90.0", descricao: "TDAH" },
             { codigo: "F50.0", descricao: "Anorexia nervosa" },
             { codigo: "F50.2", descricao: "Bulimia nervosa" },
-            { codigo: "F51", descricao: "Transtornos não orgânicos do sono" },
-            { codigo: "F60", descricao: "Transtornos específicos da personalidade" },
-            { codigo: "F60.0", descricao: "Transtorno paranóide da personalidade" },
-            { codigo: "F60.1", descricao: "Transtorno esquizóide da personalidade" },
-            { codigo: "F60.2", descricao: "Transtorno dissocial da personalidade" },
-            { codigo: "F60.3", descricao: "Transtorno borderline da personalidade" },
-            { codigo: "F60.4", descricao: "Transtorno histriônico da personalidade" },
-            { codigo: "F60.5", descricao: "Transtorno anancástico da personalidade" },
-            { codigo: "F60.6", descricao: "Transtorno ansioso da personalidade" },
-            { codigo: "F60.7", descricao: "Transtorno dependente da personalidade" },
-            { codigo: "F70", descricao: "Deficiência intelectual leve" },
-            { codigo: "F71", descricao: "Deficiência intelectual moderada" },
-            { codigo: "F72", descricao: "Deficiência intelectual grave" },
-            { codigo: "F84", descricao: "Transtornos globais do desenvolvimento" },
             { codigo: "F84.0", descricao: "Autismo infantil" },
-            { codigo: "F84.5", descricao: "Síndrome de Asperger" },
-            { codigo: "F90", descricao: "Transtornos hipercinéticos" },
-            { codigo: "F90.0", descricao: "Transtorno de déficit de atenção e hiperatividade" },
-            { codigo: "F91", descricao: "Transtornos de conduta" },
-            { codigo: "F98", descricao: "Outros transtornos emocionais e comportamentais" }
+            { codigo: "F84.5", descricao: "Síndrome de Asperger" }
         ];
 
-        // ==================== BANCO DE DADOS MEDICAMENTOS ====================
+        // ==================== BANCO DE DADOS MEDICAMENTOS (expandido) ====================
         const medicamentosData = [
-            { nome: "Escitalopram", apresentacao: "Comprimidos 10mg, 20mg", classe: "ISRS" },
-            { nome: "Sertralina", apresentacao: "Comprimidos 50mg, 100mg", classe: "ISRS" },
-            { nome: "Fluoxetina", apresentacao: "Comprimidos 20mg, 40mg", classe: "ISRS" },
-            { nome: "Paroxetina", apresentacao: "Comprimidos 20mg, 40mg", classe: "ISRS" },
-            { nome: "Citalopram", apresentacao: "Comprimidos 20mg, 40mg", classe: "ISRS" },
-            { nome: "Fluvoxamina", apresentacao: "Comprimidos 50mg, 100mg", classe: "ISRS" },
-            { nome: "Vortioxetina", apresentacao: "Comprimidos 5mg, 10mg, 20mg", classe: "ISRS" },
-            { nome: "Desvenlafaxina", apresentacao: "Comprimidos 50mg, 100mg", classe: "IRSN" },
-            { nome: "Venlafaxina", apresentacao: "Comprimidos 37,5mg, 75mg, 150mg", classe: "IRSN" },
-            { nome: "Duloxetina", apresentacao: "Cápsulas 30mg, 60mg", classe: "IRSN" },
-            { nome: "Bupropiona", apresentacao: "Comprimidos 150mg, 300mg", classe: "NDRI" },
-            { nome: "Mirtazapina", apresentacao: "Comprimidos 15mg, 30mg", classe: "NaSSA" },
-            { nome: "Trazodona", apresentacao: "Comprimidos 50mg, 100mg", classe: "SARI" },
-            { nome: "Agomelatina", apresentacao: "Comprimidos 25mg", classe: "Melatonérgico" },
+            // Psiquiátricos
+            { nome: "Escitalopram", apresentacao: "Comprimidos 10mg, 20mg", classe: "ISRS - Antidepressivo" },
+            { nome: "Sertralina", apresentacao: "Comprimidos 50mg, 100mg", classe: "ISRS - Antidepressivo" },
+            { nome: "Fluoxetina", apresentacao: "Comprimidos 20mg, 40mg", classe: "ISRS - Antidepressivo" },
+            { nome: "Paroxetina", apresentacao: "Comprimidos 20mg, 40mg", classe: "ISRS - Antidepressivo" },
+            { nome: "Venlafaxina", apresentacao: "Comprimidos 37,5mg, 75mg, 150mg", classe: "IRSN - Antidepressivo" },
+            { nome: "Duloxetina", apresentacao: "Cápsulas 30mg, 60mg", classe: "IRSN - Antidepressivo" },
+            { nome: "Bupropiona", apresentacao: "Comprimidos 150mg, 300mg", classe: "NDRI - Antidepressivo" },
+            { nome: "Mirtazapina", apresentacao: "Comprimidos 15mg, 30mg", classe: "NaSSA - Antidepressivo" },
             { nome: "Lítio", apresentacao: "Comprimidos 300mg, 450mg", classe: "Estabilizador humor" },
             { nome: "Valproato", apresentacao: "Comprimidos 250mg, 500mg", classe: "Estabilizador humor" },
-            { nome: "Carbamazepina", apresentacao: "Comprimidos 200mg, 400mg", classe: "Estabilizador humor" },
             { nome: "Lamotrigina", apresentacao: "Comprimidos 25mg, 50mg, 100mg", classe: "Estabilizador humor" },
-            { nome: "Oxcarbazepina", apresentacao: "Comprimidos 300mg, 600mg", classe: "Estabilizador humor" },
             { nome: "Risperidona", apresentacao: "Comprimidos 1mg, 2mg, 3mg", classe: "Antipsicótico" },
             { nome: "Olanzapina", apresentacao: "Comprimidos 2,5mg, 5mg, 10mg", classe: "Antipsicótico" },
             { nome: "Quetiapina", apresentacao: "Comprimidos 25mg, 50mg, 100mg, 200mg", classe: "Antipsicótico" },
             { nome: "Aripiprazol", apresentacao: "Comprimidos 5mg, 10mg, 15mg, 20mg", classe: "Antipsicótico" },
-            { nome: "Clozapina", apresentacao: "Comprimidos 25mg, 100mg", classe: "Antipsicótico" },
-            { nome: "Ziprasidona", apresentacao: "Cápsulas 40mg, 80mg", classe: "Antipsicótico" },
-            { nome: "Paliperidona", apresentacao: "Comprimidos 3mg, 6mg, 9mg", classe: "Antipsicótico" },
-            { nome: "Haloperidol", apresentacao: "Comprimidos 1mg, 5mg", classe: "Antipsicótico típico" },
             { nome: "Clonazepam", apresentacao: "Comprimidos 0,5mg, 2mg", classe: "Benzodiazepínico" },
             { nome: "Alprazolam", apresentacao: "Comprimidos 0,25mg, 0,5mg, 1mg, 2mg", classe: "Benzodiazepínico" },
             { nome: "Diazepam", apresentacao: "Comprimidos 5mg, 10mg", classe: "Benzodiazepínico" },
             { nome: "Lorazepam", apresentacao: "Comprimidos 1mg, 2mg", classe: "Benzodiazepínico" },
             { nome: "Zolpidem", apresentacao: "Comprimidos 5mg, 10mg", classe: "Hipnótico" },
-            { nome: "Zopiclona", apresentacao: "Comprimidos 7,5mg", classe: "Hipnótico" },
-            { nome: "Metilfenidato", apresentacao: "Comprimidos 10mg", classe: "Estimulante" },
-            { nome: "Lisdexanfetamina", apresentacao: "Cápsulas 30mg, 50mg, 70mg", classe: "Estimulante" },
-            { nome: "Propranolol", apresentacao: "Comprimidos 10mg, 40mg", classe: "Beta-bloqueador" },
-            { nome: "Pregabalina", apresentacao: "Cápsulas 75mg, 150mg", classe: "Anticonvulsivante" },
-            { nome: "Gabapentina", apresentacao: "Cápsulas 300mg, 400mg", classe: "Anticonvulsivante" }
+            { nome: "Metilfenidato", apresentacao: "Comprimidos 10mg", classe: "Estimulante - TDAH" },
+            { nome: "Lisdexanfetamina", apresentacao: "Cápsulas 30mg, 50mg, 70mg", classe: "Estimulante - TDAH" },
+            // Clínicos gerais
+            { nome: "Losartana", apresentacao: "Comprimidos 50mg, 100mg", classe: "Anti-hipertensivo - BRA" },
+            { nome: "Atenolol", apresentacao: "Comprimidos 25mg, 50mg, 100mg", classe: "Anti-hipertensivo - Beta-bloqueador" },
+            { nome: "Amlodipino", apresentacao: "Comprimidos 5mg, 10mg", classe: "Anti-hipertensivo - Bloqueador canal cálcio" },
+            { nome: "Enalapril", apresentacao: "Comprimidos 5mg, 10mg, 20mg", classe: "Anti-hipertensivo - IECA" },
+            { nome: "Hidroclorotiazida", apresentacao: "Comprimidos 25mg", classe: "Diurético" },
+            { nome: "Metformina", apresentacao: "Comprimidos 500mg, 850mg, 1000mg", classe: "Antidiabético - Biguanida" },
+            { nome: "Glifage", apresentacao: "Comprimidos 500mg, 850mg, 1000mg", classe: "Antidiabético - Metformina" },
+            { nome: "Insulina NPH", apresentacao: "Suspensão injetável 100UI/ml", classe: "Antidiabético" },
+            { nome: "Insulina Regular", apresentacao: "Solução injetável 100UI/ml", classe: "Antidiabético" },
+            { nome: "Sinvastatina", apresentacao: "Comprimidos 10mg, 20mg, 40mg", classe: "Hipolipemiante - Estatina" },
+            { nome: "Atorvastatina", apresentacao: "Comprimidos 10mg, 20mg, 40mg, 80mg", classe: "Hipolipemiante - Estatina" },
+            { nome: "Omeprazol", apresentacao: "Cápsulas 10mg, 20mg", classe: "Protetor gástrico - IBP" },
+            { nome: "Pantoprazol", apresentacao: "Comprimidos 20mg, 40mg", classe: "Protetor gástrico - IBP" },
+            { nome: "Dipirona", apresentacao: "Comprimidos 500mg, gotas", classe: "Analgésico/Antitérmico" },
+            { nome: "Paracetamol", apresentacao: "Comprimidos 500mg, 750mg", classe: "Analgésico/Antitérmico" },
+            { nome: "Ibuprofeno", apresentacao: "Comprimidos 200mg, 400mg, 600mg", classe: "Anti-inflamatório - AINE" },
+            { nome: "Levotiroxina", apresentacao: "Comprimidos 25mcg, 50mcg, 100mcg", classe: "Hormônio tireoidiano" },
+            { nome: "Prednisona", apresentacao: "Comprimidos 5mg, 20mg", classe: "Corticosteroide" }
         ];
 
-        // Variáveis para medicamentos selecionados
         let medicamentosSelecionados = [];
 
         // ==================== FUNÇÕES DE INICIALIZAÇÃO ====================
@@ -744,7 +766,7 @@
             alert(`💊 ${nome}\n\n(Em breve: bula completa, posologia, interações e contraindicações)`);
         }
 
-        // ==================== FUNÇÕES DE MEDICAÇÕES NA ANAMNESE ====================
+        // ==================== FUNÇÕES DE MEDICAÇÕES ====================
         function toggleMedicacoes() {
             const check = document.getElementById('checkMedicacoes');
             const div = document.getElementById('medicamentosLista');
@@ -756,6 +778,12 @@
             }
         }
 
+        function toggleExame() {
+            const check = document.getElementById('checkExame');
+            const div = document.getElementById('exameLista');
+            div.classList.toggle('show', check.checked);
+        }
+
         function atualizarMedGrid() {
             const grid = document.getElementById('medGrid');
             grid.innerHTML = medicamentosData.map(med => `
@@ -765,7 +793,7 @@
                         onchange="toggleMedicamentoSelecionado('${med.nome}')">
                     <label for="med_${med.nome.replace(/\s/g, '_')}">
                         <strong>${med.nome}</strong><br>
-                        <small>${med.apresentacao}</small>
+                        <small>${med.apresentacao} | ${med.classe}</small>
                     </label>
                 </div>
             `).join('');
@@ -793,7 +821,7 @@
         function filtrarMedicamentos() {
             const termo = document.getElementById('medSearch').value.toLowerCase();
             const filtrados = medicamentosData.filter(med => 
-                med.nome.toLowerCase().includes(termo)
+                med.nome.toLowerCase().includes(termo) || med.classe.toLowerCase().includes(termo)
             );
             const grid = document.getElementById('medGrid');
             grid.innerHTML = filtrados.map(med => `
@@ -803,7 +831,7 @@
                         onchange="toggleMedicamentoSelecionado('${med.nome}')">
                     <label for="med_${med.nome.replace(/\s/g, '_')}">
                         <strong>${med.nome}</strong><br>
-                        <small>${med.apresentacao}</small>
+                        <small>${med.apresentacao} | ${med.classe}</small>
                     </label>
                 </div>
             `).join('');
@@ -824,48 +852,115 @@
                 return;
             }
             
-            // Montar texto completo para enviar à IA (futuramente)
+            // Coletar dados do exame
+            const checkExame = document.getElementById('checkExame').checked;
+            const exameFisico = checkExame ? document.getElementById('exameFisico').value : '';
+            const examePsiquico = checkExame ? document.getElementById('examePsiquico').value : '';
+            
+            // Montar anamnese completa
             let textoCompleto = anamnese;
+            
             if (checkMed && medicamentosSelecionados.length > 0) {
-                textoCompleto += `\n\nMedicações em uso: ${medicamentosSelecionados.join(', ')}.`;
+                textoCompleto += `\n\n📌 MEDICAÇÕES EM USO: ${medicamentosSelecionados.join(', ')}.`;
             }
             
-            console.log("Texto a ser enviado para o Professor:", textoCompleto);
+            if (checkExame && (exameFisico || examePsiquico)) {
+                if (exameFisico) textoCompleto += `\n\n📋 EXAME FÍSICO: ${exameFisico}`;
+                if (examePsiquico) textoCompleto += `\n\n🧠 EXAME PSÍQUICO: ${examePsiquico}`;
+            }
+            
+            // Montar anamnese gerada (para exibição)
+            let anamneseGeradaTexto = `📝 ANAMNESE PRINCIPAL:\n${anamnese}\n\n`;
+            
+            if (checkMed && medicamentosSelecionados.length > 0) {
+                anamneseGeradaTexto += `💊 MEDICAÇÕES EM USO:\n${medicamentosSelecionados.join(', ')}\n\n`;
+            }
+            
+            if (checkExame && (exameFisico || examePsiquico)) {
+                if (exameFisico) anamneseGeradaTexto += `🩺 EXAME FÍSICO:\n${exameFisico}\n\n`;
+                if (examePsiquico) anamneseGeradaTexto += `🧠 EXAME PSÍQUICO:\n${examePsiquico}\n\n`;
+            }
+            
+            console.log("Texto enviado para o Professor:", textoCompleto);
             
             document.getElementById('loading').classList.add('show');
             document.getElementById('resultado').classList.remove('show');
+            document.getElementById('anamneseGerada').classList.remove('show');
             
             setTimeout(() => {
+                // Simular resposta do Professor com linguagem de expert
+                const hipotesePrincipal = "Transtorno Depressivo Maior (85%)";
+                
                 const mockResultado = {
+                    hipotese_principal: hipotesePrincipal,
                     hipoteses: [
-                        { diagnostico: "Transtorno Depressivo Maior", porcentagem: 85, justificativa: "Presença de anedonia, humor deprimido, alterações de sono e fadiga por >2 semanas" },
-                        { diagnostico: "Transtorno de Adaptação", porcentagem: 15, justificativa: "Possível relação com estressores psicossociais não detalhados" }
+                        { diagnostico: "Transtorno Depressivo Maior", porcentagem: 85, justificativa: "Presença de anedonia, humor deprimido, alterações de sono e fadiga por >2 semanas, preenchendo critérios diagnósticos do DSM-5." },
+                        { diagnostico: "Transtorno de Adaptação com humor deprimido", porcentagem: 15, justificativa: "Possível relação com estressores psicossociais, mas sintomas mais duradouros e intensos sugerem episódio depressivo maior." }
                     ],
+                    tratamento_explicacao: `Caro colega, com base na apresentação do caso e nas melhores evidências disponíveis (diretrizes CANMAT 2023 e APA), sugiro iniciar com Escitalopram 10mg/dia como primeira linha. A escolha do Escitalopram justifica-se por sua excelente tolerabilidade, menor risco de interações medicamentosas e eficácia comprovada em episódios depressivos moderados a graves. \n\n${medicamentosSelecionados.length > 0 ? 'ATENÇÃO às interações: Os medicamentos informados requerem monitorização, especialmente nas primeiras 2-4 semanas. Solicito considerar ajustes conforme resposta clínica e efeitos adversos.' : 'Não foram relatadas medicações concomitantes, o que reduz riscos de interações iniciais.'}`,
                     tratamentos: [
-                        { tipo: "Monoterapia", descricao: "Escitalopram 10-20mg/dia", evidencia: "1ª linha - diretriz CANMAT" },
-                        { tipo: "Combinação", descricao: "Escitalopram + Bupropiona", evidencia: "Para casos com fadiga intensa ou falta de resposta" }
+                        { tipo: "Monoterapia 1ª linha", descricao: "Escitalopram 10-20mg/dia", explicacao: "Iniciar com 10mg/dia por 2 semanas, avaliar tolerabilidade e resposta. Aumentar para 20mg se resposta parcial após 4-6 semanas." },
+                        { tipo: "Alternativa 1ª linha", descricao: "Sertralina 50-150mg/dia", explicacao: "Particularmente útil se houver comorbidade ansiosa associada. Iniciar com 50mg, titular conforme resposta." },
+                        { tipo: "Combinação (2ª linha)", descricao: "Escitalopram + Bupropiona", explicacao: "Considerar se fadiga intensa ou falta de energia persistir após 6-8 semanas de monoterapia. Bupropiona 150mg/dia pode melhorar energia e função executiva." }
                     ],
                     interacoes: medicamentosSelecionados.length > 0 ? [
-                        { medicamentos: `${medicamentosSelecionados.join(', ')} + Escitalopram`, risco: "moderado", recomendacao: "Monitorizar efeitos colaterais e possíveis interações" }
+                        { medicamentos: `${medicamentosSelecionados.join(', ')} + Escitalopram`, risco: "moderado", recomendacao: "Monitorizar efeitos colaterais e possíveis interações. Atenção ao risco de síndrome serotoninérgica (raro mas possível). Solicito reavaliação em 2 semanas." }
                     ] : [],
                     exames: [
-                        { nome: "TSH, T4 livre", justificativa: "Excluir disfunção tireoidiana" },
-                        { nome: "Vitaminas B12 e D", justificativa: "Deficiências podem mimetizar sintomas depressivos" }
+                        { nome: "TSH, T4 livre", justificativa: "Hipotireoidismo é causa reversível de sintomas depressivos e deve ser excluído em todo primeiro episódio." },
+                        { nome: "Vitamina B12 e D", justificativa: "Deficiências nutricionais podem mimetizar ou exacerbar quadros depressivos." }
                     ],
                     referencias: [
                         { titulo: "Diretriz CANMAT 2023 para TDM", link: "https://www.canmat.org/guidelines" }
                     ]
                 };
                 
+                // Adicionar a hipótese principal na anamnese gerada
+                anamneseGeradaTexto += `🎯 HIPÓTESE DIAGNÓSTICA PRINCIPAL:\n${hipotesePrincipal}`;
+                
+                document.getElementById('anamneseGeradaContent').innerHTML = anamneseGeradaTexto.replace(/\n/g, '<br>');
+                document.getElementById('anamneseGerada').classList.add('show');
+                
                 renderizarResultado(mockResultado);
                 document.getElementById('loading').classList.remove('show');
                 document.getElementById('resultado').classList.add('show');
-            }, 2000);
+                
+                // Scroll para a anamnese gerada
+                document.getElementById('anamneseGerada').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 2500);
         }
         
         function renderizarResultado(data) {
             let html = '';
             
+            // TRATAMENTO EM DESTAQUE (já aberto, não como accordion)
+            if (data.tratamento_explicacao) {
+                html += `
+                    <div class="tratamento-destaque">
+                        <h3><i class="fas fa-chalkboard-user"></i> 🎓 ORIENTAÇÃO DO PROFESSOR</h3>
+                        <div class="professor-fala">
+                            <i class="fas fa-quote-left" style="margin-right: 10px; color: #6ee7b7;"></i>
+                            ${data.tratamento_explicacao}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Tratamentos sugeridos (em formato de lista)
+            if (data.tratamentos && data.tratamentos.length) {
+                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">💊 Esquemas Terapêuticos Sugeridos <span>▼</span></div><div class="accordion-content">';
+                data.tratamentos.forEach(t => {
+                    html += `
+                        <div class="result-card">
+                            <strong>${t.tipo}:</strong> ${t.descricao}<br>
+                            <small>📖 ${t.explicacao}</small>
+                        </div>
+                    `;
+                });
+                html += '</div></div>';
+            }
+            
+            // Hipóteses
             if (data.hipoteses && data.hipoteses.length) {
                 html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📋 Hipóteses Diagnósticas <span>▼</span></div><div class="accordion-content">';
                 data.hipoteses.forEach(h => {
@@ -874,22 +969,16 @@
                 html += '</div></div>';
             }
             
-            if (data.tratamentos && data.tratamentos.length) {
-                html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">💊 Tratamentos Sugeridos <span>▼</span></div><div class="accordion-content">';
-                data.tratamentos.forEach(t => {
-                    html += `<div class="result-card"><strong>${t.tipo}:</strong> ${t.descricao}<br><small>${t.evidencia ? '📖 ' + t.evidencia : ''}</small></div>`;
-                });
-                html += '</div></div>';
-            }
-            
+            // Interações
             if (data.interacoes && data.interacoes.length) {
                 html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">⚠️ Interações Medicamentosas <span>▼</span></div><div class="accordion-content">';
                 data.interacoes.forEach(i => {
-                    html += `<div class="result-card"><strong>${i.medicamentos}</strong><br>Risco: ${i.risco}<br><small>${i.recomendacao}</small></div>`;
+                    html += `<div class="result-card"><strong>⚠️ ${i.medicamentos}</strong><br>Risco: ${i.risco}<br><small>${i.recomendacao}</small></div>`;
                 });
                 html += '</div></div>';
             }
             
+            // Exames
             if (data.exames && data.exames.length) {
                 html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">🔬 Exames Complementares <span>▼</span></div><div class="accordion-content">';
                 data.exames.forEach(e => {
@@ -898,10 +987,11 @@
                 html += '</div></div>';
             }
             
+            // Referências
             if (data.referencias && data.referencias.length) {
                 html += '<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📚 Referências Bibliográficas <span>▼</span></div><div class="accordion-content">';
                 data.referencias.forEach(r => {
-                    html += `<div class="result-card"><strong>${r.titulo}</strong><br><a href="${r.link}" target="_blank">🔗 Acessar</a></div>`;
+                    html += `<div class="result-card"><strong>${r.titulo}</strong><br><a href="${r.link}" target="_blank">🔗 Acessar diretriz</a></div>`;
                 });
                 html += '</div></div>';
             }
@@ -932,21 +1022,32 @@
         function limparAnamnese() {
             document.getElementById('anamnese').value = '';
             document.getElementById('checkMedicacoes').checked = false;
+            document.getElementById('checkExame').checked = false;
             medicamentosSelecionados = [];
             document.getElementById('medicamentosLista').classList.remove('show');
+            document.getElementById('exameLista').classList.remove('show');
             document.getElementById('medSelecionados').style.display = 'none';
+            document.getElementById('exameFisico').value = '';
+            document.getElementById('examePsiquico').value = '';
             atualizarMedGrid();
+            document.getElementById('anamneseGerada').classList.remove('show');
+            document.getElementById('resultado').classList.remove('show');
         }
         
         function exemploAnamnese() {
             document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora significativa. Nega comorbidades clínicas. Antecedentes familiares: mãe com TAG.';
+            
+            document.getElementById('checkExame').checked = true;
+            toggleExame();
+            document.getElementById('exameFisico').value = 'PA: 110x70mmHg, FC: 72bpm, FR: 16ipm, afebril. Ausculta cardiopulmonar normal. Exame neurológico sem alterações.';
+            document.getElementById('examePsiquico').value = 'Consciente, orientada em tempo e espaço. Atenção concentrada prejudicada. Humor deprimido, afeto hipomodulado. Pensamento sem alterações formais. Sem alterações de percepção. Juízo preservado, crítica parcialmente preservada.';
         }
         
         function fecharResultado() {
             document.getElementById('resultado').classList.remove('show');
         }
         
-        // Inicializar tudo
+        // Inicializar
         inicializarCID();
         inicializarBulario();
         atualizarMedGrid();
