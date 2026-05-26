@@ -28,7 +28,6 @@
         .logo p { font-size: 0.8rem; opacity: 0.9; margin-top: 5px; max-width: 500px; }
         .badge { background: rgba(110,231,183,0.2); padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; border: 1px solid #6ee7b7; }
         
-        /* Abas fixas */
         .tabs { display: flex; gap: 5px; margin-bottom: 30px; border-bottom: 2px solid var(--border); padding-bottom: 10px; flex-wrap: wrap; position: sticky; top: 100px; background: var(--bg-start); z-index: 1000; }
         .tab { padding: 10px 20px; background: transparent; border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-radius: 50px; color: var(--text-sec); transition: all 0.2s; }
         .tab:hover { background: var(--border); }
@@ -57,8 +56,6 @@
         .btn-secondary { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
         .btn-success { background: #10b981; color: white; }
         .btn-primary:hover, .btn-secondary:hover, .btn-success:hover { transform: translateY(-2px); }
-        .result-section { display: none; margin-top: 30px; background: var(--card-bg); border-radius: 24px; padding: 30px; border: 1px solid var(--border); }
-        .result-section.show { display: block; }
         .loading { text-align: center; padding: 60px; display: none; }
         .loading.show { display: block; }
         .spinner { width: 50px; height: 50px; border: 4px solid var(--border); border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
@@ -67,9 +64,6 @@
         .accordion-header { background: var(--border); padding: 12px 16px; cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; font-size: 0.9rem; }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s; padding: 0 16px; }
         .accordion-content.active { max-height: 2000px; padding: 12px 16px; }
-        .tratamento-destaque { background: linear-gradient(135deg, #1e40af10, #1e3a8a10); border-left: 5px solid var(--accent); border-radius: 16px; padding: 16px; margin-bottom: 20px; }
-        .professor-fala { background: var(--bg-start); padding: 16px; border-radius: 16px; line-height: 1.4; white-space: pre-wrap; font-size: 0.85rem; }
-        .professor-fala strong { font-size: 0.85rem; }
         .result-card { background: var(--card-bg); border-left: 4px solid #6ee7b7; padding: 10px; margin-bottom: 10px; border-radius: 8px; font-size: 0.85rem; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
         .modal.show { display: flex; }
@@ -96,30 +90,31 @@
         .med-item-lista input, .med-item-lista select { padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg); }
         .footer { background: #0f2b3d; color: white; padding: 30px 0; margin-top: 60px; text-align: center; }
         
-        /* Caixa móvel - Anamnese Gerada */
-        .anamnese-gerada {
+        /* Caixas móveis (popup) */
+        .floating-box {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 80%;
-            max-width: 800px;
+            max-width: 900px;
             max-height: 80vh;
             overflow-y: auto;
             z-index: 1050;
             display: none;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            background: linear-gradient(135deg, #fef9e3, #fef3c7);
-            border-left: 5px solid #f59e0b;
             border-radius: 24px;
             padding: 25px;
         }
-        body.dark .anamnese-gerada { background: linear-gradient(135deg, #451a03, #422006); border-left-color: #f59e0b; }
-        .anamnese-gerada.show { display: block; animation: slideUp 0.3s ease; }
+        .floating-box.show { display: block; animation: slideUp 0.3s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translate(-50%, -40%); } to { opacity: 1; transform: translate(-50%, -50%); } }
-        .btn-fechar-caixa { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text); }
+        .btn-fechar-box { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text); }
+        .anamnese-box { background: linear-gradient(135deg, #fef9e3, #fef3c7); border-left: 5px solid #f59e0b; }
+        .professor-box { background: linear-gradient(135deg, #e0f2fe, #d9f9e6); border-left: 5px solid var(--accent); }
+        body.dark .anamnese-box { background: linear-gradient(135deg, #451a03, #422006); }
+        body.dark .professor-box { background: linear-gradient(135deg, #0f2b3d, #1a4a6f); }
         
-        @media (max-width: 768px) { .container { padding: 0 20px; } .stats-grid-2 { grid-template-columns: 1fr; } .duas-colunas { flex-direction: column; } .anamnese-gerada { width: 95%; } }
+        @media (max-width: 768px) { .container { padding: 0 20px; } .stats-grid-2 { grid-template-columns: 1fr; } .duas-colunas { flex-direction: column; } .floating-box { width: 95%; } }
     </style>
 </head>
 <body>
@@ -159,23 +154,11 @@
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkAlergias" onchange="toggleSection('alergias')"><span><i class="fas fa-allergies"></i> Possui alergia a medicamentos?</span></label>
                 <div id="alergiasSection" class="section-content"><input type="text" id="searchAlergias" class="search-box" placeholder="Buscar..." onkeyup="filtrarLista('alergiasGrid',this.value)"><div id="alergiasGrid" class="checkbox-grid"></div><div id="reacaoAlergia" style="display:none; margin-top:10px;"><label>Tipo de reação:</label><select id="tipoReacao" class="form-control"><option value="">Selecione...</option><option value="rash">Rash</option><option value="urticaria">Urticária</option><option value="angioedema">Angioedema</option><option value="anafilaxia">Anafilaxia</option></select></div><div class="texto-livre"><input type="text" id="outraAlergia" placeholder="Outra alergia..."></div></div></div>
                 
-                <!-- HÁBITOS DE VIDA - SEM DROPDOWN INDIVIDUAL -->
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkHabit" onchange="toggleSection('habitos')"><span><i class="fas fa-wine-bottle"></i> Hábitos de Vida / Substâncias?</span></label>
-                <div id="habitosSection" class="section-content">
-                    <div id="substanciasContainer" class="checkbox-grid"></div>
-                    <div class="duas-colunas" style="margin-top:10px;">
-                        <div class="texto-livre"><input type="text" id="outraSubstancia" placeholder="Outra substância..."></div>
-                        <div><select id="freqOutraSubstancia" class="form-control"><option value="">Frequência...</option><option value="Nunca">Nunca</option><option value="Experimental">Experimental</option><option value="Ocasional">Ocasional</option><option value="Semanal">Semanal</option><option value="Diário">Diário</option><option value="Dependência">Dependência</option></select></div>
-                    </div>
-                </div></div>
+                <div id="habitosSection" class="section-content"><div id="substanciasContainer" class="checkbox-grid"></div><div class="duas-colunas" style="margin-top:10px;"><div class="texto-livre"><input type="text" id="outraSubstancia" placeholder="Outra substância..."></div><div><select id="freqOutraSubstancia" class="form-control"><option value="">Frequência...</option><option value="Nunca">Nunca</option><option value="Experimental">Experimental</option><option value="Ocasional">Ocasional</option><option value="Semanal">Semanal</option><option value="Diário">Diário</option><option value="Dependência">Dependência</option></select></div></div></div></div>
                 
-                <!-- HISTÓRICO FAMILIAR - INTEGRADO -->
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkHistorico" onchange="toggleSection('historico')"><span><i class="fas fa-brain"></i> Histórico Psiquiátrico Familiar?</span></label>
-                <div id="historicoSection" class="section-content">
-                    <div id="historicoGrid" class="checkbox-grid"></div>
-                    <div class="texto-livre"><input type="text" id="outroHistorico" placeholder="Outro diagnóstico..."></div>
-                    <div style="margin-top:15px;"><label>Parente(s) afetado(s):</label><textarea id="historicoFamiliar" class="textarea-anamnese" rows="2" placeholder="Ex: PAI, MÃE, IRMÃO..."></textarea></div>
-                </div></div>
+                <div id="historicoSection" class="section-content"><div id="historicoGrid" class="checkbox-grid"></div><div class="texto-livre"><input type="text" id="outroHistorico" placeholder="Outro diagnóstico..."></div><div style="margin-top:15px;"><label>Parente(s) afetado(s):</label><textarea id="historicoFamiliar" class="textarea-anamnese" rows="2" placeholder="Ex: PAI, MÃE, IRMÃO..."></textarea></div></div></div>
                 
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkExame" onchange="toggleSection('exame')"><span><i class="fas fa-stethoscope"></i> Adicionar Exame Físico e Psíquico?</span></label>
                 <div id="exameSection" class="section-content"><textarea id="exameFisico" class="textarea-anamnese" rows="2" placeholder="Exame Físico..."></textarea><textarea id="examePsiquico" class="textarea-anamnese" rows="2" placeholder="Exame Psíquico..."></textarea></div></div>
@@ -188,16 +171,18 @@
             </div>
 
             <!-- Caixa móvel da Anamnese Completa -->
-            <div id="anamneseGerada" class="anamnese-gerada">
-                <button class="btn-fechar-caixa" onclick="fecharCaixaAnamnese()">&times;</button>
-                <div id="anamneseGeradaContent"></div>
+            <div id="anamneseBox" class="floating-box anamnese-box">
+                <button class="btn-fechar-box" onclick="fecharAnamneseBox()">&times;</button>
+                <div id="anamneseBoxContent"></div>
+            </div>
+
+            <!-- Caixa móvel da Resposta do Professor -->
+            <div id="professorBox" class="floating-box professor-box">
+                <button class="btn-fechar-box" onclick="fecharProfessorBox()">&times;</button>
+                <div id="professorBoxContent"></div>
             </div>
 
             <div id="loading" class="loading"><div class="spinner"></div><p>Professor está analisando o caso...</p></div>
-            <div id="resultado" class="result-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;"><h2 style="font-size:1.2rem;">📝 Orientações do Professor</h2><button class="btn-secondary" style="padding:5px 15px;" onclick="fecharResultado()">Fechar</button></div>
-                <div id="resultado-conteudo"></div>
-            </div>
         </div>
 
         <!-- PRONTUÁRIO -->
@@ -297,54 +282,62 @@
         return texto;
     }
 
+    function fecharAnamneseBox() { document.getElementById('anamneseBox').classList.remove('show'); }
+    function fecharProfessorBox() { document.getElementById('professorBox').classList.remove('show'); }
+
     function perguntarProfessor() {
         const anamnese = document.getElementById('anamnese').value;
         if(anamnese.length < 20) { alert('Insira uma anamnese mais detalhada'); return; }
         const textoCompleto = coletarDadosCompletos();
         
         document.getElementById('loading').classList.add('show');
-        document.getElementById('resultado').classList.remove('show');
         
         setTimeout(() => {
-            const tratamentos = [{ tipo: "Monoterapia 1ª linha", descricao: "Escitalopram 10-20mg/dia", explicacao: "Baseado em diretrizes CANMAT/APA" }];
-            ultimoTratamento = tratamentos;
+            ultimoTratamento = [{ tipo: "Monoterapia 1ª linha", descricao: "Escitalopram 10-20mg/dia" }];
             analiseAtual = { texto: textoCompleto, anamneseCompleta: textoCompleto };
             
-            // Mostrar caixa móvel da anamnese completa
-            const anamneseGeradaDiv = document.getElementById('anamneseGerada');
-            document.getElementById('anamneseGeradaContent').innerHTML = `<strong>📝 ANAMNESE COMPLETA:</strong><br><br>${textoCompleto.replace(/\n/g,'<br>')}`;
-            anamneseGeradaDiv.classList.add('show');
+            // Mostrar caixa da Anamnese Completa
+            document.getElementById('anamneseBoxContent').innerHTML = `<strong>📝 ANAMNESE COMPLETA:</strong><br><br>${textoCompleto.replace(/\n/g,'<br>')}`;
+            document.getElementById('anamneseBox').classList.add('show');
             
-            // Resultado compacto do Professor
-            const resultadoHTML = `<div class="tratamento-destaque"><div class="professor-fala" style="line-height:1.4; font-size:0.85rem;">
-<strong>🎓 RESPOSTA DO PROFESSOR (APA/CANMAT/NICE/Maudsley/Stahl/ABP/DSM-5-TR/CID-11)</strong><br><br>
-<strong>📌 RESUMO CLÍNICO:</strong> Paciente com quadro depressivo com anedonia, humor deprimido, alterações de sono e fadiga. Duração >2 semanas com prejuízo funcional.<br>
-<strong>🧠 RACIOCÍNIO CLÍNICO:</strong> Humor deprimido + anedonia + alterações neurovegetativas + prejuízo funcional → Episódio Depressivo Maior.<br>
-<strong>🟡 GRAVIDADE GLOBAL:</strong> Moderada<br>
-<strong>🎯 HIPÓTESES:</strong> TDM (85%), Transtorno de Adaptação (15%), TAG (45%)<br>
-<strong>🎯 NÍVEL DE CONFIANÇA:</strong> Alta<br>
-<strong>🚨 RED FLAGS:</strong> Risco suicida ausente, psicose ausente, virada maníaca não identificada<br>
-<strong>🔬 DADOS AUSENTES:</strong> Histórico familiar TAB, uso de substâncias, episódios prévios de mania, resposta prévia a antidepressivos<br>
-<strong>💊 CONDUTA 1ª LINHA:</strong> Escitalopram 10mg/dia + psicoterapia (TCC) + atividade física<br>
-<strong>💊 CONDUTA 2ª LINHA:</strong> Sertralina 50-150mg/dia ou Venlafaxina 75-225mg/dia<br>
-<strong>💊 MEDICAÇÕES:</strong> Escitalopram 10mg/dia (10-20mg), objetivo: melhora do humor/energia/sono. Efeitos adversos: náusea, cefaleia, disfunção sexual. Cuidados: síndrome serotoninérgica.<br>
-<strong>🔬 EXAMES:</strong> TSH, T4 livre, Vitamina B12, Vitamina D, glicemia, lipidograma<br>
-<strong>📊 ANÁLISE FUNCIONAL:</strong> Sono alterado, trabalho prejudicado, social prejudicado, cognição prejudicada, autocuidado preservado.<br>
-<strong>❓ PERGUNTAS:</strong> "Já teve episódio de ficar extremamente animado com redução do sono?", "Faz uso de álcool/cannabis?", "Alguém na família tem TAB?"<br>
-<strong>📝 PRONTUÁRIO:</strong> TDM moderado, iniciado Escitalopram 10mg/dia. Orientado sobre efeitos colaterais. Solicito exames. Retorno 4 semanas.<br>
-<strong>😉 OBSERVAÇÕES:</strong> Cérebro em "greve de serotonina"! Exercício = endorfina. Rastrear bipolaridade oculta - ISRS isolado pode ser catastrófico em TAB.
-</div></div>`;
-            document.getElementById('resultado-conteudo').innerHTML = resultadoHTML;
+            // RESPOSTA DO PROFESSOR - formato em parágrafos com opinião
+            const respostaProfessor = `
+<p><strong>🎓 Opinião do Professor (Baseado em APA/CANMAT/NICE/Maudsley/Stahl/ABP/DSM-5-TR/CID-11)</strong></p>
+
+<p>Caro colega, após analisar o caso, temos um quadro depressivo bastante sugestivo de <strong>Transtorno Depressivo Maior (TDM)</strong>, episódio atual moderado.</p>
+
+<p>O paciente apresenta os critérios centrais: humor deprimido e anedonia, associados a alterações de sono, fadiga e prejuízo funcional. A duração superior a 2 semanas já nos permite firmar essa hipótese com boa confiança clínica.</p>
+
+<p><strong>📋 HIPÓTESES DIAGNÓSTICAS COM PROBABILIDADE:</strong><br>
+• Transtorno Depressivo Maior — 85%<br>
+• Transtorno de Ansiedade Generalizada (comorbidade) — 45%<br>
+• Transtorno de Adaptação com humor deprimido — 15%</p>
+
+<p><strong>⚠️ RED FLAGS avaliados:</strong> risco suicida ausente, psicose ausente, virada maníaca não identificada. Contudo, precisamos rastrear melhor bipolaridade oculta antes de qualquer antidepressivo.</p>
+
+<p><strong>💊 Quanto ao tratamento:</strong> pelas diretrizes CANMAT e APA, a primeira linha é um ISRS, com Escitalopram ou Sertralina sendo ótimas escolhas pela tolerabilidade. Inicie com Escitalopram 10mg/dia, reavalie em 4 semanas. Associar psicoterapia (TCC) sempre que possível — nível A de evidência.</p>
+
+<p><strong>🔬 Exames iniciais importantes:</strong> TSH, T4 livre, vitamina B12, vitamina D, glicemia e lipidograma. Hipotireoidismo e deficiências nutricionais mimetizam depressão e são causas reversíveis.</p>
+
+<p><strong>📊 Análise funcional:</strong> sono alterado, trabalho prejudicado, cognição comprometida — isso justifica a abordagem ativa precoce.</p>
+
+<p><strong>❓ Perguntas que faltaram:</strong><br>
+• "Já teve episódios de ficar extremamente animado, com redução do sono, por vários dias?" (rastrear TAB)<br>
+• "Faz uso de álcool, cannabis ou outras substâncias?"<br>
+• "Alguém na família tem transtorno bipolar ou depressão grave?"</p>
+
+<p><strong>😉 Observação final:</strong> Lembre-se: o cérebro do paciente pode estar em "greve de serotonina". Nosso papel é convencê-lo a voltar ao trabalho! E atenção: ISRS isolado em bipolaridade oculta pode induzir virada maníaca — fique atento.</p>
+
+<p><strong>📝 Resumo para prontuário:</strong><br>
+Paciente com TDM moderado. Iniciado Escitalopram 10mg/dia. Orientado sobre efeitos colaterais e adesão. Solicitados exames laboratoriais. Retorno em 4 semanas para reavaliação. Sem ideação suicida ou psicose. Risco psicossocial controlado.</p>
+`;
+            document.getElementById('professorBoxContent').innerHTML = respostaProfessor;
+            document.getElementById('professorBox').classList.add('show');
+            
             document.getElementById('loading').classList.remove('show');
-            document.getElementById('resultado').classList.add('show');
-            
-            // Scroll suave para o resultado
-            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 1500);
     }
     
-    function fecharCaixaAnamnese() { document.getElementById('anamneseGerada').classList.remove('show'); }
-    function fecharResultado() { document.getElementById('resultado').classList.remove('show'); }
     function toggleAccordion(header) { const content = header.nextElementSibling; content.classList.toggle('active'); const span = header.querySelector('span'); if(span) span.innerHTML = content.classList.contains('active') ? '▲' : '▼'; }
     
     function limparAnamnese() { 
@@ -353,12 +346,12 @@
         comorbidadesSelecionadas=[]; medicamentosSelecionados=[]; alergiasSelecionadas=[]; historicoSelecionado=[];
         document.querySelectorAll('#comorbidadesGrid input, #medicacoesGrid input, #alergiasGrid input, #historicoGrid input, #substanciasContainer input').forEach(cb=>cb.checked=false);
         document.getElementById('outraComorbidade').value=''; document.getElementById('outraMedicacao').value=''; document.getElementById('outraAlergia').value=''; document.getElementById('outroHistorico').value=''; document.getElementById('historicoFamiliar').value=''; document.getElementById('exameFisico').value=''; document.getElementById('examePsiquico').value=''; document.getElementById('outraSubstancia').value=''; document.getElementById('freqOutraSubstancia').value='';
-        document.getElementById('anamneseGerada').classList.remove('show'); document.getElementById('resultado').classList.remove('show');
+        document.getElementById('anamneseBox').classList.remove('show'); document.getElementById('professorBox').classList.remove('show');
         atualizarMedSelecionados();
     }
     function exemploAnamnese() { document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora.'; }
 
-    // PRESCRIÇÃO CORRIGIDA
+    // PRESCRIÇÃO CORRIGIDA - SEM ESPAÇAMENTO EXCESSIVO
     function buscarMedicamentoPrescricao() {
         const termo = document.getElementById('buscaMedicamento').value.toLowerCase();
         const container = document.getElementById('resultadoBuscaMed');
@@ -403,10 +396,11 @@
         const data = new Date().toLocaleDateString('pt-BR');
         let texto = `${viaSelecionada}\n\n`;
         listaPrescricao.forEach((m,idx) => {
-            let linha = `${idx+1}. ${m.nome}`;
-            if(m.dose) linha += ` ${m.dose.toUpperCase()}${!m.dose.toUpperCase().endsWith('MG') && !m.dose.toUpperCase().endsWith('MCG') && !m.dose.toUpperCase().endsWith('G') ? 'MG' : ''}`;
-            let separador = " ".repeat(Math.max(1, 55 - linha.length));
-            linha += `${separador}---------------------------------------- ${m.quantidade} ${m.quantidade === '1' ? 'comp' : 'comps'}\n`;
+            let nomeMed = m.nome;
+            if(m.dose) nomeMed += ` ${m.dose.toUpperCase()}${!m.dose.toUpperCase().endsWith('MG') && !m.dose.toUpperCase().endsWith('MCG') && !m.dose.toUpperCase().endsWith('G') ? 'MG' : ''}`;
+            let linha = `${idx+1}. ${nomeMed}`;
+            let espacos = " ".repeat(Math.max(1, 55 - linha.length));
+            linha += `${espacos}---------------------------------------- ${m.quantidade} ${m.quantidade === '1' ? 'comp' : 'comps'}\n`;
             linha += `            ${m.posologia}\n\n`;
             texto += linha;
         });
