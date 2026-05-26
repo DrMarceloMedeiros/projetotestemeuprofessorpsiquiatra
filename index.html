@@ -123,27 +123,21 @@
                 <div class="hero-title"><i class="fas fa-stethoscope"></i> Anamnese Clínica</div>
                 <textarea id="anamnese" class="textarea-anamnese" rows="5" placeholder="Descreva o caso do paciente..."></textarea>
                 
-                <!-- Comorbidades -->
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkComorbidades" onchange="toggleSection('comorbidades')"><span><i class="fas fa-heartbeat"></i> Possui comorbidades?</span></label>
                 <div id="comorbidadesSection" class="section-content"><input type="text" id="searchComorbidades" class="search-box" placeholder="Buscar..." onkeyup="filtrarLista('comorbidadesGrid',this.value)"><div id="comorbidadesGrid" class="checkbox-grid"></div><div class="texto-livre"><input type="text" id="outraComorbidade" placeholder="Outra comorbidade..."></div></div></div>
                 
-                <!-- Medicações -->
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkMedicacoes" onchange="toggleSection('medicacoes')"><span><i class="fas fa-pills"></i> Faz uso de outras medicações?</span></label>
                 <div id="medicacoesSection" class="section-content"><input type="text" id="searchMedicacoes" class="search-box" placeholder="Buscar..." onkeyup="filtrarLista('medicacoesGrid',this.value)"><div id="medicacoesGrid" class="checkbox-grid"></div><div id="medSelecionados" class="med-selecionados" style="display:none;"><i class="fas fa-check-circle"></i> Selecionados: <span id="listaSelecionados"></span></div><div class="texto-livre"><input type="text" id="outraMedicacao" placeholder="Outro medicamento..."></div></div></div>
                 
-                <!-- Alergias -->
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkAlergias" onchange="toggleSection('alergias')"><span><i class="fas fa-allergies"></i> Possui alergia a medicamentos?</span></label>
                 <div id="alergiasSection" class="section-content"><input type="text" id="searchAlergias" class="search-box" placeholder="Buscar..." onkeyup="filtrarLista('alergiasGrid',this.value)"><div id="alergiasGrid" class="checkbox-grid"></div><div class="reacao-input" id="reacaoAlergia" style="display:none;"><label>Tipo de reação:</label><select id="tipoReacao"><option value="">Selecione...</option><option value="rash">Rash</option><option value="urticaria">Urticária</option><option value="angioedema">Angioedema</option><option value="anafilaxia">Anafilaxia</option></select></div><div class="texto-livre"><input type="text" id="outraAlergia" placeholder="Outra alergia..."></div></div></div>
                 
-                <!-- Hábitos -->
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkHabit" onchange="toggleSection('habitos')"><span><i class="fas fa-wine-bottle"></i> Hábitos de Vida / Substâncias?</span></label>
                 <div id="habitosSection" class="section-content"><div id="substanciasContainer" class="checkbox-grid"></div><div class="duas-colunas"><div class="texto-livre"><input type="text" id="outraSubstancia" placeholder="Outra substância..."></div><div><select id="freqOutraSubstancia" class="form-control"><option value="">Frequência...</option><option value="Nunca">Nunca</option><option value="Experimental">Experimental</option><option value="Ocasional">Ocasional</option><option value="Semanal">Semanal</option><option value="Diário">Diário</option><option value="Dependência">Dependência</option></select></div></div></div></div>
                 
-                <!-- Histórico Psiquiátrico -->
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkHistorico" onchange="toggleSection('historico')"><span><i class="fas fa-brain"></i> Histórico Psiquiátrico / Familiar?</span></label>
                 <div id="historicoSection" class="section-content"><input type="text" id="searchHistorico" class="search-box" placeholder="Buscar..." onkeyup="filtrarLista('historicoGrid',this.value)"><div id="historicoGrid" class="checkbox-grid"></div><div class="texto-livre"><input type="text" id="outroHistorico" placeholder="Outro diagnóstico..."></div><div style="margin-top:15px;"><label>Histórico Familiar:</label><textarea id="historicoFamiliar" class="textarea-anamnese" rows="2" placeholder="Ex: Depressão - PAI, TAG - IRMÃO..."></textarea></div></div></div>
                 
-                <!-- Exame Físico -->
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkExame" onchange="toggleSection('exame')"><span><i class="fas fa-stethoscope"></i> Adicionar Exame Físico e Psíquico?</span></label>
                 <div id="exameSection" class="section-content"><textarea id="exameFisico" class="textarea-anamnese" rows="2" placeholder="Exame Físico..."></textarea><textarea id="examePsiquico" class="textarea-anamnese" rows="2" placeholder="Exame Psíquico..."></textarea></div></div>
                 
@@ -177,7 +171,6 @@
             
             <div class="form-group" style="margin-top:20px;"><label>✏️ Texto final da prescrição:</label><textarea id="prescricaoEditavel" class="textarea-anamnese" rows="10" placeholder="A prescrição aparecerá aqui..."></textarea></div>
             <div style="display: flex; justify-content: flex-end; margin-top: 10px;"><button class="btn-success" onclick="copiarReceitaCompleta()"><i class="fas fa-copy"></i> Copiar Toda Receita</button></div>
-            <div class="info-box" style="margin-top:20px; padding:15px; background:var(--bg-start); border-radius:12px;"><i class="fas fa-info-circle"></i> <strong>Como usar:</strong> Busque o medicamento, preencha dose, quantidade e posologia, edite o texto final se necessário, clique em "Copiar Toda Receita" e cole no Memed.</div>
             </div>
         </div>
 
@@ -209,50 +202,13 @@
     
     // CID COMPLETO
     const cidData = [
-        {cod:"F32.0",desc:"Episódio depressivo leve"},
-        {cod:"F32.1",desc:"Episódio depressivo moderado"},
-        {cod:"F32.2",desc:"Episódio depressivo grave sem sintomas psicóticos"},
-        {cod:"F32.3",desc:"Episódio depressivo grave com sintomas psicóticos"},
-        {cod:"F32.8",desc:"Outros episódios depressivos"},
-        {cod:"F32.9",desc:"Episódio depressivo não especificado"},
-        {cod:"F33.0",desc:"Transtorno depressivo recorrente - episódio atual leve"},
-        {cod:"F33.1",desc:"Transtorno depressivo recorrente - episódio atual moderado"},
-        {cod:"F33.2",desc:"Transtorno depressivo recorrente - episódio atual grave sem psicóticos"},
-        {cod:"F33.3",desc:"Transtorno depressivo recorrente - episódio atual grave com psicóticos"},
-        {cod:"F33.4",desc:"Transtorno depressivo recorrente - em remissão"},
-        {cod:"F33.8",desc:"Outros transtornos depressivos recorrentes"},
-        {cod:"F33.9",desc:"Transtorno depressivo recorrente não especificado"},
-        {cod:"F41.0",desc:"Transtorno de pânico"},
-        {cod:"F41.1",desc:"Transtorno de ansiedade generalizada"},
-        {cod:"F41.2",desc:"Transtorno misto ansioso e depressivo"},
-        {cod:"F41.3",desc:"Outros transtornos ansiosos mistos"},
-        {cod:"F41.8",desc:"Outros transtornos ansiosos especificados"},
-        {cod:"F41.9",desc:"Transtorno ansioso não especificado"},
-        {cod:"F43.0",desc:"Reação aguda ao estresse"},
-        {cod:"F43.1",desc:"Transtorno de estresse pós-traumático (TEPT)"},
-        {cod:"F43.2",desc:"Transtorno de adaptação"},
-        {cod:"F31.0",desc:"Transtorno bipolar - episódio atual hipomaníaco"},
-        {cod:"F31.1",desc:"Transtorno bipolar - episódio atual maníaco sem psicóticos"},
-        {cod:"F31.2",desc:"Transtorno bipolar - episódio atual maníaco com psicóticos"},
-        {cod:"F31.3",desc:"Transtorno bipolar - episódio atual depressivo leve/moderado"},
-        {cod:"F31.4",desc:"Transtorno bipolar - episódio atual depressivo grave sem psicóticos"},
-        {cod:"F31.5",desc:"Transtorno bipolar - episódio atual depressivo grave com psicóticos"},
-        {cod:"F31.6",desc:"Transtorno bipolar - episódio atual misto"},
-        {cod:"F31.7",desc:"Transtorno bipolar - em remissão"},
-        {cod:"F31.8",desc:"Outros transtornos bipolares"},
-        {cod:"F31.9",desc:"Transtorno bipolar não especificado"},
-        {cod:"F20.0",desc:"Esquizofrenia paranóide"},
-        {cod:"F20.1",desc:"Esquizofrenia hebefrênica"},
-        {cod:"F20.2",desc:"Esquizofrenia catatônica"},
-        {cod:"F20.3",desc:"Esquizofrenia indiferenciada"},
-        {cod:"F20.5",desc:"Esquizofrenia residual"},
-        {cod:"F20.6",desc:"Esquizofrenia simples"},
-        {cod:"F20.9",desc:"Esquizofrenia não especificada"},
-        {cod:"F60.3",desc:"Transtorno de personalidade borderline"},
-        {cod:"F90.0",desc:"TDAH - tipo desatento"},
-        {cod:"F90.1",desc:"TDAH - tipo hiperativo/impulsivo"},
-        {cod:"F84.0",desc:"Autismo infantil"},
-        {cod:"F84.5",desc:"Síndrome de Asperger"}
+        {cod:"F32.0",desc:"Episódio depressivo leve"},{cod:"F32.1",desc:"Episódio depressivo moderado"},{cod:"F32.2",desc:"Episódio depressivo grave sem sintomas psicóticos"},{cod:"F32.3",desc:"Episódio depressivo grave com sintomas psicóticos"},{cod:"F32.8",desc:"Outros episódios depressivos"},{cod:"F32.9",desc:"Episódio depressivo não especificado"},
+        {cod:"F33.0",desc:"Transtorno depressivo recorrente - episódio atual leve"},{cod:"F33.1",desc:"Transtorno depressivo recorrente - episódio atual moderado"},{cod:"F33.2",desc:"Transtorno depressivo recorrente - episódio atual grave sem psicóticos"},{cod:"F33.3",desc:"Transtorno depressivo recorrente - episódio atual grave com psicóticos"},{cod:"F33.4",desc:"Transtorno depressivo recorrente - em remissão"},{cod:"F33.8",desc:"Outros transtornos depressivos recorrentes"},{cod:"F33.9",desc:"Transtorno depressivo recorrente não especificado"},
+        {cod:"F41.0",desc:"Transtorno de pânico"},{cod:"F41.1",desc:"Transtorno de ansiedade generalizada"},{cod:"F41.2",desc:"Transtorno misto ansioso e depressivo"},{cod:"F41.3",desc:"Outros transtornos ansiosos mistos"},{cod:"F41.8",desc:"Outros transtornos ansiosos especificados"},{cod:"F41.9",desc:"Transtorno ansioso não especificado"},
+        {cod:"F43.0",desc:"Reação aguda ao estresse"},{cod:"F43.1",desc:"Transtorno de estresse pós-traumático (TEPT)"},{cod:"F43.2",desc:"Transtorno de adaptação"},
+        {cod:"F31.0",desc:"Transtorno bipolar - episódio atual hipomaníaco"},{cod:"F31.1",desc:"Transtorno bipolar - episódio atual maníaco sem psicóticos"},{cod:"F31.2",desc:"Transtorno bipolar - episódio atual maníaco com psicóticos"},{cod:"F31.3",desc:"Transtorno bipolar - episódio atual depressivo leve/moderado"},{cod:"F31.4",desc:"Transtorno bipolar - episódio atual depressivo grave sem psicóticos"},{cod:"F31.5",desc:"Transtorno bipolar - episódio atual depressivo grave com psicóticos"},{cod:"F31.6",desc:"Transtorno bipolar - episódio atual misto"},{cod:"F31.7",desc:"Transtorno bipolar - em remissão"},{cod:"F31.8",desc:"Outros transtornos bipolares"},{cod:"F31.9",desc:"Transtorno bipolar não especificado"},
+        {cod:"F20.0",desc:"Esquizofrenia paranóide"},{cod:"F20.1",desc:"Esquizofrenia hebefrênica"},{cod:"F20.2",desc:"Esquizofrenia catatônica"},{cod:"F20.3",desc:"Esquizofrenia indiferenciada"},{cod:"F20.5",desc:"Esquizofrenia residual"},{cod:"F20.6",desc:"Esquizofrenia simples"},{cod:"F20.9",desc:"Esquizofrenia não especificada"},
+        {cod:"F60.3",desc:"Transtorno de personalidade borderline"},{cod:"F90.0",desc:"TDAH - tipo desatento"},{cod:"F90.1",desc:"TDAH - tipo hiperativo/impulsivo"},{cod:"F84.0",desc:"Autismo infantil"},{cod:"F84.5",desc:"Síndrome de Asperger"}
     ];
     
     let medicamentosSelecionados = [], comorbidadesSelecionadas = [], alergiasSelecionadas = [], historicoSelecionado = [], pacientes = [], analiseAtual = null, ultimoTratamento = null;
@@ -281,7 +237,6 @@
         if(alergiasSelecionadas.length) texto += `\n\nALERGIAS: ${alergiasSelecionadas.join(', ')}.`;
         if(document.getElementById('outraAlergia').value.trim()) texto += ` ${document.getElementById('outraAlergia').value.trim()}.`;
         
-        // Histórico familiar com a patologia marcada
         let historicoFamiliarTexto = [];
         if(historicoSelecionado.length) historicoFamiliarTexto.push(...historicoSelecionado);
         if(document.getElementById('outroHistorico').value.trim()) historicoFamiliarTexto.push(document.getElementById('outroHistorico').value.trim());
@@ -311,34 +266,76 @@
             document.getElementById('anamneseGeradaContent').innerHTML = `<strong>📝 ANAMNESE COMPLETA:</strong><br>${textoCompleto.replace(/\n/g,'<br>')}`;
             document.getElementById('anamneseGerada').style.display = 'block';
             
+            // PROMPT DA IA ATUALIZADO - SIMULAÇÃO DA RESPOSTA DO PROFESSOR ESPECIALISTA
             const resultadoHTML = `<div class="tratamento-destaque"><div class="professor-fala">
-🎓 <strong>RESUMO DO PROFESSOR:</strong><br>
-Caro colega, analisando o caso com base nas diretrizes APA, CANMAT, NICE, Maudsley, Stahl, ABP, DSM-5-TR e CID-11, observo um quadro compatível com Transtorno Depressivo Maior, episódio atual de intensidade moderada a grave.<br><br>
-<strong>🎯 HIPÓTESE PRINCIPAL:</strong> Transtorno Depressivo Maior (85%)<br>
-<strong>📋 DIAGNÓSTICOS DIFERENCIAIS:</strong> Transtorno de Adaptação (15%), Transtorno de Ansiedade Generalizada (45%)<br><br>
-<strong>🚨 SINAIS DE ALERTA AVALIADOS:</strong><br>
-✓ Risco suicida: não referido<br>
-✓ Sintomas psicóticos: ausentes<br>
-✓ Virada maníaca: não identificada<br>
-✓ Interações medicamentosas: avaliar comorbidades<br><br>
-<strong>💊 CONDUTA SUGERIDA (Baseada em diretrizes):</strong><br>
-• Iniciar Escitalopram 10mg/dia (ISRS de 1ª linha)<br>
-• Reavaliar em 4-6 semanas<br>
+🎓 <strong>RESPOSTA DO PROFESSOR (Baseado em APA/CANMAT/NICE/Maudsley/Stahl/ABP/DSM-5-TR/CID-11)</strong><br><br>
+
+<strong>📌 RESUMO CLÍNICO:</strong><br>
+Paciente com quadro depressivo com anedonia, humor deprimido, alterações de sono e fadiga. Duração superior a 2 semanas com prejuízo funcional. Ausência de sintomas psicóticos ou ideação suicida ativa.<br><br>
+
+<strong>🧠 RACIOCÍNIO CLÍNICO:</strong><br>
+A presença de humor deprimido persistente + anedonia + alterações neurovegetativas + prejuízo funcional favorece o diagnóstico de Episódio Depressivo Maior. A ausência de episódios prévios de mania/hipomania afasta temporariamente Transtorno Bipolar, mas deve-se monitorar virada.<br><br>
+
+<strong>🟡 GRAVIDADE GLOBAL:</strong> Moderada<br><br>
+
+<strong>🎯 HIPÓTESES DIAGNÓSTICAS:</strong><br>
+• Transtorno Depressivo Maior, episódio atual moderado (85%)<br>
+• Transtorno de Adaptação com humor deprimido (15%) - caso haja gatilho estressor claro<br>
+• Transtorno de Ansiedade Generalizada (45%) - sintomas ansiosos associados<br><br>
+
+<strong>🎯 NÍVEL DE CONFIANÇA DIAGNÓSTICA:</strong> Alta<br><br>
+
+<strong>🚨 RED FLAGS AVALIADOS:</strong><br>
+✓ Risco suicida - ausente<br>
+✓ Sintomas psicóticos - ausentes<br>
+✓ Virada maníaca - não identificada<br>
+✓ Interações medicamentosas - avaliar comorbidades<br><br>
+
+<strong>🔬 DADOS IMPORTANTES AUSENTES:</strong><br>
+• Histórico familiar de transtorno bipolar<br>
+• Uso de substâncias psicoativas (álcool, cannabis)<br>
+• Episódios prévios de mania/hipomania<br>
+• Resposta a antidepressivos no passado<br><br>
+
+<strong>💊 CONDUTA PRIMEIRA LINHA:</strong><br>
+• Iniciar Escitalopram 10mg/dia (ISRS de 1ª linha - CANMAT/APA)<br>
 • Associar psicoterapia (TCC) - nível A de evidência<br>
 • Orientar atividade física regular (30 min/dia)<br><br>
+
+<strong>💊 CONDUTA SEGUNDA LINHA (se falha):</strong><br>
+• Trocar para Sertralina 50-150mg/dia<br>
+• Ou Venlafaxina 75-225mg/dia (IRSN)<br><br>
+
+<strong>💊 MEDICAÇÕES SUGERIDAS:</strong><br>
+• <strong>Medicamento:</strong> Escitalopram<br>
+• <strong>Dose inicial:</strong> 10mg/dia<br>
+• <strong>Faixa terapêutica:</strong> 10-20mg/dia<br>
+• <strong>Objetivo clínico:</strong> Melhora do humor, energia e sono<br>
+• <strong>Efeitos adversos:</strong> Náusea, cefaleia, disfunção sexual (10-15%)<br>
+• <strong>Cuidados:</strong> Monitorar síndrome serotoninérgica se associar outros medicamentos<br><br>
+
 <strong>🔬 EXAMES SUGERIDOS:</strong><br>
 • TSH, T4 livre - excluir disfunção tireoidiana<br>
-• Vitamina B12 e D - avaliar deficiências<br><br>
+• Vitamina B12 e D - avaliar deficiências<br>
+• Glicemia e lipidograma - baseline<br><br>
+
+<strong>📊 ANÁLISE FUNCIONAL:</strong><br>
+• Sono: alterado (insônia inicial)<br>
+• Trabalho: prejudicado<br>
+• Social: possivelmente prejudicado<br>
+• Cognição: prejudicada (atenção/concentração)<br>
+• Autocuidado: preservado<br><br>
+
+<strong>❓ PERGUNTAS INTELIGENTES PARA PRÓXIMA CONSULTA:</strong><br>
+• "Já teve algum episódio de ficar extremamente animado, com redução da necessidade de sono, por vários dias seguidos?"<br>
+• "Faz uso de álcool, cannabis ou outras substâncias?"<br>
+• "Alguém na família tem transtorno bipolar ou depressão grave?"<br><br>
+
+<strong>📝 TEXTO PARA PRONTUÁRIO:</strong><br>
+Paciente com TDM moderado, iniciado Escitalopram 10mg/dia. Orientado sobre efeitos colaterais e necessidade de adesão. Solicito exames laboratoriais (TSH, B12, D). Retorno em 4 semanas para reavaliação. Sem ideação suicida. Risco psicossocial controlado.<br><br>
+
 <strong>😉 OBSERVAÇÕES DO PROFESSOR:</strong><br>
-Lembre-se: o cérebro do paciente pode estar em "greve de serotonina". Nossa missão é convencê-lo a voltar ao trabalho! Exercício físico é a melhor receita de endorfina que há. Paciente ansioso? A mente dele está no modo "alerta máximo" - vamos acalmar essa sirene interna.<br><br>
-<strong>📚 REFERÊNCIAS:</strong><br>
-• CANMAT 2023 Depression Guidelines<br>
-• APA Practice Guidelines<br>
-• NICE Depression in Adults<br>
-• Stahl's Essential Psychopharmacology<br>
-• Maudsley Prescribing Guidelines<br>
-• ABP - Protocolos Clínicos<br>
-• DSM-5-TR e CID-11
+Caro colega, lembre-se: o cérebro do paciente pode estar em "greve de serotonina". Nossa missão é convencê-lo a voltar ao trabalho! Exercício físico é a melhor receita de endorfina que há. E não esqueça de rastrear bipolaridade oculta - um ISRS isolado pode ser catastrófico se o paciente for bipolar. Vamos monitorar!
 </div></div>`;
             document.getElementById('resultado-conteudo').innerHTML = resultadoHTML;
             document.getElementById('loading').classList.remove('show');
@@ -359,26 +356,16 @@ Lembre-se: o cérebro do paciente pode estar em "greve de serotonina". Nossa mis
     function exemploAnamnese() { document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora.'; }
     function fecharResultado() { document.getElementById('resultado').classList.remove('show'); }
 
-    // PRESCRIÇÃO COM QUANTIDADE E POSOLOGIA
+    // PRESCRIÇÃO COM VIA SELECIONÁVEL
+    const opcoesVia = ["VIA ORAL", "VIA INTRAMUSCULAR (IM)", "VIA ENDOVENOSA (EV)", "VIA SUBCUTÂNEA (SC)", "VIA SUBLINGUAL (SL)", "VIA TÓPICA"];
     const opcoesPosologia = [
-        "1 comprimido ao dia",
-        "1 comprimido 2x ao dia",
-        "1 comprimido 3x ao dia",
-        "1 comprimido em jejum",
-        "1 comprimido após refeição",
-        "1 comprimido antes de dormir",
-        "10 gotas 3x ao dia",
-        "15 gotas 2x ao dia",
-        "20 gotas ao dia",
-        "1 cápsula ao dia",
-        "1 cápsula 2x ao dia",
-        "1 colher de sopa ao dia",
-        "Uso contínuo",
-        "Uso por 30 dias",
-        "Uso por 60 dias",
-        "Uso por 90 dias",
-        "Conforme orientação médica"
+        "1 comprimido ao dia", "1 comprimido 2x ao dia", "1 comprimido 3x ao dia", "1 comprimido em jejum",
+        "1 comprimido após refeição", "1 comprimido antes de dormir", "10 gotas 3x ao dia", "15 gotas 2x ao dia",
+        "20 gotas ao dia", "1 cápsula ao dia", "1 cápsula 2x ao dia", "1 colher de sopa ao dia",
+        "Uso contínuo", "Uso por 30 dias", "Uso por 60 dias", "Uso por 90 dias", "Conforme orientação médica"
     ];
+    
+    let viaSelecionada = "VIA ORAL";
     
     function buscarMedicamentoPrescricao() {
         const termo = document.getElementById('buscaMedicamento').value.toLowerCase();
@@ -402,13 +389,14 @@ Lembre-se: o cérebro do paciente pode estar em "greve de serotonina". Nossa mis
     function renderizarListaPrescricao() {
         const container = document.getElementById('listaPrescricao');
         if(!container) return;
-        if(listaPrescricao.length === 0) { container.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-sec);">Nenhum medicamento adicionado. Busque acima.</div>'; }
+        let viaHtml = `<div style="margin-bottom:15px;"><label>Via de administração:</label><select id="selectVia" class="form-control" onchange="viaSelecionada=this.value; atualizarTextoPrescricao()">${opcoesVia.map(v => `<option value="${v}" ${viaSelecionada===v ? 'selected' : ''}>${v}</option>`).join('')}</select></div>`;
+        if(listaPrescricao.length === 0) { container.innerHTML = viaHtml + '<div style="padding:20px; text-align:center; color:var(--text-sec);">Nenhum medicamento adicionado. Busque acima.</div>'; }
         else { 
-            container.innerHTML = listaPrescricao.map((m,idx) => `
+            container.innerHTML = viaHtml + listaPrescricao.map((m,idx) => `
                 <div class="med-item-lista">
                     <strong>${idx+1}. ${m.nome}</strong>
                     <div>
-                        <input type="text" placeholder="Dose (ex: 10mg)" value="${m.dose}" onchange="atualizarCampoPrescricao(${idx}, 'dose', this.value)" style="width:100px;">
+                        <input type="text" placeholder="Dose (ex: 150mg)" value="${m.dose}" onchange="atualizarCampoPrescricao(${idx}, 'dose', this.value)" style="width:100px;">
                         <input type="text" placeholder="Quantidade" value="${m.quantidade}" onchange="atualizarCampoPrescricao(${idx}, 'quantidade', this.value)" style="width:80px;">
                         <select onchange="atualizarCampoPrescricao(${idx}, 'posologia', this.value)">
                             ${opcoesPosologia.map(opt => `<option value="${opt}" ${m.posologia === opt ? 'selected' : ''}>${opt}</option>`).join('')}
@@ -423,9 +411,13 @@ Lembre-se: o cérebro do paciente pode estar em "greve de serotonina". Nossa mis
     
     function atualizarTextoPrescricao() {
         const data = new Date().toLocaleDateString('pt-BR');
-        let texto = `VIA ORAL\n\n`;
+        let texto = `${viaSelecionada}\n\n`;
         listaPrescricao.forEach((m,idx) => {
-            texto += `${idx+1}. ${m.nome}${m.dose ? ` ${m.dose}` : ''} - Tomar ${m.quantidade || '1'} ${m.posologia || 'conforme orientação'}\n`;
+            let linha = `${idx+1}. ${m.nome}`;
+            if(m.dose) linha += ` ${m.dose.toUpperCase()}${!m.dose.toUpperCase().endsWith('MG') && !m.dose.toUpperCase().endsWith('MCG') && !m.dose.toUpperCase().endsWith('G') ? 'MG' : ''}`;
+            linha += ` ${'-'.repeat(Math.max(1, 60 - linha.length))} ${m.quantidade} ${m.quantidade === '1' ? 'comp' : 'comps'}\n`;
+            linha += `            Tomar ${m.quantidade} ${m.posologia}.\n\n`;
+            texto += linha;
         });
         texto += `\nData: ${data}\nDr. Marcelo Medeiros\nCRM-PR 47960`;
         document.getElementById('prescricaoEditavel').value = texto;
@@ -509,6 +501,7 @@ Lembre-se: o cérebro do paciente pode estar em "greve de serotonina". Nossa mis
         renderizarComorbidades(); renderizarMedicacoes(); renderizarAlergias(); renderizarHistorico(); renderizarHabitos();
         renderizarProntuario(); atualizarEstatisticas();
         initPHQ9(); initGAD7();
+        viaSelecionada = "VIA ORAL";
     })();
 </script>
 </body>
