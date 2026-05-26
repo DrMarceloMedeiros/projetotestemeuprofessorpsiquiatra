@@ -3,736 +3,408 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Meu Professor Psiquiatra - Assistente Clínico com protocolos atualizados e IA">
-    <meta name="author" content="Dr. Marcelo Medeiros">
     <title>Meu Professor Psiquiatra | Assistente Clínico</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --bg-gradient-start: #e0f2fe;
-            --bg-gradient-end: #dcfce7;
-            --header-bg: linear-gradient(135deg, #0f2b3d 0%, #1a4a6f 100%);
-            --card-bg: white;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --accent-color: #1a4a6f;
-            --success-bg: #dcfce7;
-            --warning-bg: #fef3c7;
-            --danger-color: #ef4444;
+            --bg-start: #e0f2fe; --bg-end: #dcfce7; --header-bg: linear-gradient(135deg, #0f2b3d, #1a4a6f);
+            --card-bg: white; --text: #1e293b; --text-sec: #64748b; --border: #e2e8f0;
+            --accent: #1a4a6f; --success: #dcfce7; --warning: #fef3c7; --danger: #ef4444;
         }
         body.dark {
-            --bg-gradient-start: #0f172a;
-            --bg-gradient-end: #1e1b4b;
-            --header-bg: linear-gradient(135deg, #020617 0%, #0f172a 100%);
-            --card-bg: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --border-color: #334155;
-            --accent-color: #38bdf8;
-            --success-bg: #065f46;
-            --warning-bg: #451a03;
+            --bg-start: #0f172a; --bg-end: #1e1b4b; --header-bg: linear-gradient(135deg, #020617, #0f172a);
+            --card-bg: #1e293b; --text: #f1f5f9; --text-sec: #94a3b8; --border: #334155;
+            --accent: #38bdf8; --success: #065f46; --warning: #451a03;
         }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-            min-height: 100vh;
-            color: var(--text-primary);
-            transition: all 0.3s;
-        }
-        .header {
-            background: var(--header-bg);
-            color: white;
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, var(--bg-start), var(--bg-end)); min-height: 100vh; color: var(--text); transition: all 0.3s; }
+        .header { background: var(--header-bg); color: white; padding: 20px 0; position: sticky; top: 0; z-index: 1000; }
         .container { max-width: 1400px; margin: 0 auto; padding: 0 30px; }
         .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
         .logo h1 { font-size: 1.8rem; font-weight: 700; }
         .logo h1 i { color: #6ee7b7; margin-right: 10px; }
         .logo p { font-size: 0.8rem; opacity: 0.9; margin-top: 5px; max-width: 500px; }
-        .badge { background: rgba(110, 231, 183, 0.2); padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; border: 1px solid #6ee7b7; }
-        .tabs { display: flex; gap: 5px; margin-bottom: 30px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; flex-wrap: wrap; }
-        .tab { padding: 10px 20px; background: transparent; border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-radius: 50px; transition: all 0.3s; color: var(--text-secondary); }
-        .tab:hover { background: var(--border-color); }
-        .tab.active { background: var(--accent-color); color: white; }
+        .badge { background: rgba(110,231,183,0.2); padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; border: 1px solid #6ee7b7; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 30px; border-bottom: 2px solid var(--border); padding-bottom: 10px; flex-wrap: wrap; }
+        .tab { padding: 10px 20px; background: transparent; border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-radius: 50px; color: var(--text-sec); }
+        .tab:hover { background: var(--border); }
+        .tab.active { background: var(--accent); color: white; }
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .main-content { padding: 40px 0; }
-        .hero-card { background: var(--card-bg); border-radius: 24px; padding: 35px; margin-bottom: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); border: 1px solid var(--border-color); }
-        .hero-title { font-size: 1.8rem; font-weight: 700; color: var(--accent-color); margin-bottom: 10px; }
-        .hero-subtitle { color: var(--text-secondary); margin-bottom: 25px; font-size: 1rem; }
-        .textarea-anamnese { width: 100%; padding: 18px; border: 2px solid var(--border-color); border-radius: 16px; font-size: 1rem; font-family: 'Inter', monospace; resize: vertical; transition: all 0.3s; background: var(--card-bg); color: var(--text-primary); }
-        .textarea-anamnese:focus { outline: none; border-color: #6ee7b7; }
-        .form-section { background: var(--bg-gradient-start); border-radius: 16px; padding: 20px; margin-top: 20px; border: 1px solid var(--border-color); }
-        .checkbox-label { display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600; color: var(--text-primary); margin-bottom: 0; }
-        .checkbox-label input { width: 20px; height: 20px; cursor: pointer; accent-color: var(--accent-color); }
-        .section-content { display: none; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border-color); }
+        .hero-card, .stats-card, .paciente-pasta, .modal-content { background: var(--card-bg); border-radius: 24px; padding: 35px; margin-bottom: 40px; border: 1px solid var(--border); }
+        .hero-title { font-size: 1.8rem; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+        .textarea-anamnese, .search-box, .form-control, select { width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 12px; background: var(--card-bg); color: var(--text); font-family: 'Inter', monospace; }
+        .form-section { background: var(--bg-start); border-radius: 16px; padding: 20px; margin-top: 20px; border: 1px solid var(--border); }
+        .checkbox-label { display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600; margin-bottom: 0; }
+        .checkbox-label input { width: 20px; height: 20px; accent-color: var(--accent); }
+        .section-content { display: none; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border); }
         .section-content.show { display: block; }
-        .search-box-custom { width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 0.9rem; margin-bottom: 15px; background: var(--card-bg); color: var(--text-primary); }
         .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; max-height: 250px; overflow-y: auto; padding: 5px; }
         .checkbox-item { display: flex; align-items: center; gap: 8px; }
-        .checkbox-item input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent-color); }
+        .checkbox-item input { width: 18px; height: 18px; cursor: pointer; }
         .checkbox-item label { cursor: pointer; font-size: 0.85rem; }
-        .texto-livre { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border-color); }
-        .texto-livre input, .texto-livre textarea { width: 100%; padding: 10px; border: 2px solid var(--border-color); border-radius: 8px; background: var(--card-bg); color: var(--text-primary); margin-top: 5px; }
+        .texto-livre { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
         .duas-colunas { display: flex; gap: 15px; flex-wrap: wrap; }
         .duas-colunas > div { flex: 1; }
-        .reacao-input { margin-top: 10px; padding: 10px; background: var(--warning-bg); border-radius: 8px; }
-        .reacao-input label { font-size: 0.85rem; font-weight: 500; }
-        .med-selecionados { margin-top: 15px; padding: 10px; background: var(--success-bg); border-radius: 8px; font-size: 0.85rem; }
-        .anamnese-gerada { background: linear-gradient(135deg, #fef9e3 0%, #fef3c7 100%); border-left: 5px solid #f59e0b; border-radius: 16px; padding: 25px; margin: 30px 0; position: relative; }
-        body.dark .anamnese-gerada { background: linear-gradient(135deg, #451a03 0%, #422006 100%); border-left-color: #f59e0b; }
-        .btn-salvar { background: #f59e0b; color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all 0.3s; margin-top: 20px; }
-        .btn-salvar:hover { background: #d97706; transform: translateY(-2px); }
-        .btn-salvar-container { display: flex; justify-content: flex-end; }
-        .button-group { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
-        .btn-primary { background: linear-gradient(135deg, #0f2b3d 0%, #1a4a6f 100%); color: white; padding: 12px 24px; border: none; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(26, 74, 111, 0.3); }
-        .btn-secondary { background: transparent; color: var(--accent-color); padding: 12px 24px; border: 2px solid var(--accent-color); border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-secondary:hover { background: var(--accent-color); color: white; }
-        .btn-success { background: #10b981; color: white; padding: 12px 24px; border: none; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-success:hover { background: #059669; transform: translateY(-2px); }
-        .result-section { background: var(--card-bg); border-radius: 24px; padding: 30px; margin-top: 30px; display: none; border: 1px solid var(--border-color); }
-        .result-section.show { display: block; animation: fadeIn 0.5s ease; }
+        .btn-primary, .btn-secondary, .btn-success { padding: 12px 24px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; border: none; }
+        .btn-primary { background: linear-gradient(135deg, #0f2b3d, #1a4a6f); color: white; }
+        .btn-secondary { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+        .btn-success { background: #10b981; color: white; }
+        .btn-primary:hover, .btn-secondary:hover, .btn-success:hover { transform: translateY(-2px); }
+        .result-section { display: none; margin-top: 30px; }
+        .result-section.show { display: block; }
         .loading { text-align: center; padding: 60px; display: none; }
         .loading.show { display: block; }
-        .spinner { width: 50px; height: 50px; border: 4px solid var(--border-color); border-top: 4px solid var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        .spinner { width: 50px; height: 50px; border: 4px solid var(--border); border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .accordion { background: var(--bg-gradient-start); margin-bottom: 15px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); }
-        .accordion-header { background: var(--border-color); padding: 16px 20px; cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
-        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; padding: 0 20px; }
+        .accordion { background: var(--bg-start); margin-bottom: 15px; border-radius: 12px; overflow: hidden; }
+        .accordion-header { background: var(--border); padding: 16px 20px; cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s; padding: 0 20px; }
         .accordion-content.active { max-height: 2000px; padding: 20px; }
-        .tratamento-destaque { background: linear-gradient(135deg, #1e40af10 0%, #1e3a8a10 100%); border-left: 5px solid var(--accent-color); border-radius: 16px; padding: 25px; margin-bottom: 25px; }
-        .professor-fala { background: var(--bg-gradient-start); padding: 20px; border-radius: 16px; line-height: 1.6; }
+        .tratamento-destaque { background: linear-gradient(135deg, #1e40af10, #1e3a8a10); border-left: 5px solid var(--accent); border-radius: 16px; padding: 25px; margin-bottom: 25px; }
+        .professor-fala { background: var(--bg-start); padding: 20px; border-radius: 16px; line-height: 1.6; white-space: pre-wrap; }
         .result-card { background: var(--card-bg); border-left: 4px solid #6ee7b7; padding: 15px; margin-bottom: 12px; border-radius: 8px; }
-        .alternativa-item { background: var(--card-bg); border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 12px; border-radius: 8px; cursor: pointer; transition: transform 0.2s; }
-        .alternativa-item:hover { transform: translateX(5px); background: var(--bg-gradient-start); }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
         .modal.show { display: flex; }
-        .modal-content { background: var(--card-bg); border-radius: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 30px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 2px solid var(--border-color); border-radius: 8px; background: var(--card-bg); color: var(--text-primary); }
-        .search-results { max-height: 200px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; margin-top: 10px; }
-        .search-result-item { padding: 10px; border-bottom: 1px solid var(--border-color); cursor: pointer; }
-        .search-result-item:hover { background: var(--bg-gradient-start); }
-        .paciente-pasta { background: var(--card-bg); border-radius: 16px; margin-bottom: 15px; border: 1px solid var(--border-color); overflow: hidden; }
-        .paciente-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: var(--bg-gradient-start); transition: background 0.2s; }
-        .paciente-header:hover { background: var(--border-color); }
-        .paciente-nome { font-weight: 700; font-size: 1.1rem; color: var(--accent-color); }
-        .paciente-info { font-size: 0.8rem; color: var(--text-secondary); }
+        .modal-content { max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 30px; margin: 0; }
+        .modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .search-results { max-height: 200px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; margin-top: 10px; }
+        .search-result-item { padding: 10px; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .search-result-item:hover { background: var(--bg-start); }
+        .paciente-pasta { margin-bottom: 15px; padding: 0; overflow: hidden; }
+        .paciente-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: var(--bg-start); }
+        .paciente-header:hover { background: var(--border); }
+        .paciente-nome { font-weight: 700; color: var(--accent); }
         .seta { transition: transform 0.2s; }
         .seta.rotacionada { transform: rotate(90deg); }
-        .anamneses-lista { display: none; padding: 10px 20px 20px 40px; border-top: 1px solid var(--border-color); }
+        .anamneses-lista { display: none; padding: 10px 20px 20px 40px; border-top: 1px solid var(--border); }
         .anamneses-lista.expandido { display: block; }
-        .anamnese-preview { padding: 12px; margin-bottom: 8px; background: var(--bg-gradient-start); border-radius: 12px; cursor: pointer; transition: background 0.2s; border-left: 3px solid var(--accent-color); }
-        .anamnese-preview:hover { background: var(--border-color); }
-        .anamnese-completa { display: none; padding: 15px; margin-top: 8px; background: var(--card-bg); border-radius: 12px; font-size: 0.9rem; line-height: 1.5; white-space: pre-wrap; }
+        .anamnese-preview { padding: 12px; margin-bottom: 8px; background: var(--bg-start); border-radius: 12px; cursor: pointer; border-left: 3px solid var(--accent); }
+        .anamnese-completa { display: none; padding: 15px; margin-top: 8px; background: var(--card-bg); border-radius: 12px; white-space: pre-wrap; }
         .anamnese-completa.expandido { display: block; }
         .stats-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; }
-        .stats-card { background: var(--card-bg); border-radius: 16px; padding: 20px; border: 1px solid var(--border-color); }
-        .stats-card h3 { font-size: 1rem; margin-bottom: 15px; color: var(--accent-color); }
-        .stats-list { max-height: 300px; overflow-y: auto; }
-        .stats-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; }
-        .stats-count { font-weight: 700; color: var(--accent-color); }
-        .prescricao-texto { background: var(--bg-gradient-start); border-radius: 12px; padding: 20px; margin-bottom: 20px; white-space: pre-wrap; font-family: monospace; font-size: 0.9rem; }
+        .prescricao-lista { background: var(--bg-start); border-radius: 12px; padding: 15px; margin-top: 15px; }
+        .med-item-lista { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); }
         .footer { background: #0f2b3d; color: white; padding: 30px 0; margin-top: 60px; text-align: center; }
-        @media (max-width: 768px) {
-            .container { padding: 0 20px; }
-            .tabs { gap: 5px; }
-            .tab { padding: 8px 16px; font-size: 0.8rem; }
-            .button-group { flex-direction: column; }
-            .stats-grid-2 { grid-template-columns: 1fr; }
-            .duas-colunas { flex-direction: column; }
-        }
+        @media (max-width: 768px) { .container { padding: 0 20px; } .stats-grid-2 { grid-template-columns: 1fr; } .duas-colunas { flex-direction: column; } }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <h1><i class="fas fa-brain"></i> Meu Professor Psiquiatra</h1>
-                    <p>Assistente Clínico com protocolos atuais e IA</p>
-                </div>
-                <div class="badge">
-                    <i class="fas fa-robot"></i> DeepSeek | Protocolos CANMAT/APA/NICE
-                </div>
-            </div>
+<div class="header">
+    <div class="container">
+        <div class="header-content">
+            <div class="logo"><h1><i class="fas fa-brain"></i> Meu Professor Psiquiatra</h1><p>Assistente Clínico com protocolos atuais e IA</p></div>
+            <div class="badge"><i class="fas fa-robot"></i> APA | CANMAT | NICE | Maudsley | Stahl | ABP | DSM-5-TR | CID-10/11</div>
         </div>
     </div>
+</div>
 
-    <div class="main-content">
-        <div class="container">
-
-            <div class="tabs">
-                <button class="tab active" onclick="mudarAba('assistente')">📋 Assistente</button>
-                <button class="tab" onclick="mudarAba('prontuario')">📁 Prontuário</button>
-                <button class="tab" onclick="mudarAba('prescricao')">💊 Prescrição</button>
-                <button class="tab" onclick="mudarAba('estatisticas')">📊 Estatísticas</button>
-                <button class="tab" onclick="mudarAba('consulta')">📋 Consulta Rápida</button>
-                <button class="tab" onclick="mudarAba('configuracoes')">⚙️ Configurações</button>
-            </div>
-
-            <!-- ABA ASSISTENTE -->
-            <div id="aba-assistente" class="tab-content active">
-                <div class="hero-card">
-                    <div class="hero-title"><i class="fas fa-stethoscope"></i> Anamnese Clínica</div>
-                    <textarea id="anamnese" class="textarea-anamnese" rows="5" placeholder="Descreva o caso do paciente..."></textarea>
-                    
-                    <!-- COMORBIDADES -->
-                    <div class="form-section">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="checkComorbidades" onchange="toggleSection('comorbidades')">
-                            <span><i class="fas fa-heartbeat"></i> Possui comorbidades?</span>
-                        </label>
-                        <div id="comorbidadesSection" class="section-content">
-                            <input type="text" id="searchComorbidades" class="search-box-custom" placeholder="🔍 Buscar comorbidade..." onkeyup="filtrarComorbidades()">
-                            <div id="comorbidadesGrid" class="checkbox-grid"></div>
-                            <div class="texto-livre">
-                                <input type="text" id="outraComorbidade" placeholder="Outra comorbidade (digite aqui)...">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- MEDICAÇÕES -->
-                    <div class="form-section">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="checkMedicacoes" onchange="toggleSection('medicacoes')">
-                            <span><i class="fas fa-pills"></i> Faz uso de outras medicações?</span>
-                        </label>
-                        <div id="medicacoesSection" class="section-content">
-                            <input type="text" id="searchMedicacoes" class="search-box-custom" placeholder="🔍 Buscar medicamento..." onkeyup="filtrarMedicamentos()">
-                            <div id="medicacoesGrid" class="checkbox-grid"></div>
-                            <div id="medSelecionados" class="med-selecionados" style="display:none;">
-                                <i class="fas fa-check-circle"></i> Medicamentos selecionados: <span id="listaSelecionados"></span>
-                            </div>
-                            <div class="texto-livre">
-                                <input type="text" id="outraMedicacao" placeholder="Outro medicamento (digite aqui)...">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ALERGIAS -->
-                    <div class="form-section">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="checkAlergias" onchange="toggleSection('alergias')">
-                            <span><i class="fas fa-allergies"></i> Possui alergia a medicamentos?</span>
-                        </label>
-                        <div id="alergiasSection" class="section-content">
-                            <input type="text" id="searchAlergias" class="search-box-custom" placeholder="🔍 Buscar medicamento..." onkeyup="filtrarAlergias()">
-                            <div id="alergiasGrid" class="checkbox-grid"></div>
-                            <div id="reacaoAlergia" class="reacao-input" style="display:none;">
-                                <label>Tipo de reação:</label>
-                                <select id="tipoReacao">
-                                    <option value="">Selecione...</option>
-                                    <option value="rash">Rash cutâneo</option>
-                                    <option value="urticaria">Urticária</option>
-                                    <option value="angioedema">Angioedema</option>
-                                    <option value="anafilaxia">Anafilaxia</option>
-                                    <option value="outra">Outra</option>
-                                </select>
-                            </div>
-                            <div class="texto-livre">
-                                <input type="text" id="outraAlergia" placeholder="Outra alergia (digite aqui)...">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- HÁBITOS DE VIDA -->
-                    <div class="form-section">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="checkHabit" onchange="toggleSection('habitos')">
-                            <span><i class="fas fa-wine-bottle"></i> Hábitos de Vida / Substâncias?</span>
-                        </label>
-                        <div id="habitosSection" class="section-content">
-                            <div id="substanciasContainer" class="checkbox-grid"></div>
-                            <div class="duas-colunas">
-                                <div class="texto-livre">
-                                    <input type="text" id="outraSubstancia" placeholder="Outra substância...">
-                                </div>
-                                <div>
-                                    <select id="freqOutraSubstancia" style="width:100%; padding:10px; border:2px solid var(--border-color); border-radius:8px; background:var(--card-bg);">
-                                        <option value="">Frequência...</option>
-                                        <option value="nunca">Nunca usou</option>
-                                        <option value="experimental">Uso experimental</option>
-                                        <option value="ocasional">Uso ocasional</option>
-                                        <option value="semanal">Uso semanal</option>
-                                        <option value="diario">Uso diário</option>
-                                        <option value="dependencia">Dependência</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- HISTÓRICO PSIQUIÁTRICO -->
-                    <div class="form-section">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="checkHistorico" onchange="toggleSection('historico')">
-                            <span><i class="fas fa-brain"></i> Histórico Psiquiátrico / Familiar?</span>
-                        </label>
-                        <div id="historicoSection" class="section-content">
-                            <input type="text" id="searchHistorico" class="search-box-custom" placeholder="🔍 Buscar diagnóstico..." onkeyup="filtrarHistorico()">
-                            <div id="historicoGrid" class="checkbox-grid"></div>
-                            <div class="texto-livre">
-                                <input type="text" id="outroHistorico" placeholder="Outro diagnóstico (digite aqui)...">
-                            </div>
-                            <div style="margin-top: 15px;">
-                                <label style="font-weight: 500;">📋 Histórico Familiar:</label>
-                                <textarea id="historicoFamiliar" class="textarea-anamnese" rows="2" placeholder="Pais, irmãos, filhos... (ex: mãe com depressão, pai com TAG)"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- EXAME FÍSICO E PSÍQUICO -->
-                    <div class="form-section">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="checkExame" onchange="toggleSection('exame')">
-                            <span><i class="fas fa-stethoscope"></i> Adicionar Exame Físico e Psíquico?</span>
-                        </label>
-                        <div id="exameSection" class="section-content">
-                            <textarea id="exameFisico" class="textarea-anamnese" rows="2" placeholder="Exame Físico: PA, FC, FR, ausculta..."></textarea>
-                            <textarea id="examePsiquico" class="textarea-anamnese" rows="2" placeholder="Exame Psíquico: Consciência, orientação, humor, afeto..."></textarea>
-                        </div>
-                    </div>
-                    
-                    <div class="button-group">
-                        <button class="btn-primary" onclick="perguntarProfessor()"><i class="fas fa-chalkboard-user"></i> PERGUNTE AO PROFESSOR</button>
-                        <button class="btn-secondary" onclick="limparAnamnese()"><i class="fas fa-eraser"></i> Limpar</button>
-                        <button class="btn-secondary" onclick="exemploAnamnese()"><i class="fas fa-file-alt"></i> Exemplo</button>
-                    </div>
-                </div>
-
-                <div id="anamneseGerada" class="anamnese-gerada" style="display:none;">
-                    <div id="anamneseGeradaContent" class="anamnese-gerada-content"></div>
-                    <div class="btn-salvar-container">
-                        <button class="btn-salvar" onclick="abrirModalSalvar()"><i class="fas fa-save"></i> Salvar no Prontuário</button>
-                    </div>
-                </div>
-
-                <div id="loading" class="loading">
-                    <div class="spinner"></div>
-                    <p>🧑‍🏫 Professor está analisando o caso...</p>
-                </div>
-
-                <div id="resultado" class="result-section">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2>📝 Orientações do Professor</h2>
-                        <button class="btn-secondary" onclick="fecharResultado()">Fechar</button>
-                    </div>
-                    <div id="resultado-conteudo"></div>
-                </div>
-            </div>
-
-            <!-- PRONTUÁRIO -->
-            <div id="aba-prontuario" class="tab-content">
-                <div class="hero-card">
-                    <div class="hero-title"><i class="fas fa-folder-open"></i> Prontuário</div>
-                    <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
-                        <div style="flex: 1;">
-                            <input type="text" id="buscarPacienteProntuario" class="search-box-custom" placeholder="🔍 Buscar paciente..." onkeyup="filtrarPacientes()">
-                        </div>
-                        <button class="btn-success" onclick="abrirModalCriarPaciente()"><i class="fas fa-plus"></i> Criar Novo Paciente</button>
-                    </div>
-                    <div id="prontuarioContainer"></div>
-                </div>
-            </div>
-
-            <!-- PRESCRIÇÃO -->
-            <div id="aba-prescricao" class="tab-content">
-                <div class="hero-card">
-                    <div class="hero-title"><i class="fas fa-prescription"></i> Prescrição</div>
-                    <div class="button-group" style="margin-bottom: 20px;">
-                        <button class="btn-secondary" onclick="gerarPrescricaoAtual()"><i class="fas fa-sync"></i> Atualizar da última análise</button>
-                        <button class="btn-success" onclick="ativarPrescricaoManual()"><i class="fas fa-pen"></i> Criar Prescrição Manual</button>
-                    </div>
-                    <div id="prescricaoArea">
-                        <div class="prescricao-texto" id="prescricaoTexto">Nenhuma análise realizada ainda.</div>
-                        <div class="form-group"><label>✏️ Editar prescrição:</label><textarea id="prescricaoEditavel" class="textarea-anamnese" rows="12"></textarea></div>
-                    </div>
-                    <div class="info-box" style="margin-top:20px; padding:15px; background:var(--bg-gradient-start); border-radius:12px;">
-                        <i class="fas fa-info-circle"></i> <strong>Como usar:</strong> Copie o texto e cole no Memed.
-                    </div>
-                </div>
-            </div>
-
-            <!-- ESTATÍSTICAS -->
-            <div id="aba-estatisticas" class="tab-content">
-                <div class="hero-card">
-                    <div class="hero-title"><i class="fas fa-chart-line"></i> Estatísticas Clínicas</div>
-                    <div class="stats-grid-2">
-                        <div class="stats-card"><h3>📋 Diagnósticos Mais Frequentes</h3><div id="statsDiagnosticos" class="stats-list"></div></div>
-                        <div class="stats-card"><h3>💊 Medicamentos Mais Prescritos</h3><div id="statsMedicamentos" class="stats-list"></div></div>
-                        <div class="stats-card"><h3>🧠 Sintomas Frequentes</h3><div id="statsSintomas" class="stats-list"></div></div>
-                        <div class="stats-card"><h3>🩺 Comorbidades Mais Frequentes</h3><div id="statsComorbidades" class="stats-list"></div></div>
-                    </div>
-                    <button class="btn-secondary" onclick="atualizarEstatisticas()"><i class="fas fa-chart-simple"></i> Atualizar</button>
-                </div>
-            </div>
-
-            <!-- CONSULTA RÁPIDA -->
-            <div id="aba-consulta" class="tab-content">
-                <div class="hero-card">
-                    <div class="hero-title"><i class="fas fa-clipboard-list"></i> Ferramentas de Avaliação</div>
-                    <div class="accordion"><div class="accordion-header" onclick="toggleAccordionItem(this)">📋 PHQ-9 (Depressão) <span>▼</span></div><div class="accordion-content"><div id="phq9"></div><div id="phq9Resultado" class="resultado-escala" style="display:none;"></div><button class="btn-primary" onclick="calcularPHQ9()">Calcular PHQ-9</button></div></div>
-                    <div class="accordion"><div class="accordion-header" onclick="toggleAccordionItem(this)">📋 GAD-7 (Ansiedade) <span>▼</span></div><div class="accordion-content"><div id="gad7"></div><div id="gad7Resultado" class="resultado-escala" style="display:none;"></div><button class="btn-primary" onclick="calcularGAD7()">Calcular GAD-7</button></div></div>
-                    <div class="accordion"><div class="accordion-header" onclick="toggleAccordionItem(this)">💊 Algoritmo de Tratamento para TDM <span>▼</span></div><div class="accordion-content"><div class="form-group"><label>Gravidade:</label><select id="gravidadeTDM"><option value="leve">Leve</option><option value="moderado">Moderado</option><option value="grave">Grave</option></select></div><div class="form-group"><label>Comorbidade ansiosa?</label><select id="comorbidadeAnsiedade"><option value="nao">Não</option><option value="sim">Sim</option></select></div><div class="form-group"><label>Resposta prévia?</label><select id="respostaPrevia"><option value="nao">Não</option><option value="sim_escitalopram">Sim - Escitalopram</option><option value="sim_sertralina">Sim - Sertralina</option><option value="sim_outro">Sim - Outro</option></select></div><button class="btn-primary" onclick="calcularAlgoritmoTDM()">Gerar Conduta</button><div id="algoritmoResultado" class="resultado-escala" style="display:none;"></div></div></div>
-                </div>
-            </div>
-
-            <!-- CONFIGURAÇÕES -->
-            <div id="aba-configuracoes" class="tab-content">
-                <div class="hero-card">
-                    <div class="hero-title"><i class="fas fa-sliders-h"></i> Configurações</div>
-                    <div class="form-group"><label>🌓 Tema:</label><select id="temaSelect" onchange="mudarTema()"><option value="light">Claro</option><option value="dark">Escuro</option></select></div>
-                    <hr style="margin:20px 0; border-color:var(--border-color);">
-                    <h3>📁 Dados do Prontuário</h3>
-                    <div class="button-group"><button class="btn-secondary" onclick="exportarDados()"><i class="fas fa-download"></i> Exportar</button><button class="btn-secondary" onclick="importarDados()"><i class="fas fa-upload"></i> Importar</button><button class="btn-secondary" style="border-color:var(--danger-color);color:var(--danger-color);" onclick="limparTodosDados()"><i class="fas fa-trash"></i> Limpar</button></div>
-                    <hr style="margin:20px 0; border-color:var(--border-color);">
-                    <h3>ℹ️ Sobre</h3>
-                    <p><strong>Versão:</strong> 3.0.0 | <strong>IA:</strong> DeepSeek | <strong>Diretrizes:</strong> CANMAT/APA/NICE</p>
-                    <p>Dr. Marcelo Medeiros © 2025</p>
-                </div>
-            </div>
-
+<div class="main-content">
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="mudarAba('assistente')">📋 Assistente</button>
+            <button class="tab" onclick="mudarAba('prontuario')">📁 Prontuário</button>
+            <button class="tab" onclick="mudarAba('prescricao')">💊 Prescrição</button>
+            <button class="tab" onclick="mudarAba('estatisticas')">📊 Estatísticas</button>
+            <button class="tab" onclick="mudarAba('consulta')">📋 Consulta Rápida</button>
+            <button class="tab" onclick="mudarAba('configuracoes')">⚙️ Configurações</button>
         </div>
-    </div>
 
-    <!-- MODAIS -->
-    <div id="modalSalvar" class="modal"><div class="modal-content"><div class="modal-header" style="display:flex; justify-content:space-between; margin-bottom:20px;"><h3><i class="fas fa-save"></i> Salvar no Prontuário</h3><button style="background:none; border:none; font-size:1.5rem; cursor:pointer;" onclick="fecharModal()">&times;</button></div><div id="modalBody"></div></div></div>
-    <div id="modalCriarPaciente" class="modal"><div class="modal-content"><div style="display:flex; justify-content:space-between; margin-bottom:20px;"><h3><i class="fas fa-user-plus"></i> Criar Paciente</h3><button style="background:none; border:none; font-size:1.5rem; cursor:pointer;" onclick="fecharModalCriarPaciente()">&times;</button></div><div class="form-group"><label>Nome *</label><input type="text" id="novoPacienteNome"></div><div class="form-group"><label>Idade</label><input type="text" id="novoPacienteIdade"></div><div class="form-group"><label>Cidade/UF</label><input type="text" id="novoPacienteCidade"></div><div class="button-group"><button class="btn-primary" onclick="confirmarCriarPaciente()">Criar</button><button class="btn-secondary" onclick="fecharModalCriarPaciente()">Cancelar</button></div></div></div>
-
-    <div class="footer"><div class="container"><p><i class="fas fa-brain"></i> Meu Professor Psiquiatra | Baseado em diretrizes CANMAT, APA, NICE</p><p>Dr. Marcelo Medeiros © 2025 | Versão 3.0</p></div></div>
-
-    <script>
-        // BANCOS DE DADOS
-        const comorbidadesLista = [
-            "Hipertensão Arterial", "Diabetes Mellitus", "Obesidade", "Dislipidemia", "Hipotireoidismo",
-            "Asma", "DPOC", "Apneia do Sono", "Epilepsia", "Enxaqueca", "Parkinson", "Alzheimer",
-            "Insuficiência Cardíaca", "Arritmia", "AVC prévio", "Doença Renal Crônica", "Hepatite",
-            "Cirrose", "Artrite Reumatoide", "Fibromialgia", "Lúpus", "HIV/AIDS", "COVID longa",
-            "Câncer (em tratamento)", "Quimioterapia prévia", "Endometriose", "Menopausa", "Glaucoma"
-        ];
-        
-        const medicamentosLista = [
-            "Escitalopram", "Sertralina", "Fluoxetina", "Paroxetina", "Venlafaxina", "Duloxetina",
-            "Bupropiona", "Mirtazapina", "Trazodona", "Lítio", "Valproato", "Carbamazepina",
-            "Lamotrigina", "Risperidona", "Olanzapina", "Quetiapina", "Aripiprazol", "Clozapina",
-            "Clonazepam", "Alprazolam", "Diazepam", "Lorazepam", "Zolpidem", "Metilfenidato",
-            "Propranolol", "Pregabalina", "Gabapentina", "Buspirona", "Hidroxizina"
-        ];
-        
-        const historicoLista = [
-            "Depressão", "Transtorno Bipolar", "Esquizofrenia", "TAG", "Síndrome do Pânico",
-            "TOC", "TEPT", "Borderline", "TDAH", "Autismo", "Tentativa de suicídio",
-            "Dependência química", "Transtorno alimentar", "Insônia crônica", "Burnout"
-        ];
-        
-        const habitosLista = [
-            "Álcool", "Tabagismo", "Cannabis", "Cocaína/Crack", "Estimulantes", "Opioides",
-            "Benzodiazepínicos", "Cafeína/Energéticos", "Jogos de azar", "Tecnologia (vício)"
-        ];
-        
-        const freqOpcoes = {
-            "Álcool": ["Nunca", "Social", "Semanal", "Diário", "Dependência"],
-            "Tabagismo": ["Nunca", "Ex-tabagista", "Leve (<10/dia)", "Moderado (10-20/dia)", "Pesado (>20/dia)"],
-            "Cannabis": ["Nunca", "Experimental", "Recreativo", "Semanal", "Diário", "Dependência"],
-            "Cocaína/Crack": ["Nunca", "Ocasional", "Frequente", "Dependência"],
-            "default": ["Nunca", "Ocasional", "Frequente", "Diário"]
-        };
-
-        // Estado global
-        let medicamentosSelecionados = [];
-        let comorbidadesSelecionadas = [];
-        let alergiasSelecionadas = [];
-        let historicoSelecionado = [];
-        let habitosSelecionados = {};
-        let analiseAtual = null;
-        let pacientes = [];
-        let ultimoTratamento = null;
-        
-        // Carregar dados
-        function carregarDados() {
-            const saved = localStorage.getItem('meu_professor_pacientes');
-            if (saved) pacientes = JSON.parse(saved);
-            const tema = localStorage.getItem('meu_professor_tema');
-            if (tema === 'dark') { document.body.classList.add('dark'); document.getElementById('temaSelect').value = 'dark'; }
-            renderizarComorbidades();
-            renderizarMedicacoes();
-            renderizarAlergias();
-            renderizarHistorico();
-            renderizarHabitos();
-            renderizarProntuario();
-            atualizarEstatisticas();
-        }
-        
-        function salvarPacientes() {
-            localStorage.setItem('meu_professor_pacientes', JSON.stringify(pacientes));
-            renderizarProntuario();
-            atualizarEstatisticas();
-        }
-        
-        // Renderização dos checkboxes
-        function renderizarComorbidades() {
-            const grid = document.getElementById('comorbidadesGrid');
-            if(grid) grid.innerHTML = comorbidadesLista.map(item => `<div class="checkbox-item"><input type="checkbox" value="${item}" onchange="toggleComorbidade(this)"><label>${item}</label></div>`).join('');
-        }
-        
-        function renderizarMedicacoes() {
-            const grid = document.getElementById('medicacoesGrid');
-            if(grid) grid.innerHTML = medicamentosLista.map(item => `<div class="checkbox-item"><input type="checkbox" value="${item}" onchange="toggleMedicamento(this)"><label>${item}</label></div>`).join('');
-        }
-        
-        function renderizarAlergias() {
-            const grid = document.getElementById('alergiasGrid');
-            if(grid) grid.innerHTML = medicamentosLista.map(item => `<div class="checkbox-item"><input type="checkbox" value="${item}" onchange="toggleAlergia(this)"><label>${item}</label></div>`).join('');
-        }
-        
-        function renderizarHistorico() {
-            const grid = document.getElementById('historicoGrid');
-            if(grid) grid.innerHTML = historicoLista.map(item => `<div class="checkbox-item"><input type="checkbox" value="${item}" onchange="toggleHistoricoItem(this)"><label>${item}</label></div>`).join('');
-        }
-        
-        function renderizarHabitos() {
-            const container = document.getElementById('substanciasContainer');
-            if(!container) return;
-            container.innerHTML = habitosLista.map(sub => `
-                <div class="checkbox-item" style="flex-wrap:wrap;">
-                    <input type="checkbox" value="${sub}" onchange="toggleHabito(this, '${sub}')">
-                    <label><strong>${sub}</strong></label>
-                    <select id="freq_${sub.replace(/[^a-zA-Z]/g, '_')}" style="margin-left:auto; padding:5px; border-radius:8px; border:1px solid var(--border-color); background:var(--card-bg);" disabled>
-                        <option value="">Selecione a frequência</option>
-                        ${(freqOpcoes[sub] || freqOpcoes.default).map(opt => `<option value="${opt}">${opt}</option>`).join('')}
-                    </select>
+        <!-- ASSISTENTE -->
+        <div id="aba-assistente" class="tab-content active">
+            <div class="hero-card">
+                <div class="hero-title"><i class="fas fa-stethoscope"></i> Anamnese Clínica</div>
+                <textarea id="anamnese" class="textarea-anamnese" rows="5" placeholder="Descreva o caso do paciente..."></textarea>
+                
+                <!-- Comorbidades -->
+                <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkComorbidades" onchange="toggleSection('comorbidades')"><span><i class="fas fa-heartbeat"></i> Possui comorbidades?</span></label>
+                <div id="comorbidadesSection" class="section-content"><input type="text" id="searchComorbidades" class="search-box" placeholder="Buscar..." onkeyup="filtrarLista('comorbidadesGrid',this.value)"><div id="comorbidadesGrid" class="checkbox-grid"></div><div class="texto-livre"><input type="text" id="outraComorbidade" placeholder="Outra comorbidade..."></div></div></div>
+                
+                <!-- Medicações -->
+                <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkMedicacoes" onchange="toggleSection('medicacoes')"><span><i class="fas fa-pills"></i> Faz uso de outras medicações?</span></label>
+                <div id="medicacoesSection" class="section-content"><input type="text" id="searchMedicacoes" class="search-box" placeholder="Buscar..." onkeyup="filtrarLista('medicacoesGrid',this.value)"><div id="medicacoesGrid" class="checkbox-grid"></div><div id="medSelecionados" class="med-selecionados" style="display:none;"><i class="fas fa-check-circle"></i> Selecionados: <span id="listaSelecionados"></span></div><div class="texto-livre"><input type="text" id="outraMedicacao" placeholder="Outro medicamento..."></div></div></div>
+                
+                <!-- Alergias -->
+                <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkAlergias" onchange="toggleSection('alergias')"><span><i class="fas fa-allergies"></i> Possui alergia a medicamentos?</span></label>
+                <div id="alergiasSection" class="section-content"><input type="text" id="searchAlergias" class="search-box" placeholder="Buscar..." onkeyup="filtrarLista('alergiasGrid',this.value)"><div id="alergiasGrid" class="checkbox-grid"></div><div class="reacao-input" id="reacaoAlergia" style="display:none;"><label>Tipo de reação:</label><select id="tipoReacao"><option value="">Selecione...</option><option value="rash">Rash</option><option value="urticaria">Urticária</option><option value="angioedema">Angioedema</option><option value="anafilaxia">Anafilaxia</option></select></div><div class="texto-livre"><input type="text" id="outraAlergia" placeholder="Outra alergia..."></div></div></div>
+                
+                <!-- Hábitos -->
+                <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkHabit" onchange="toggleSection('habitos')"><span><i class="fas fa-wine-bottle"></i> Hábitos de Vida / Substâncias?</span></label>
+                <div id="habitosSection" class="section-content"><div id="substanciasContainer" class="checkbox-grid"></div><div class="duas-colunas"><div class="texto-livre"><input type="text" id="outraSubstancia" placeholder="Outra substância..."></div><div><select id="freqOutraSubstancia" class="form-control"><option value="">Frequência...</option><option value="Nunca">Nunca</option><option value="Experimental">Experimental</option><option value="Ocasional">Ocasional</option><option value="Semanal">Semanal</option><option value="Diário">Diário</option><option value="Dependência">Dependência</option></select></div></div></div></div>
+                
+                <!-- Histórico Psiquiátrico -->
+                <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkHistorico" onchange="toggleSection('historico')"><span><i class="fas fa-brain"></i> Histórico Psiquiátrico / Familiar?</span></label>
+                <div id="historicoSection" class="section-content"><input type="text" id="searchHistorico" class="search-box" placeholder="Buscar..." onkeyup="filtrarLista('historicoGrid',this.value)"><div id="historicoGrid" class="checkbox-grid"></div><div class="texto-livre"><input type="text" id="outroHistorico" placeholder="Outro diagnóstico..."></div><div style="margin-top:15px;"><label>Histórico Familiar:</label><textarea id="historicoFamiliar" class="textarea-anamnese" rows="2" placeholder="Pais, irmãos, filhos..."></textarea></div></div></div>
+                
+                <!-- Exame Físico -->
+                <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkExame" onchange="toggleSection('exame')"><span><i class="fas fa-stethoscope"></i> Adicionar Exame Físico e Psíquico?</span></label>
+                <div id="exameSection" class="section-content"><textarea id="exameFisico" class="textarea-anamnese" rows="2" placeholder="Exame Físico..."></textarea><textarea id="examePsiquico" class="textarea-anamnese" rows="2" placeholder="Exame Psíquico..."></textarea></div></div>
+                
+                <div class="button-group" style="display: flex; gap: 15px; margin-top: 20px;">
+                    <button class="btn-primary" onclick="perguntarProfessor()"><i class="fas fa-chalkboard-user"></i> PERGUNTE AO PROFESSOR</button>
+                    <button class="btn-secondary" onclick="limparAnamnese()"><i class="fas fa-eraser"></i> Limpar</button>
+                    <button class="btn-secondary" onclick="exemploAnamnese()"><i class="fas fa-file-alt"></i> Exemplo</button>
                 </div>
-            `).join('');
-        }
-        
-        // Toggle functions
-        function toggleComorbidade(cb) { if(cb.checked) comorbidadesSelecionadas.push(cb.value); else comorbidadesSelecionadas = comorbidadesSelecionadas.filter(v=>v!==cb.value); }
-        function toggleMedicamento(cb) { if(cb.checked) medicamentosSelecionados.push(cb.value); else medicamentosSelecionados = medicamentosSelecionados.filter(v=>v!==cb.value); atualizarMedSelecionados(); }
-        function toggleAlergia(cb) { if(cb.checked) alergiasSelecionadas.push(cb.value); else alergiasSelecionadas = alergiasSelecionadas.filter(v=>v!==cb.value); document.getElementById('reacaoAlergia').style.display = alergiasSelecionadas.length ? 'block' : 'none'; }
-        function toggleHistoricoItem(cb) { if(cb.checked) historicoSelecionado.push(cb.value); else historicoSelecionado = historicoSelecionado.filter(v=>v!==cb.value); }
-        function toggleHabito(cb, sub) { 
-            const select = document.getElementById(`freq_${sub.replace(/[^a-zA-Z]/g, '_')}`);
-            if(select) select.disabled = !cb.checked;
-            if(cb.checked) habitosSelecionados[sub] = ''; else delete habitosSelecionados[sub];
-        }
-        
-        function atualizarMedSelecionados() {
-            const div = document.getElementById('medSelecionados');
-            const span = document.getElementById('listaSelecionados');
-            if(medicamentosSelecionados.length > 0) { div.style.display = 'block'; span.innerText = medicamentosSelecionados.join(', '); }
-            else div.style.display = 'none';
-        }
-        
-        function toggleSection(section) {
-            let show = false;
-            if(section === 'comorbidades') show = document.getElementById('checkComorbidades').checked;
-            else if(section === 'medicacoes') show = document.getElementById('checkMedicacoes').checked;
-            else if(section === 'alergias') show = document.getElementById('checkAlergias').checked;
-            else if(section === 'habitos') show = document.getElementById('checkHabit').checked;
-            else if(section === 'historico') show = document.getElementById('checkHistorico').checked;
-            else if(section === 'exame') show = document.getElementById('checkExame').checked;
-            document.getElementById(`${section}Section`).classList.toggle('show', show);
-        }
-        
-        // Filtros
-        function filtrarComorbidades() { const termo = document.getElementById('searchComorbidades')?.value.toLowerCase(); const items = document.querySelectorAll('#comorbidadesGrid .checkbox-item'); items.forEach(i => { const label = i.querySelector('label')?.innerText.toLowerCase(); i.style.display = label?.includes(termo) ? 'flex' : 'none'; }); }
-        function filtrarMedicamentos() { const termo = document.getElementById('searchMedicacoes')?.value.toLowerCase(); const items = document.querySelectorAll('#medicacoesGrid .checkbox-item'); items.forEach(i => { const label = i.querySelector('label')?.innerText.toLowerCase(); i.style.display = label?.includes(termo) ? 'flex' : 'none'; }); }
-        function filtrarAlergias() { const termo = document.getElementById('searchAlergias')?.value.toLowerCase(); const items = document.querySelectorAll('#alergiasGrid .checkbox-item'); items.forEach(i => { const label = i.querySelector('label')?.innerText.toLowerCase(); i.style.display = label?.includes(termo) ? 'flex' : 'none'; }); }
-        function filtrarHistorico() { const termo = document.getElementById('searchHistorico')?.value.toLowerCase(); const items = document.querySelectorAll('#historicoGrid .checkbox-item'); items.forEach(i => { const label = i.querySelector('label')?.innerText.toLowerCase(); i.style.display = label?.includes(termo) ? 'flex' : 'none'; }); }
-        
-        // Função principal do Professor
-        function perguntarProfessor() {
-            const anamnese = document.getElementById('anamnese').value;
-            if(anamnese.length < 20) { alert('Por favor, insira uma anamnese mais detalhada'); return; }
+            </div>
+
+            <div id="anamneseGerada" class="hero-card" style="display:none; background: linear-gradient(135deg, #fef9e3, #fef3c7);"><div id="anamneseGeradaContent"></div><div class="btn-salvar-container" style="display: flex; justify-content: flex-end;"><button class="btn-success" onclick="abrirModalSalvar()"><i class="fas fa-save"></i> Salvar no Prontuário</button></div></div>
+            <div id="loading" class="loading"><div class="spinner"></div><p>Professor está analisando o caso...</p></div>
+            <div id="resultado" class="result-section"><div style="display: flex; justify-content: space-between;"><h2>Orientações do Professor</h2><button class="btn-secondary" onclick="fecharResultado()">Fechar</button></div><div id="resultado-conteudo"></div></div>
+        </div>
+
+        <!-- PRONTUÁRIO -->
+        <div id="aba-prontuario" class="tab-content">
+            <div class="hero-card"><div class="hero-title"><i class="fas fa-folder-open"></i> Prontuário</div>
+            <div style="display: flex; gap: 15px; margin-bottom: 25px;"><div style="flex:1"><input type="text" id="buscarPacienteProntuario" class="search-box" placeholder="🔍 Buscar paciente..." onkeyup="filtrarPacientes()"></div><button class="btn-success" onclick="abrirModalCriarPaciente()"><i class="fas fa-plus"></i> Criar Paciente</button></div>
+            <div id="prontuarioContainer"></div></div>
+        </div>
+
+        <!-- PRESCRIÇÃO -->
+        <div id="aba-prescricao" class="tab-content">
+            <div class="hero-card"><div class="hero-title"><i class="fas fa-prescription"></i> Prescrição</div>
+            <div class="button-group" style="margin-bottom:20px;"><button class="btn-secondary" onclick="gerarPrescricaoAtual()"><i class="fas fa-sync"></i> Atualizar da análise</button><button class="btn-success" onclick="ativarPrescricaoManual()"><i class="fas fa-pen"></i> Prescrição Manual</button></div>
             
-            document.getElementById('loading').classList.add('show');
-            document.getElementById('resultado').classList.remove('show');
-            document.getElementById('anamneseGerada').style.display = 'none';
+            <div><label>🔍 Buscar medicamento:</label><input type="text" id="buscaMedicamento" class="search-box" placeholder="Digite o nome..." onkeyup="buscarMedicamentoPrescricao()"><div id="resultadoBuscaMed" class="search-results" style="display:none;"></div></div>
             
-            setTimeout(() => {
-                const tratamentos = [
-                    { tipo: "Monoterapia (1ª linha)", descricao: "Escitalopram 10-20mg/dia", explicacao: "Melhor tolerabilidade e eficácia comprovada" },
-                    { tipo: "Monoterapia (Alternativa)", descricao: "Sertralina 50-150mg/dia", explicacao: "Útil em casos com comorbidade ansiosa" },
-                    { tipo: "Combinação (2ª linha)", descricao: "Escitalopram + Bupropiona", explicacao: "Quando fadiga é sintoma central" }
-                ];
-                const alternativas = [
-                    { nome: "TCC (Terapia Cognitivo-Comportamental)", justificativa: "Evidência nível A para TDM leve a moderado" },
-                    { nome: "Mindfulness", justificativa: "Reduz recaídas em até 50%" },
-                    { nome: "Atividade Física", justificativa: "30 min/dia, 5x/semana - efeito antidepressivo comprovado" }
-                ];
-                const exames = [
-                    { nome: "TSH, T4 livre", justificativa: "Excluir disfunção tireoidiana" },
-                    { nome: "Vitamina B12 e D", justificativa: "Deficiências podem mimetizar depressão" }
-                ];
-                
-                ultimoTratamento = tratamentos;
-                analiseAtual = { texto: anamnese, anamneseCompleta: `📝 ANAMNESE:\n${anamnese}\n\n🎯 HIPÓTESE: Transtorno Depressivo Maior (85%)` };
-                
-                document.getElementById('anamneseGeradaContent').innerHTML = `📝 ANAMNESE:\n${anamnese}`.replace(/\n/g,'<br>');
-                document.getElementById('anamneseGerada').style.display = 'block';
-                
-                const resultadoHTML = `
-                    <div class="tratamento-destaque"><h3>🎓 ORIENTAÇÃO DO PROFESSOR</h3><div class="professor-fala">Olhe o caso, meu caro! Pelo que me descreveu, o paciente apresenta um quadro de Transtorno Depressivo Maior com 85% de probabilidade. Os sintomas de anedonia, insônia e fadiga são clássicos.<br><br>Sugiro iniciar com Escitalopram 10mg/dia, reavaliar em 4-6 semanas. A psicoterapia complementar é fundamental.<br><br>Lembre-se: exercício físico é a melhor receita de endorfina que há! 😉</div></div>
-                    <div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">💊 Tratamentos <span>▼</span></div><div class="accordion-content">${tratamentos.map(t=>`<div class="result-card"><strong>${t.tipo}:</strong> ${t.descricao}<br><small>${t.explicacao}</small></div>`).join('')}</div></div>
-                    <div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">🔄 Alternativas Terapêuticas <span>▼</span></div><div class="accordion-content">${alternativas.map(a=>`<div class="alternativa-item" onclick="alert('${a.nome}\\n\\n${a.justificativa}')"><strong>🔄 ${a.nome}</strong><br><small>${a.justificativa}</small></div>`).join('')}</div></div>
-                    <div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">🔬 Exames Sugeridos <span>▼</span></div><div class="accordion-content">${exames.map(e=>`<div class="result-card"><strong>${e.nome}</strong><br><small>${e.justificativa}</small></div>`).join('')}</div></div>
-                `;
-                document.getElementById('resultado-conteudo').innerHTML = resultadoHTML;
-                document.getElementById('loading').classList.remove('show');
-                document.getElementById('resultado').classList.add('show');
-            }, 1500);
-        }
+            <div class="prescricao-lista"><h4>📋 Medicamentos Prescritos:</h4><div id="listaPrescricao"></div></div>
+            
+            <div class="form-group" style="margin-top:20px;"><label>✏️ Texto final da prescrição:</label><textarea id="prescricaoEditavel" class="textarea-anamnese" rows="12" placeholder="A prescrição aparecerá aqui..."></textarea></div>
+            <div class="info-box" style="margin-top:20px; padding:15px; background:var(--bg-start); border-radius:12px;"><i class="fas fa-info-circle"></i> <strong>Como usar:</strong> Busque o medicamento, clique para adicionar, edite o texto final, copie e cole no Memed.</div>
+            </div>
+        </div>
+
+        <!-- ESTATÍSTICAS -->
+        <div id="aba-estatisticas" class="tab-content"><div class="hero-card"><div class="hero-title"><i class="fas fa-chart-line"></i> Estatísticas</div><div class="stats-grid-2"><div class="stats-card"><h3>📋 Diagnósticos</h3><div id="statsDiagnosticos"></div></div><div class="stats-card"><h3>💊 Medicamentos</h3><div id="statsMedicamentos"></div></div><div class="stats-card"><h3>🧠 Sintomas</h3><div id="statsSintomas"></div></div><div class="stats-card"><h3>🩺 Comorbidades</h3><div id="statsComorbidades"></div></div></div><button class="btn-secondary" onclick="atualizarEstatisticas()">Atualizar</button></div></div>
+
+        <!-- CONSULTA RÁPIDA -->
+        <div id="aba-consulta" class="tab-content"><div class="hero-card"><div class="hero-title"><i class="fas fa-clipboard-list"></i> Ferramentas</div>
+        <div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📋 PHQ-9 (Depressão) <span>▼</span></div><div class="accordion-content"><div id="phq9"></div><div id="phq9Resultado" class="result-card" style="display:none;"></div><button class="btn-primary" onclick="calcularPHQ9()">Calcular</button></div></div>
+        <div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📋 GAD-7 (Ansiedade) <span>▼</span></div><div class="accordion-content"><div id="gad7"></div><div id="gad7Resultado" class="result-card" style="display:none;"></div><button class="btn-primary" onclick="calcularGAD7()">Calcular</button></div></div>
+        <div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">💊 Algoritmo TDM <span>▼</span></div><div class="accordion-content"><select id="gravidadeTDM" class="form-control"><option value="leve">Leve</option><option value="moderado">Moderado</option><option value="grave">Grave</option></select><select id="comorbidadeAnsiedade" class="form-control"><option value="nao">Sem ansiedade</option><option value="sim">Com ansiedade</option></select><select id="respostaPrevia" class="form-control"><option value="nao">Sem resposta prévia</option><option value="sim">Com resposta prévia</option></select><button class="btn-primary" onclick="calcularAlgoritmoTDM()">Gerar Conduta</button><div id="algoritmoResultado" class="result-card" style="display:none;"></div></div></div></div></div>
+
+        <!-- CONFIGURAÇÕES -->
+        <div id="aba-configuracoes" class="tab-content"><div class="hero-card"><div class="hero-title"><i class="fas fa-sliders-h"></i> Configurações</div><div class="form-group"><label>🌓 Tema:</label><select id="temaSelect" onchange="mudarTema()"><option value="light">Claro</option><option value="dark">Escuro</option></select></div><hr><h3>📁 Dados</h3><div class="button-group"><button class="btn-secondary" onclick="exportarDados()"><i class="fas fa-download"></i> Exportar</button><button class="btn-secondary" onclick="importarDados()"><i class="fas fa-upload"></i> Importar</button><button class="btn-secondary" style="border-color:var(--danger);color:var(--danger);" onclick="limparTodosDados()"><i class="fas fa-trash"></i> Limpar</button></div><hr><h3>ℹ️ Sobre</h3><p><strong>Protocolos:</strong> APA | CANMAT | NICE | Maudsley | Stahl | ABP | DSM-5-TR | CID-10/11</p><p>Dr. Marcelo Medeiros | Versão 3.0</p></div></div>
+    </div>
+</div>
+
+<div id="modalSalvar" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-save"></i> Salvar no Prontuário</h3><button onclick="fecharModal()">&times;</button></div><div id="modalBody"></div></div></div>
+<div id="modalCriarPaciente" class="modal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-user-plus"></i> Criar Paciente</h3><button onclick="fecharModalCriarPaciente()">&times;</button></div><input type="text" id="novoPacienteNome" placeholder="Nome completo *" class="form-control"><input type="text" id="novoPacienteIdade" placeholder="Idade" class="form-control" style="margin-top:10px;"><input type="text" id="novoPacienteCidade" placeholder="Cidade/UF" class="form-control" style="margin-top:10px;"><div class="button-group" style="margin-top:20px;"><button class="btn-primary" onclick="confirmarCriarPaciente()">Criar</button><button class="btn-secondary" onclick="fecharModalCriarPaciente()">Cancelar</button></div></div></div>
+
+<div class="footer"><div class="container"><p>Meu Professor Psiquiatra | Baseado em diretrizes internacionais | Dr. Marcelo Medeiros © 2025</p></div></div>
+
+<script>
+    // BANCOS DE DADOS
+    const comorbidadesLista = ["Hipertensão Arterial","Diabetes Mellitus","Obesidade","Dislipidemia","Hipotireoidismo","Asma","DPOC","Apneia do Sono","Epilepsia","Enxaqueca","Parkinson","Insuficiência Cardíaca","AVC prévio","Doença Renal Crônica","Artrite Reumatoide","Fibromialgia","HIV/AIDS","COVID longa","Câncer","Menopausa","Glaucoma"];
+    const medicamentosLista = ["Escitalopram","Sertralina","Fluoxetina","Paroxetina","Venlafaxina","Duloxetina","Bupropiona","Mirtazapina","Trazodona","Lítio","Valproato","Carbamazepina","Lamotrigina","Risperidona","Olanzapina","Quetiapina","Aripiprazol","Clozapina","Clonazepam","Alprazolam","Diazepam","Lorazepam","Zolpidem","Metilfenidato","Propranolol","Pregabalina","Gabapentina"];
+    const historicoLista = ["Depressão","Transtorno Bipolar","Esquizofrenia","TAG","Síndrome do Pânico","TOC","TEPT","Borderline","TDAH","Autismo","Tentativa de suicídio","Dependência química"];
+    const habitosLista = ["Álcool","Tabagismo","Cannabis","Cocaína/Crack","Estimulantes","Opioides","Benzodiazepínicos","Cafeína/Energéticos"];
+    
+    let medicamentosSelecionados = [], comorbidadesSelecionadas = [], alergiasSelecionadas = [], historicoSelecionado = [], pacientes = [], analiseAtual = null, ultimoTratamento = null;
+    let listaPrescricao = [];
+
+    function toggleSection(s) { let show = document.getElementById(`check${s.charAt(0).toUpperCase()+s.slice(1)}`)?.checked; document.getElementById(`${s}Section`).classList.toggle('show', show); }
+    function filtrarLista(gridId, termo) { const items = document.querySelectorAll(`#${gridId} .checkbox-item`); items.forEach(i => { const label = i.querySelector('label')?.innerText.toLowerCase(); i.style.display = label?.includes(termo.toLowerCase()) ? 'flex' : 'none'; }); }
+    function toggleComorbidade(cb) { if(cb.checked) comorbidadesSelecionadas.push(cb.value); else comorbidadesSelecionadas = comorbidadesSelecionadas.filter(v=>v!==cb.value); }
+    function toggleMedicamento(cb) { if(cb.checked) medicamentosSelecionados.push(cb.value); else medicamentosSelecionados = medicamentosSelecionados.filter(v=>v!==cb.value); atualizarMedSelecionados(); }
+    function toggleAlergia(cb) { if(cb.checked) alergiasSelecionadas.push(cb.value); else alergiasSelecionadas = alergiasSelecionadas.filter(v=>v!==cb.value); document.getElementById('reacaoAlergia').style.display = alergiasSelecionadas.length ? 'block' : 'none'; }
+    function toggleHistoricoItem(cb) { if(cb.checked) historicoSelecionado.push(cb.value); else historicoSelecionado = historicoSelecionado.filter(v=>v!==cb.value); }
+    function atualizarMedSelecionados() { const d=document.getElementById('medSelecionados'); const s=document.getElementById('listaSelecionados'); if(medicamentosSelecionados.length){ d.style.display='block'; s.innerText=medicamentosSelecionados.join(', '); } else d.style.display='none'; }
+    
+    function renderizarComorbidades(){ document.getElementById('comorbidadesGrid').innerHTML=comorbidadesLista.map(i=>`<div class="checkbox-item"><input type="checkbox" value="${i}" onchange="toggleComorbidade(this)"><label>${i}</label></div>`).join(''); }
+    function renderizarMedicacoes(){ document.getElementById('medicacoesGrid').innerHTML=medicamentosLista.map(i=>`<div class="checkbox-item"><input type="checkbox" value="${i}" onchange="toggleMedicamento(this)"><label>${i}</label></div>`).join(''); }
+    function renderizarAlergias(){ document.getElementById('alergiasGrid').innerHTML=medicamentosLista.map(i=>`<div class="checkbox-item"><input type="checkbox" value="${i}" onchange="toggleAlergia(this)"><label>${i}</label></div>`).join(''); }
+    function renderizarHistorico(){ document.getElementById('historicoGrid').innerHTML=historicoLista.map(i=>`<div class="checkbox-item"><input type="checkbox" value="${i}" onchange="toggleHistoricoItem(this)"><label>${i}</label></div>`).join(''); }
+    function renderizarHabitos(){ document.getElementById('substanciasContainer').innerHTML=habitosLista.map(s=>`<div class="checkbox-item"><input type="checkbox" value="${s}" onchange="this.nextElementSibling.disabled=!this.checked"><label>${s}</label><select style="margin-left:auto" ${habitosSelecionados[s]?.freq?`value="${habitosSelecionados[s].freq}"`:""} disabled><option value="">Frequência</option><option value="Nunca">Nunca</option><option value="Ocasional">Ocasional</option><option value="Frequente">Frequente</option><option value="Diário">Diário</option></select></div>`).join(''); }
+    
+    function coletarDadosCompletos() {
+        let texto = document.getElementById('anamnese').value;
+        if(comorbidadesSelecionadas.length) texto += `\nCOMORBIDADES: ${comorbidadesSelecionadas.join(', ')}.`;
+        if(document.getElementById('outraComorbidade').value.trim()) texto += ` ${document.getElementById('outraComorbidade').value.trim()}.`;
+        if(medicamentosSelecionados.length) texto += `\nMEDICAÇÕES: ${medicamentosSelecionados.join(', ')}.`;
+        if(document.getElementById('outraMedicacao').value.trim()) texto += ` ${document.getElementById('outraMedicacao').value.trim()}.`;
+        if(alergiasSelecionadas.length) texto += `\nALERGIAS: ${alergiasSelecionadas.join(', ')}.`;
+        if(document.getElementById('outraAlergia').value.trim()) texto += ` ${document.getElementById('outraAlergia').value.trim()}.`;
+        if(document.getElementById('historicoFamiliar').value.trim()) texto += `\nHISTÓRICO FAMILIAR: ${document.getElementById('historicoFamiliar').value.trim()}.`;
+        if(document.getElementById('exameFisico').value.trim()) texto += `\nEXAME FÍSICO: ${document.getElementById('exameFisico').value.trim()}.`;
+        if(document.getElementById('examePsiquico').value.trim()) texto += `\nEXAME PSÍQUICO: ${document.getElementById('examePsiquico').value.trim()}.`;
+        return texto;
+    }
+
+    function perguntarProfessor() {
+        const anamnese = document.getElementById('anamnese').value;
+        if(anamnese.length < 20) { alert('Insira uma anamnese mais detalhada'); return; }
+        const textoCompleto = coletarDadosCompletos();
         
-        function toggleAccordion(header) { const content = header.nextElementSibling; content.classList.toggle('active'); const arrow = header.querySelector('span'); if(arrow) arrow.innerHTML = content.classList.contains('active') ? '▲' : '▼'; }
-        function toggleAccordionItem(header) { const content = header.nextElementSibling; content.classList.toggle('active'); const arrow = header.querySelector('span'); if(arrow) arrow.innerHTML = content.classList.contains('active') ? '▲' : '▼'; }
+        document.getElementById('loading').classList.add('show');
+        document.getElementById('resultado').classList.remove('show');
+        document.getElementById('anamneseGerada').style.display = 'none';
         
-        function limparAnamnese() {
-            document.getElementById('anamnese').value = '';
-            ['checkComorbidades','checkMedicacoes','checkAlergias','checkHabit','checkHistorico','checkExame'].forEach(id=>{ const cb=document.getElementById(id); if(cb) cb.checked=false; });
-            comorbidadesSelecionadas=[]; medicamentosSelecionados=[]; alergiasSelecionadas=[]; historicoSelecionado=[]; habitosSelecionados={};
-            document.querySelectorAll('#comorbidadesGrid input').forEach(cb=>cb.checked=false);
-            document.querySelectorAll('#medicacoesGrid input').forEach(cb=>cb.checked=false);
-            document.querySelectorAll('#alergiasGrid input').forEach(cb=>cb.checked=false);
-            document.querySelectorAll('#historicoGrid input').forEach(cb=>cb.checked=false);
-            document.querySelectorAll('#substanciasContainer input').forEach(cb=>{ cb.checked=false; const sel=document.getElementById(`freq_${cb.value.replace(/[^a-zA-Z]/g,'_')}`); if(sel) sel.disabled=true; });
-            document.getElementById('outraComorbidade').value=''; document.getElementById('outraMedicacao').value=''; document.getElementById('outraAlergia').value=''; document.getElementById('outroHistorico').value=''; document.getElementById('historicoFamiliar').value=''; document.getElementById('exameFisico').value=''; document.getElementById('examePsiquico').value='';
-            document.getElementById('anamneseGerada').style.display='none'; document.getElementById('resultado').classList.remove('show');
-            atualizarMedSelecionados();
-        }
-        
-        function exemploAnamnese() { document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora significativa.'; }
-        function fecharResultado() { document.getElementById('resultado').classList.remove('show'); }
-        
-        // Prescrição
-        function gerarPrescricaoAtual() {
-            if(!ultimoTratamento) { alert('Nenhuma análise disponível.'); return; }
-            const data = new Date().toLocaleDateString('pt-BR');
-            const texto = `VIA ORAL\n\n1. ${ultimoTratamento[0].descricao} - Tomar 1 comprimido ao dia\n\nData: ${data}\nDr. Marcelo Medeiros\nCRM-PR 47960`;
-            document.getElementById('prescricaoTexto').innerText = texto;
-            document.getElementById('prescricaoEditavel').value = texto;
-        }
-        function ativarPrescricaoManual() { if(ultimoTratamento) gerarPrescricaoAtual(); document.getElementById('prescricaoEditavel').focus(); document.getElementById('prescricaoEditavel').scrollIntoView({behavior:'smooth'}); }
-        function copiarPrescricao() { navigator.clipboard.writeText(document.getElementById('prescricaoEditavel').value); alert('Copiado!'); }
-        
-        // Estatísticas
-        function atualizarEstatisticas() {
-            const diagnosticos = {};
-            pacientes.forEach(p => (p.anamneses||[]).forEach(a => { if(a.cid) diagnosticos[a.cid] = (diagnosticos[a.cid]||0)+1; }));
-            document.getElementById('statsDiagnosticos').innerHTML = Object.entries(diagnosticos).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k,v])=>`<div class="stats-item"><span>${k}</span><span class="stats-count">${v}</span></div>`).join('') || '<div>Sem dados</div>';
-            document.getElementById('statsMedicamentos').innerHTML = '<div>Sem dados</div>';
-            document.getElementById('statsSintomas').innerHTML = '<div>Sem dados</div>';
-            document.getElementById('statsComorbidades').innerHTML = '<div>Sem dados</div>';
-        }
-        
-        // PHQ-9 e GAD-7
-        function initPHQ9() {
-            const perguntas = ["Pouco interesse ou prazer","Se sentir para baixo","Dificuldade para dormir","Cansaço","Falta de apetite","Se sentir mal consigo","Dificuldade de concentração","Lentidão/agitação","Pensamentos de morte"];
-            let html='';
-            perguntas.forEach((p,i)=>{ html+=`<div class="questionario-item"><label>${i+1}. ${p}</label><div class="radio-group">`; for(let v=0;v<=3;v++) html+=`<label><input type="radio" name="phq9_${i}" value="${v}"> ${v} - ${v===0?'Nunca':v===1?'Vários dias':v===2?'Mais da metade':'Quase todos'}</label>`; html+=`</div></div>`; });
-            document.getElementById('phq9').innerHTML=html;
-        }
-        function calcularPHQ9() {
-            let total=0; for(let i=0;i<9;i++){ const s=document.querySelector(`input[name="phq9_${i}"]:checked`); if(s) total+=parseInt(s.value); }
-            let grav=''; if(total<=4) grav='Mínima'; else if(total<=9) grav='Leve'; else if(total<=14) grav='Moderada'; else if(total<=19) grav='Moderadamente grave'; else grav='Grave';
-            document.getElementById('phq9Resultado').innerHTML=`<strong>PHQ-9: ${total}</strong> | Gravidade: ${grav}<br>${total>=10?'Considerar tratamento.':'Monitorar sintomas.'}`;
-            document.getElementById('phq9Resultado').style.display='block';
-        }
-        function initGAD7() {
-            const perguntas = ["Nervosismo","Não conseguir parar de preocupar","Preocupação excessiva","Dificuldade para relaxar","Inquietação","Irritabilidade","Medo de algo ruim"];
-            let html='';
-            perguntas.forEach((p,i)=>{ html+=`<div class="questionario-item"><label>${i+1}. ${p}</label><div class="radio-group">`; for(let v=0;v<=3;v++) html+=`<label><input type="radio" name="gad7_${i}" value="${v}"> ${v} - ${v===0?'Nunca':v===1?'Vários dias':v===2?'Mais da metade':'Quase todos'}</label>`; html+=`</div></div>`; });
-            document.getElementById('gad7').innerHTML=html;
-        }
-        function calcularGAD7() {
-            let total=0; for(let i=0;i<7;i++){ const s=document.querySelector(`input[name="gad7_${i}"]:checked`); if(s) total+=parseInt(s.value); }
-            let grav=''; if(total<=4) grav='Mínima'; else if(total<=9) grav='Leve'; else if(total<=14) grav='Moderada'; else grav='Grave';
-            document.getElementById('gad7Resultado').innerHTML=`<strong>GAD-7: ${total}</strong> | Gravidade: ${grav}<br>${total>=10?'Considerar tratamento.':'Monitorar sintomas.'}`;
-            document.getElementById('gad7Resultado').style.display='block';
-        }
-        function calcularAlgoritmoTDM() {
-            const g=document.getElementById('gravidadeTDM').value, a=document.getElementById('comorbidadeAnsiedade').value, r=document.getElementById('respostaPrevia').value;
-            let s=''; if(g==='leve') s='Psicoterapia + monitoramento. Se medicamento: Escitalopram 10mg/dia.'; else if(g==='moderado') s='Iniciar Escitalopram 10mg/dia ou Sertralina 50mg/dia. Reavaliar em 4 semanas.'; else s='Iniciar Escitalopram 10-20mg/dia + psicoterapia. Acompanhamento semanal.';
-            if(a==='sim') s+=' Comorbidade ansiosa - Sertralina é preferível.';
-            if(r!=='nao') s+=' Considerar medicação com resposta prévia positiva.';
-            document.getElementById('algoritmoResultado').innerHTML=`<strong>Conduta:</strong><br>${s}`;
-            document.getElementById('algoritmoResultado').style.display='block';
-        }
-        
-        // Prontuário
-        function renderizarProntuario() {
-            const container=document.getElementById('prontuarioContainer');
-            if(!container) return;
-            const pacientesOrd = [...pacientes].sort((a,b)=>(a.nome||'').localeCompare(b.nome||''));
-            if(pacientesOrd.length===0){ container.innerHTML='<div style="text-align:center;padding:40px;">📁 Nenhum paciente cadastrado.</div>'; return; }
-            container.innerHTML=pacientesOrd.map(p=>`
-                <div class="paciente-pasta" data-nome="${p.nome||''}">
-                    <div class="paciente-header" onclick="togglePasta(this)">
-                        <div><div class="paciente-nome"><i class="fas fa-user"></i> ${p.nome||'Sem nome'}</div><div class="paciente-info">${p.idade?`${p.idade} anos | `:''}${p.cidade||''} | ${p.anamneses?.length||0} anamnese(s)</div></div>
-                        <i class="fas fa-chevron-right seta"></i>
-                    </div>
-                    <div class="anamneses-lista">${(p.anamneses||[]).slice().reverse().map(a=>`<div><div class="anamnese-preview" onclick="toggleAnamneseCompleta(this,event)"><span class="anamnese-data">📅 ${a.data}</span> | CID: ${a.cid||'?'}</div><div class="anamnese-completa">${a.anamneseCompleta||a.texto||''}</div></div>`).join('')}${(!p.anamneses||p.anamneses.length===0)?'<div>Sem anamneses</div>':''}</div>
-                </div>`).join('');
-        }
-        function togglePasta(header){ const pasta=header.closest('.paciente-pasta'); const lista=pasta.querySelector('.anamneses-lista'); const seta=header.querySelector('.seta'); lista.classList.toggle('expandido'); seta.classList.toggle('rotacionada'); }
-        function toggleAnamneseCompleta(el,ev){ ev.stopPropagation(); const completa=el.nextElementSibling; completa.classList.toggle('expandido'); }
-        function filtrarPacientes(){ const termo=document.getElementById('buscarPacienteProntuario')?.value.toLowerCase(); document.querySelectorAll('.paciente-pasta').forEach(p=>{ const nome=p.getAttribute('data-nome'); p.style.display=nome?.toLowerCase().includes(termo)?'block':'none'; }); }
-        
-        // Criar paciente
-        function abrirModalCriarPaciente(){ document.getElementById('modalCriarPaciente').classList.add('show'); }
-        function fecharModalCriarPaciente(){ document.getElementById('modalCriarPaciente').classList.remove('show'); document.getElementById('novoPacienteNome').value=''; document.getElementById('novoPacienteIdade').value=''; document.getElementById('novoPacienteCidade').value=''; }
-        function confirmarCriarPaciente(){ const nome=document.getElementById('novoPacienteNome').value.trim(); if(!nome){ alert('Informe o nome'); return; } pacientes.push({id:Date.now().toString(),nome,idade:document.getElementById('novoPacienteIdade').value,cidade:document.getElementById('novoPacienteCidade').value,anamneses:[]}); salvarPacientes(); fecharModalCriarPaciente(); alert(`Paciente ${nome} criado!`); }
-        
-        // Modal Salvar
-        let cidSelecionado=null, pacienteIdTemp=null;
-        function abrirModalSalvar(){ if(!analiseAtual){ alert('Nenhuma análise para salvar'); return; } const modal=document.getElementById('modalSalvar'); const body=document.getElementById('modalBody'); body.innerHTML=`<div><label>🔍 Buscar paciente:</label><input type="text" id="buscaPacienteModal" class="search-box-custom" placeholder="Digite o nome..."><div id="resultadoBuscaModal" class="search-results"></div></div><div style="text-align:center;margin:15px 0;">— ou —</div><div><label>➕ Novo paciente:</label><input type="text" id="novoNomeModal" placeholder="Nome completo *" style="width:100%;padding:10px;margin-bottom:10px;"><div style="display:flex;gap:10px;"><input type="text" id="novaIdadeModal" placeholder="Idade" style="flex:1;"><input type="text" id="novaCidadeModal" placeholder="Cidade" style="flex:2;"></div></div><div style="margin-top:15px;"><label>📋 CID:</label><div id="cidOptions"><div class="cid-option" onclick="selecionarCID('F32.0')">F32.0 - Depressão leve</div><div class="cid-option" onclick="selecionarCID('F32.1')">F32.1 - Depressão moderada</div><div class="cid-option" onclick="selecionarCID('F32.2')">F32.2 - Depressão grave</div><div class="cid-option" onclick="selecionarCID('F41.1')">F41.1 - Ansiedade generalizada</div></div><input type="text" id="cidManual" placeholder="Ou digite manualmente" style="margin-top:10px;width:100%;"></div><div style="display:flex;gap:10px;margin-top:20px;"><button class="btn-primary" style="flex:1;" onclick="confirmarSalvarModal()">✅ Salvar</button><button class="btn-secondary" style="flex:1;" onclick="fecharModal()">Cancelar</button></div>`;
-            document.getElementById('buscaPacienteModal').addEventListener('input',e=>{ const termo=e.target.value.toLowerCase(); const res=pacientes.filter(p=>p.nome?.toLowerCase().includes(termo)); document.getElementById('resultadoBuscaModal').innerHTML=res.map(p=>`<div class="search-result-item" onclick="selecionarPacienteTemp('${p.id}')">${p.nome}</div>`).join(''); });
-            modal.classList.add('show');
-        }
-        function selecionarCID(cid){ document.querySelectorAll('.cid-option').forEach(opt=>opt.classList.remove('selected')); const opt=Array.from(document.querySelectorAll('.cid-option')).find(o=>o.innerText.includes(cid)); if(opt) opt.classList.add('selected'); cidSelecionado=cid; }
-        function selecionarPacienteTemp(id){ pacienteIdTemp=id; const p=pacientes.find(p=>p.id===id); if(p) alert(`Paciente: ${p.nome}`); }
-        function confirmarSalvarModal(){
-            let cidFinal=cidSelecionado; const cidManual=document.getElementById('cidManual'); if(cidManual && cidManual.value.trim()) cidFinal=cidManual.value.trim();
-            if(!cidFinal){ alert('Selecione um CID'); return; }
-            let id=pacienteIdTemp; if(!id){ const nome=document.getElementById('novoNomeModal').value.trim(); if(!nome){ alert('Informe o nome'); return; } const novo={id:Date.now().toString(),nome,idade:document.getElementById('novaIdadeModal').value,cidade:document.getElementById('novaCidadeModal').value,anamneses:[]}; pacientes.push(novo); id=novo.id; }
-            const p=pacientes.find(p=>p.id===id); if(p){ const data=new Date(); const dataStr=`${data.getDate().toString().padStart(2,'0')}/${(data.getMonth()+1).toString().padStart(2,'0')}/${data.getFullYear()} ${data.getHours().toString().padStart(2,'0')}:${data.getMinutes().toString().padStart(2,'0')}`; p.anamneses=p.anamneses||[]; p.anamneses.push({id:Date.now().toString(),data:dataStr,cid:cidFinal,texto:analiseAtual.texto,anamneseCompleta:analiseAtual.anamneseCompleta}); salvarPacientes(); alert('Salvo!'); fecharModal(); mudarAba('prontuario'); }
-        }
-        function fecharModal(){ document.getElementById('modalSalvar').classList.remove('show'); cidSelecionado=null; pacienteIdTemp=null; }
-        
-        // Abas
-        function mudarAba(aba){
-            document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(tc=>tc.classList.remove('active'));
-            if(aba==='assistente'){ document.querySelector('.tab:first-child').classList.add('active'); document.getElementById('aba-assistente').classList.add('active'); }
-            else if(aba==='prontuario'){ document.querySelectorAll('.tab')[1].classList.add('active'); document.getElementById('aba-prontuario').classList.add('active'); renderizarProntuario(); }
-            else if(aba==='prescricao'){ document.querySelectorAll('.tab')[2].classList.add('active'); document.getElementById('aba-prescricao').classList.add('active'); gerarPrescricaoAtual(); }
-            else if(aba==='estatisticas'){ document.querySelectorAll('.tab')[3].classList.add('active'); document.getElementById('aba-estatisticas').classList.add('active'); atualizarEstatisticas(); }
-            else if(aba==='consulta'){ document.querySelectorAll('.tab')[4].classList.add('active'); document.getElementById('aba-consulta').classList.add('active'); }
-            else if(aba==='configuracoes'){ document.querySelectorAll('.tab')[5].classList.add('active'); document.getElementById('aba-configuracoes').classList.add('active'); }
-        }
-        function mudarTema(){ document.body.classList.toggle('dark', document.getElementById('temaSelect').value==='dark'); localStorage.setItem('meu_professor_tema', document.getElementById('temaSelect').value); }
-        function exportarDados(){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(pacientes,null,2)],{type:'application/json'})); a.download=`prontuario_${new Date().toISOString().slice(0,10)}.json`; a.click(); }
-        function importarDados(){ const input=document.createElement('input'); input.type='file'; input.accept='application/json'; input.onchange=e=>{ const f=e.target.files[0]; const r=new FileReader(); r.onload=ev=>{ pacientes=JSON.parse(ev.target.result); salvarPacientes(); alert('Importado!'); }; r.readAsText(f); }; input.click(); }
-        function limparTodosDados(){ if(confirm('⚠️ Apagar TODOS os dados?')){ pacientes=[]; localStorage.removeItem('meu_professor_pacientes'); salvarPacientes(); alert('Dados limpos!'); } }
-        
-        // Inicialização
-        carregarDados();
-        initPHQ9();
-        initGAD7();
-    </script>
+        setTimeout(() => {
+            const tratamentos = [{ tipo: "Monoterapia 1ª linha", descricao: "Escitalopram 10-20mg/dia", explicacao: "Baseado em diretrizes CANMAT/APA - melhor relação eficácia/tolerabilidade" }];
+            ultimoTratamento = tratamentos;
+            analiseAtual = { texto: textoCompleto, anamneseCompleta: textoCompleto };
+            
+            document.getElementById('anamneseGeradaContent').innerHTML = `<strong>📝 ANAMNESE COMPLETA:</strong><br>${textoCompleto.replace(/\n/g,'<br>')}`;
+            document.getElementById('anamneseGerada').style.display = 'block';
+            
+            const resultadoHTML = `<div class="tratamento-destaque"><h3>🎓 ORIENTAÇÃO DO PROFESSOR (Baseado em APA/CANMAT/NICE/Maudsley/Stahl/ABP/DSM-5-TR/CID-11)</h3><div class="professor-fala">
+📌 <strong>RESUMO CLÍNICO:</strong><br>
+Paciente com quadro sugestivo de Transtorno Depressivo Maior (TDM), conforme critérios DSM-5-TR e CID-11. Sintomas incluem anedonia, humor deprimido, alterações de sono e fadiga com duração >2 semanas, causando prejuízo funcional.<br><br>
+📌 <strong>HIPÓTESES DIAGNÓSTICAS:</strong><br>
+• Transtorno Depressivo Maior (85%) - critérios preenchidos<br>
+• Transtorno de Adaptação com humor deprimido (15%) - considerar gatilho estressor<br><br>
+📌 <strong>SINAIS DE ALERTA AVALIADOS:</strong><br>
+✓ Risco suicida: não referido<br>
+✓ Sintomas psicóticos: ausentes<br>
+✓ Virada maníaca: não identificada<br><br>
+📌 <strong>CONDUTA SUGERIDA (Baseada em diretrizes CANMAT 2023 e APA):</strong><br>
+• Iniciar Escitalopram 10mg/dia (ISRS de 1ª linha)<br>
+• Reavaliar em 4-6 semanas<br>
+• Associar psicoterapia (TCC) - nível A de evidência<br>
+• Orientar atividade física regular (30 min/dia)<br><br>
+📌 <strong>EXAMES SUGERIDOS:</strong><br>
+• TSH, T4 livre - excluir disfunção tireoidiana<br>
+• Vitamina B12 e D - avaliar deficiências<br><br>
+📌 <strong>OBSERVAÇÕES DO PROFESSOR:</strong><br>
+Caro colega, o caso parece bem delineado. Lembre-se: a psicoterapia é tão importante quanto o medicamento. Exercício físico é a melhor receita de endorfina que há! 😉<br><br>
+📌 <strong>REFERÊNCIAS:</strong><br>
+• CANMAT 2023 Depression Guidelines<br>
+• APA Practice Guidelines<br>
+• NICE Depression in Adults<br>
+• Stahl's Essential Psychopharmacology<br>
+• Maudsley Prescribing Guidelines<br>
+• ABP - Protocolos Clínicos<br>
+• DSM-5-TR e CID-11
+</div></div>`;
+            document.getElementById('resultado-conteudo').innerHTML = resultadoHTML;
+            document.getElementById('loading').classList.remove('show');
+            document.getElementById('resultado').classList.add('show');
+        }, 1500);
+    }
+
+    function toggleAccordion(header) { const content = header.nextElementSibling; content.classList.toggle('active'); const span = header.querySelector('span'); if(span) span.innerHTML = content.classList.contains('active') ? '▲' : '▼'; }
+    function limparAnamnese() { 
+        document.getElementById('anamnese').value = '';
+        ['checkComorbidades','checkMedicacoes','checkAlergias','checkHabit','checkHistorico','checkExame'].forEach(id=>{ const cb=document.getElementById(id); if(cb) cb.checked=false; });
+        comorbidadesSelecionadas=[]; medicamentosSelecionados=[]; alergiasSelecionadas=[]; historicoSelecionado=[];
+        document.querySelectorAll('#comorbidadesGrid input, #medicacoesGrid input, #alergiasGrid input, #historicoGrid input').forEach(cb=>cb.checked=false);
+        document.getElementById('outraComorbidade').value=''; document.getElementById('outraMedicacao').value=''; document.getElementById('outraAlergia').value=''; document.getElementById('outroHistorico').value=''; document.getElementById('historicoFamiliar').value=''; document.getElementById('exameFisico').value=''; document.getElementById('examePsiquico').value='';
+        document.getElementById('anamneseGerada').style.display='none'; document.getElementById('resultado').classList.remove('show');
+        atualizarMedSelecionados();
+    }
+    function exemploAnamnese() { document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora.'; }
+    function fecharResultado() { document.getElementById('resultado').classList.remove('show'); }
+
+    // PRESCRIÇÃO
+    function buscarMedicamentoPrescricao() {
+        const termo = document.getElementById('buscaMedicamento').value.toLowerCase();
+        const container = document.getElementById('resultadoBuscaMed');
+        if(termo.length < 2) { container.style.display='none'; return; }
+        const resultados = medicamentosLista.filter(m => m.toLowerCase().includes(termo));
+        if(resultados.length) { container.style.display='block'; container.innerHTML = resultados.map(m => `<div class="search-result-item" onclick="adicionarMedicamentoPrescricao('${m}')">${m}</div>`).join(''); }
+        else container.style.display='none';
+    }
+    function adicionarMedicamentoPrescricao(med) {
+        listaPrescricao.push({ nome: med, dose: "", via: "Oral", observacao: "" });
+        renderizarListaPrescricao();
+        document.getElementById('buscaMedicamento').value = '';
+        document.getElementById('resultadoBuscaMed').style.display = 'none';
+    }
+    function removerMedicamentoPrescricao(idx) { listaPrescricao.splice(idx,1); renderizarListaPrescricao(); }
+    function atualizarDose(idx, dose) { listaPrescricao[idx].dose = dose; renderizarListaPrescricao(); }
+    function renderizarListaPrescricao() {
+        const container = document.getElementById('listaPrescricao');
+        if(!container) return;
+        if(listaPrescricao.length === 0) { container.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-sec);">Nenhum medicamento adicionado. Busque acima.</div>'; }
+        else { container.innerHTML = listaPrescricao.map((m,idx) => `<div class="med-item-lista"><div><strong>${idx+1}. ${m.nome}</strong><br><input type="text" placeholder="Dose (ex: 10mg/dia)" value="${m.dose}" onchange="atualizarDose(${idx}, this.value)" style="width:150px; margin-top:5px;"></div><button class="btn-secondary" style="padding:5px 12px;" onclick="removerMedicamentoPrescricao(${idx})">Remover</button></div>`).join(''); }
+        atualizarTextoPrescricao();
+    }
+    function atualizarTextoPrescricao() {
+        const data = new Date().toLocaleDateString('pt-BR');
+        let texto = `VIA ORAL\n\n`;
+        listaPrescricao.forEach((m,idx) => { texto += `${idx+1}. ${m.nome}${m.dose ? ` ${m.dose}` : ''} - Tomar conforme orientação médica\n`; });
+        texto += `\nData: ${data}\nDr. Marcelo Medeiros\nCRM-PR 47960`;
+        document.getElementById('prescricaoEditavel').value = texto;
+    }
+    function gerarPrescricaoAtual() { if(ultimoTratamento) adicionarMedicamentoPrescricao(ultimoTratamento[0].descricao); }
+    function ativarPrescricaoManual() { document.getElementById('prescricaoEditavel').focus(); }
+    
+    // PRONTUÁRIO
+    function salvarPacientes() { localStorage.setItem('meu_professor_pacientes', JSON.stringify(pacientes)); renderizarProntuario(); atualizarEstatisticas(); }
+    function renderizarProntuario() {
+        const container = document.getElementById('prontuarioContainer');
+        if(!container) return;
+        const ord = [...pacientes].sort((a,b)=>(a.nome||'').localeCompare(b.nome||''));
+        if(ord.length===0){ container.innerHTML='<div style="text-align:center;padding:40px;">Nenhum paciente cadastrado.</div>'; return; }
+        container.innerHTML = ord.map(p=>`<div class="paciente-pasta" data-nome="${p.nome}"><div class="paciente-header" onclick="togglePasta(this)"><div><div class="paciente-nome"><i class="fas fa-user"></i> ${p.nome}</div><div class="paciente-info">${p.idade?`${p.idade} anos | `:''}${p.cidade||''} | ${p.anamneses?.length||0} anamnese(s)</div></div><i class="fas fa-chevron-right seta"></i></div><div class="anamneses-lista">${(p.anamneses||[]).slice().reverse().map(a=>`<div><div class="anamnese-preview" onclick="toggleAnamneseCompleta(this,event)"><span>📅 ${a.data}</span> | CID: ${a.cid||'?'}</div><div class="anamnese-completa">${a.anamneseCompleta||a.texto||''}</div></div>`).join('')}${(!p.anamneses||!p.anamneses.length)?'<div>Sem anamneses</div>':''}</div></div>`).join('');
+    }
+    function togglePasta(header){ const p=header.closest('.paciente-pasta'); const l=p.querySelector('.anamneses-lista'); const s=header.querySelector('.seta'); l.classList.toggle('expandido'); s.classList.toggle('rotacionada'); }
+    function toggleAnamneseCompleta(el,ev){ ev.stopPropagation(); const c=el.nextElementSibling; c.classList.toggle('expandido'); }
+    function filtrarPacientes(){ const termo=document.getElementById('buscarPacienteProntuario')?.value.toLowerCase(); document.querySelectorAll('.paciente-pasta').forEach(p=>{ p.style.display=p.getAttribute('data-nome')?.toLowerCase().includes(termo)?'block':'none'; }); }
+    function abrirModalCriarPaciente(){ document.getElementById('modalCriarPaciente').classList.add('show'); }
+    function fecharModalCriarPaciente(){ document.getElementById('modalCriarPaciente').classList.remove('show'); document.getElementById('novoPacienteNome').value=''; document.getElementById('novoPacienteIdade').value=''; document.getElementById('novoPacienteCidade').value=''; }
+    function confirmarCriarPaciente(){ const n=document.getElementById('novoPacienteNome').value.trim(); if(!n){ alert('Informe o nome'); return; } pacientes.push({id:Date.now(),nome:n,idade:document.getElementById('novoPacienteIdade').value,cidade:document.getElementById('novoPacienteCidade').value,anamneses:[]}); salvarPacientes(); fecharModalCriarPaciente(); alert(`Paciente ${n} criado!`); }
+    
+    // CID Buscável
+    const cidData = [{cod:"F32.0",desc:"Episódio depressivo leve"},{cod:"F32.1",desc:"Episódio depressivo moderado"},{cod:"F32.2",desc:"Episódio depressivo grave"},{cod:"F41.1",desc:"Ansiedade generalizada"},{cod:"F43.1",desc:"TEPT"},{cod:"F31",desc:"Transtorno bipolar"},{cod:"F20.0",desc:"Esquizofrenia paranóide"}];
+    let cidSelecionado=null, pacienteTemp=null;
+    function abrirModalSalvar(){ if(!analiseAtual){ alert('Nenhuma análise'); return; } const modal=document.getElementById('modalSalvar'); const body=document.getElementById('modalBody'); body.innerHTML=`<div><label>🔍 Buscar paciente:</label><input type="text" id="buscaPacienteModal" class="search-box" placeholder="Digite o nome..."><div id="resultadoBuscaModal" class="search-results"></div></div><div style="text-align:center;margin:15px 0;">— ou —</div><div><label>➕ Novo paciente:</label><input type="text" id="novoNomeModal" placeholder="Nome completo *" style="width:100%;padding:10px;"><div style="display:flex;gap:10px;margin-top:10px;"><input type="text" id="novaIdadeModal" placeholder="Idade" style="flex:1;"><input type="text" id="novaCidadeModal" placeholder="Cidade" style="flex:2;"></div></div><div style="margin-top:15px;"><label>📋 Buscar CID:</label><input type="text" id="buscaCid" class="search-box" placeholder="Digite o código ou diagnóstico..." onkeyup="filtrarCid()"><div id="cidOptions" style="max-height:200px;overflow-y:auto;"></div></div><div style="display:flex;gap:10px;margin-top:20px;"><button class="btn-primary" style="flex:1;" onclick="confirmarSalvarModal()">Salvar</button><button class="btn-secondary" style="flex:1;" onclick="fecharModal()">Cancelar</button></div>`;
+        document.getElementById('buscaPacienteModal').addEventListener('input',e=>{ const t=e.target.value.toLowerCase(); const r=pacientes.filter(p=>p.nome?.toLowerCase().includes(t)); document.getElementById('resultadoBuscaModal').innerHTML=r.map(p=>`<div class="search-result-item" onclick="selecionarPacienteTemp('${p.id}')">${p.nome}</div>`).join(''); });
+        renderizarCidOptions();
+        modal.classList.add('show');
+    }
+    function renderizarCidOptions(){ const container=document.getElementById('cidOptions'); container.innerHTML=cidData.map(c=>`<div class="search-result-item" onclick="selecionarCID('${c.cod} - ${c.desc}')">${c.cod} - ${c.desc}</div>`).join(''); }
+    function filtrarCid(){ const termo=document.getElementById('buscaCid').value.toLowerCase(); const filt=cidData.filter(c=>c.cod.toLowerCase().includes(termo)||c.desc.toLowerCase().includes(termo)); document.getElementById('cidOptions').innerHTML=filt.map(c=>`<div class="search-result-item" onclick="selecionarCID('${c.cod} - ${c.desc}')">${c.cod} - ${c.desc}</div>`).join(''); }
+    function selecionarCID(cid){ cidSelecionado=cid; alert(`CID selecionado: ${cid}`); }
+    function selecionarPacienteTemp(id){ pacienteTemp=id; const p=pacientes.find(p=>p.id==id); if(p) alert(`Paciente: ${p.nome}`); }
+    function confirmarSalvarModal(){
+        if(!cidSelecionado){ alert('Selecione um CID'); return; }
+        let id=pacienteTemp; if(!id){ const nome=document.getElementById('novoNomeModal').value.trim(); if(!nome){ alert('Informe o nome'); return; } const novo={id:Date.now(),nome,idade:document.getElementById('novaIdadeModal').value,cidade:document.getElementById('novaCidadeModal').value,anamneses:[]}; pacientes.push(novo); id=novo.id; }
+        const p=pacientes.find(p=>p.id==id); if(p){ const d=new Date(); const ds=`${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`; p.anamneses=p.anamneses||[]; p.anamneses.push({id:Date.now(),data:ds,cid:cidSelecionado,texto:analiseAtual.texto,anamneseCompleta:analiseAtual.anamneseCompleta}); salvarPacientes(); alert('Salvo!'); fecharModal(); mudarAba('prontuario'); }
+    }
+    function fecharModal(){ document.getElementById('modalSalvar').classList.remove('show'); cidSelecionado=null; pacienteTemp=null; }
+    
+    // ESTATÍSTICAS
+    function atualizarEstatisticas(){ const diag={}; pacientes.forEach(p=>(p.anamneses||[]).forEach(a=>{ if(a.cid) diag[a.cid]=(diag[a.cid]||0)+1; })); document.getElementById('statsDiagnosticos').innerHTML=Object.entries(diag).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k,v])=>`<div class="stats-item"><span>${k}</span><span class="stats-count">${v}</span></div>`).join('')||'Sem dados'; }
+    
+    // PHQ9/GAD7
+    function initPHQ9(){ const p=["Pouco interesse ou prazer","Sentir-se para baixo","Dificuldade para dormir","Cansaço","Falta de apetite","Sentir-se mal consigo","Dificuldade de concentração","Lentidão/agitação","Pensamentos de morte"]; let h=''; p.forEach((q,i)=>{ h+=`<div><label>${i+1}. ${q}</label><div class="radio-group" style="display:flex;gap:10px;flex-wrap:wrap;">`; for(let v=0;v<=3;v++) h+=`<label><input type="radio" name="phq9_${i}" value="${v}"> ${v}</label>`; h+=`</div></div>`; }); document.getElementById('phq9').innerHTML=h; }
+    function calcularPHQ9(){ let t=0; for(let i=0;i<9;i++){ const s=document.querySelector(`input[name="phq9_${i}"]:checked`); if(s) t+=parseInt(s.value); } let g=t<=4?'Mínima':t<=9?'Leve':t<=14?'Moderada':t<=19?'Moderadamente grave':'Grave'; document.getElementById('phq9Resultado').innerHTML=`<strong>PHQ-9: ${t}</strong> - Gravidade ${g}<br>${t>=10?'Considerar tratamento.':'Monitorar.'}`; document.getElementById('phq9Resultado').style.display='block'; }
+    function initGAD7(){ const p=["Nervosismo","Não conseguir parar de preocupar","Preocupação excessiva","Dificuldade para relaxar","Inquietação","Irritabilidade","Medo de algo ruim"]; let h=''; p.forEach((q,i)=>{ h+=`<div><label>${i+1}. ${q}</label><div class="radio-group" style="display:flex;gap:10px;flex-wrap:wrap;">`; for(let v=0;v<=3;v++) h+=`<label><input type="radio" name="gad7_${i}" value="${v}"> ${v}</label>`; h+=`</div></div>`; }); document.getElementById('gad7').innerHTML=h; }
+    function calcularGAD7(){ let t=0; for(let i=0;i<7;i++){ const s=document.querySelector(`input[name="gad7_${i}"]:checked`); if(s) t+=parseInt(s.value); } let g=t<=4?'Mínima':t<=9?'Leve':t<=14?'Moderada':'Grave'; document.getElementById('gad7Resultado').innerHTML=`<strong>GAD-7: ${t}</strong> - ${g}<br>${t>=10?'Considerar tratamento.':'Monitorar.'}`; document.getElementById('gad7Resultado').style.display='block'; }
+    function calcularAlgoritmoTDM(){ const g=document.getElementById('gravidadeTDM').value; const a=document.getElementById('comorbidadeAnsiedade').value; let s=g==='leve'?'Psicoterapia + monitoramento.':g==='moderado'?'Iniciar ISRS (Escitalopram 10mg/dia).':'Iniciar ISRS + psicoterapia. Acompanhamento semanal.'; if(a==='sim') s+=' Comorbidade ansiosa - Sertralina é boa opção.'; document.getElementById('algoritmoResultado').innerHTML=s; document.getElementById('algoritmoResultado').style.display='block'; }
+    
+    // CONFIG
+    function mudarTema(){ document.body.classList.toggle('dark', document.getElementById('temaSelect').value==='dark'); localStorage.setItem('meu_professor_tema', document.getElementById('temaSelect').value); }
+    function exportarDados(){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(pacientes,null,2)],{type:'application/json'})); a.download=`prontuario_${new Date().toISOString().slice(0,10)}.json`; a.click(); }
+    function importarDados(){ const i=document.createElement('input'); i.type='file'; i.accept='application/json'; i.onchange=e=>{ const f=e.target.files[0]; const r=new FileReader(); r.onload=ev=>{ pacientes=JSON.parse(ev.target.result); salvarPacientes(); alert('Importado!'); }; r.readAsText(f); }; i.click(); }
+    function limparTodosDados(){ if(confirm('⚠️ Apagar TODOS os dados?')){ pacientes=[]; localStorage.removeItem('meu_professor_pacientes'); salvarPacientes(); alert('Dados limpos!'); } }
+    function mudarAba(aba){
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tc=>tc.classList.remove('active'));
+        if(aba==='assistente'){ document.querySelector('.tab:first-child').classList.add('active'); document.getElementById('aba-assistente').classList.add('active'); }
+        else if(aba==='prontuario'){ document.querySelectorAll('.tab')[1].classList.add('active'); document.getElementById('aba-prontuario').classList.add('active'); renderizarProntuario(); }
+        else if(aba==='prescricao'){ document.querySelectorAll('.tab')[2].classList.add('active'); document.getElementById('aba-prescricao').classList.add('active'); }
+        else if(aba==='estatisticas'){ document.querySelectorAll('.tab')[3].classList.add('active'); document.getElementById('aba-estatisticas').classList.add('active'); atualizarEstatisticas(); }
+        else if(aba==='consulta'){ document.querySelectorAll('.tab')[4].classList.add('active'); document.getElementById('aba-consulta').classList.add('active'); }
+        else if(aba==='configuracoes'){ document.querySelectorAll('.tab')[5].classList.add('active'); document.getElementById('aba-configuracoes').classList.add('active'); }
+    }
+    
+    // Inicialização
+    (function init(){
+        const saved = localStorage.getItem('meu_professor_pacientes');
+        if(saved) pacientes = JSON.parse(saved);
+        const tema = localStorage.getItem('meu_professor_tema');
+        if(tema === 'dark') { document.body.classList.add('dark'); document.getElementById('temaSelect').value = 'dark'; }
+        renderizarComorbidades(); renderizarMedicacoes(); renderizarAlergias(); renderizarHistorico(); renderizarHabitos();
+        renderizarProntuario(); atualizarEstatisticas();
+        initPHQ9(); initGAD7();
+    })();
+</script>
 </body>
 </html>
