@@ -88,7 +88,9 @@
         .anamnese-completa.expandido { display: block; }
         .stats-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; }
         .prescricao-lista { background: var(--bg-start); border-radius: 12px; padding: 15px; margin-top: 15px; }
-        .med-item-lista { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); }
+        .med-item-lista { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); gap: 10px; }
+        .med-item-lista > div { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .med-item-lista input, .med-item-lista select { padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg); }
         .footer { background: #0f2b3d; color: white; padding: 30px 0; margin-top: 60px; text-align: center; }
         @media (max-width: 768px) { .container { padding: 0 20px; } .stats-grid-2 { grid-template-columns: 1fr; } .duas-colunas { flex-direction: column; } }
     </style>
@@ -139,7 +141,7 @@
                 
                 <!-- Histórico Psiquiátrico -->
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkHistorico" onchange="toggleSection('historico')"><span><i class="fas fa-brain"></i> Histórico Psiquiátrico / Familiar?</span></label>
-                <div id="historicoSection" class="section-content"><input type="text" id="searchHistorico" class="search-box" placeholder="Buscar..." onkeyup="filtrarLista('historicoGrid',this.value)"><div id="historicoGrid" class="checkbox-grid"></div><div class="texto-livre"><input type="text" id="outroHistorico" placeholder="Outro diagnóstico..."></div><div style="margin-top:15px;"><label>Histórico Familiar:</label><textarea id="historicoFamiliar" class="textarea-anamnese" rows="2" placeholder="Pais, irmãos, filhos..."></textarea></div></div></div>
+                <div id="historicoSection" class="section-content"><input type="text" id="searchHistorico" class="search-box" placeholder="Buscar..." onkeyup="filtrarLista('historicoGrid',this.value)"><div id="historicoGrid" class="checkbox-grid"></div><div class="texto-livre"><input type="text" id="outroHistorico" placeholder="Outro diagnóstico..."></div><div style="margin-top:15px;"><label>Histórico Familiar:</label><textarea id="historicoFamiliar" class="textarea-anamnese" rows="2" placeholder="Ex: Depressão - PAI, TAG - IRMÃO..."></textarea></div></div></div>
                 
                 <!-- Exame Físico -->
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkExame" onchange="toggleSection('exame')"><span><i class="fas fa-stethoscope"></i> Adicionar Exame Físico e Psíquico?</span></label>
@@ -173,8 +175,9 @@
             
             <div class="prescricao-lista"><h4>📋 Medicamentos Prescritos:</h4><div id="listaPrescricao"></div></div>
             
-            <div class="form-group" style="margin-top:20px;"><label>✏️ Texto final da prescrição:</label><textarea id="prescricaoEditavel" class="textarea-anamnese" rows="12" placeholder="A prescrição aparecerá aqui..."></textarea></div>
-            <div class="info-box" style="margin-top:20px; padding:15px; background:var(--bg-start); border-radius:12px;"><i class="fas fa-info-circle"></i> <strong>Como usar:</strong> Busque o medicamento, clique para adicionar, edite o texto final, copie e cole no Memed.</div>
+            <div class="form-group" style="margin-top:20px;"><label>✏️ Texto final da prescrição:</label><textarea id="prescricaoEditavel" class="textarea-anamnese" rows="10" placeholder="A prescrição aparecerá aqui..."></textarea></div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 10px;"><button class="btn-success" onclick="copiarReceitaCompleta()"><i class="fas fa-copy"></i> Copiar Toda Receita</button></div>
+            <div class="info-box" style="margin-top:20px; padding:15px; background:var(--bg-start); border-radius:12px;"><i class="fas fa-info-circle"></i> <strong>Como usar:</strong> Busque o medicamento, preencha dose, quantidade e posologia, edite o texto final se necessário, clique em "Copiar Toda Receita" e cole no Memed.</div>
             </div>
         </div>
 
@@ -204,6 +207,54 @@
     const historicoLista = ["Depressão","Transtorno Bipolar","Esquizofrenia","TAG","Síndrome do Pânico","TOC","TEPT","Borderline","TDAH","Autismo","Tentativa de suicídio","Dependência química"];
     const habitosLista = ["Álcool","Tabagismo","Cannabis","Cocaína/Crack","Estimulantes","Opioides","Benzodiazepínicos","Cafeína/Energéticos"];
     
+    // CID COMPLETO
+    const cidData = [
+        {cod:"F32.0",desc:"Episódio depressivo leve"},
+        {cod:"F32.1",desc:"Episódio depressivo moderado"},
+        {cod:"F32.2",desc:"Episódio depressivo grave sem sintomas psicóticos"},
+        {cod:"F32.3",desc:"Episódio depressivo grave com sintomas psicóticos"},
+        {cod:"F32.8",desc:"Outros episódios depressivos"},
+        {cod:"F32.9",desc:"Episódio depressivo não especificado"},
+        {cod:"F33.0",desc:"Transtorno depressivo recorrente - episódio atual leve"},
+        {cod:"F33.1",desc:"Transtorno depressivo recorrente - episódio atual moderado"},
+        {cod:"F33.2",desc:"Transtorno depressivo recorrente - episódio atual grave sem psicóticos"},
+        {cod:"F33.3",desc:"Transtorno depressivo recorrente - episódio atual grave com psicóticos"},
+        {cod:"F33.4",desc:"Transtorno depressivo recorrente - em remissão"},
+        {cod:"F33.8",desc:"Outros transtornos depressivos recorrentes"},
+        {cod:"F33.9",desc:"Transtorno depressivo recorrente não especificado"},
+        {cod:"F41.0",desc:"Transtorno de pânico"},
+        {cod:"F41.1",desc:"Transtorno de ansiedade generalizada"},
+        {cod:"F41.2",desc:"Transtorno misto ansioso e depressivo"},
+        {cod:"F41.3",desc:"Outros transtornos ansiosos mistos"},
+        {cod:"F41.8",desc:"Outros transtornos ansiosos especificados"},
+        {cod:"F41.9",desc:"Transtorno ansioso não especificado"},
+        {cod:"F43.0",desc:"Reação aguda ao estresse"},
+        {cod:"F43.1",desc:"Transtorno de estresse pós-traumático (TEPT)"},
+        {cod:"F43.2",desc:"Transtorno de adaptação"},
+        {cod:"F31.0",desc:"Transtorno bipolar - episódio atual hipomaníaco"},
+        {cod:"F31.1",desc:"Transtorno bipolar - episódio atual maníaco sem psicóticos"},
+        {cod:"F31.2",desc:"Transtorno bipolar - episódio atual maníaco com psicóticos"},
+        {cod:"F31.3",desc:"Transtorno bipolar - episódio atual depressivo leve/moderado"},
+        {cod:"F31.4",desc:"Transtorno bipolar - episódio atual depressivo grave sem psicóticos"},
+        {cod:"F31.5",desc:"Transtorno bipolar - episódio atual depressivo grave com psicóticos"},
+        {cod:"F31.6",desc:"Transtorno bipolar - episódio atual misto"},
+        {cod:"F31.7",desc:"Transtorno bipolar - em remissão"},
+        {cod:"F31.8",desc:"Outros transtornos bipolares"},
+        {cod:"F31.9",desc:"Transtorno bipolar não especificado"},
+        {cod:"F20.0",desc:"Esquizofrenia paranóide"},
+        {cod:"F20.1",desc:"Esquizofrenia hebefrênica"},
+        {cod:"F20.2",desc:"Esquizofrenia catatônica"},
+        {cod:"F20.3",desc:"Esquizofrenia indiferenciada"},
+        {cod:"F20.5",desc:"Esquizofrenia residual"},
+        {cod:"F20.6",desc:"Esquizofrenia simples"},
+        {cod:"F20.9",desc:"Esquizofrenia não especificada"},
+        {cod:"F60.3",desc:"Transtorno de personalidade borderline"},
+        {cod:"F90.0",desc:"TDAH - tipo desatento"},
+        {cod:"F90.1",desc:"TDAH - tipo hiperativo/impulsivo"},
+        {cod:"F84.0",desc:"Autismo infantil"},
+        {cod:"F84.5",desc:"Síndrome de Asperger"}
+    ];
+    
     let medicamentosSelecionados = [], comorbidadesSelecionadas = [], alergiasSelecionadas = [], historicoSelecionado = [], pacientes = [], analiseAtual = null, ultimoTratamento = null;
     let listaPrescricao = [];
 
@@ -219,19 +270,27 @@
     function renderizarMedicacoes(){ document.getElementById('medicacoesGrid').innerHTML=medicamentosLista.map(i=>`<div class="checkbox-item"><input type="checkbox" value="${i}" onchange="toggleMedicamento(this)"><label>${i}</label></div>`).join(''); }
     function renderizarAlergias(){ document.getElementById('alergiasGrid').innerHTML=medicamentosLista.map(i=>`<div class="checkbox-item"><input type="checkbox" value="${i}" onchange="toggleAlergia(this)"><label>${i}</label></div>`).join(''); }
     function renderizarHistorico(){ document.getElementById('historicoGrid').innerHTML=historicoLista.map(i=>`<div class="checkbox-item"><input type="checkbox" value="${i}" onchange="toggleHistoricoItem(this)"><label>${i}</label></div>`).join(''); }
-    function renderizarHabitos(){ document.getElementById('substanciasContainer').innerHTML=habitosLista.map(s=>`<div class="checkbox-item"><input type="checkbox" value="${s}" onchange="this.nextElementSibling.disabled=!this.checked"><label>${s}</label><select style="margin-left:auto" ${habitosSelecionados[s]?.freq?`value="${habitosSelecionados[s].freq}"`:""} disabled><option value="">Frequência</option><option value="Nunca">Nunca</option><option value="Ocasional">Ocasional</option><option value="Frequente">Frequente</option><option value="Diário">Diário</option></select></div>`).join(''); }
+    function renderizarHabitos(){ document.getElementById('substanciasContainer').innerHTML=habitosLista.map(s=>`<div class="checkbox-item"><input type="checkbox" value="${s}" onchange="this.nextElementSibling.disabled=!this.checked"><label>${s}</label><select style="margin-left:auto" disabled><option value="">Frequência</option><option value="Nunca">Nunca</option><option value="Ocasional">Ocasional</option><option value="Frequente">Frequente</option><option value="Diário">Diário</option></select></div>`).join(''); }
     
     function coletarDadosCompletos() {
         let texto = document.getElementById('anamnese').value;
-        if(comorbidadesSelecionadas.length) texto += `\nCOMORBIDADES: ${comorbidadesSelecionadas.join(', ')}.`;
+        if(comorbidadesSelecionadas.length) texto += `\n\nCOMORBIDADES: ${comorbidadesSelecionadas.join(', ')}.`;
         if(document.getElementById('outraComorbidade').value.trim()) texto += ` ${document.getElementById('outraComorbidade').value.trim()}.`;
-        if(medicamentosSelecionados.length) texto += `\nMEDICAÇÕES: ${medicamentosSelecionados.join(', ')}.`;
+        if(medicamentosSelecionados.length) texto += `\n\nMEDICAÇÕES EM USO: ${medicamentosSelecionados.join(', ')}.`;
         if(document.getElementById('outraMedicacao').value.trim()) texto += ` ${document.getElementById('outraMedicacao').value.trim()}.`;
-        if(alergiasSelecionadas.length) texto += `\nALERGIAS: ${alergiasSelecionadas.join(', ')}.`;
+        if(alergiasSelecionadas.length) texto += `\n\nALERGIAS: ${alergiasSelecionadas.join(', ')}.`;
         if(document.getElementById('outraAlergia').value.trim()) texto += ` ${document.getElementById('outraAlergia').value.trim()}.`;
-        if(document.getElementById('historicoFamiliar').value.trim()) texto += `\nHISTÓRICO FAMILIAR: ${document.getElementById('historicoFamiliar').value.trim()}.`;
-        if(document.getElementById('exameFisico').value.trim()) texto += `\nEXAME FÍSICO: ${document.getElementById('exameFisico').value.trim()}.`;
-        if(document.getElementById('examePsiquico').value.trim()) texto += `\nEXAME PSÍQUICO: ${document.getElementById('examePsiquico').value.trim()}.`;
+        
+        // Histórico familiar com a patologia marcada
+        let historicoFamiliarTexto = [];
+        if(historicoSelecionado.length) historicoFamiliarTexto.push(...historicoSelecionado);
+        if(document.getElementById('outroHistorico').value.trim()) historicoFamiliarTexto.push(document.getElementById('outroHistorico').value.trim());
+        let familiarObs = document.getElementById('historicoFamiliar').value.trim();
+        if(historicoFamiliarTexto.length) texto += `\n\nHISTÓRICO PESSOAL: ${historicoFamiliarTexto.join(', ')}.`;
+        if(familiarObs) texto += `\n\nHISTÓRICO FAMILIAR: ${familiarObs}.`;
+        
+        if(document.getElementById('exameFisico').value.trim()) texto += `\n\nEXAME FÍSICO: ${document.getElementById('exameFisico').value.trim()}.`;
+        if(document.getElementById('examePsiquico').value.trim()) texto += `\n\nEXAME PSÍQUICO: ${document.getElementById('examePsiquico').value.trim()}.`;
         return texto;
     }
 
@@ -252,27 +311,27 @@
             document.getElementById('anamneseGeradaContent').innerHTML = `<strong>📝 ANAMNESE COMPLETA:</strong><br>${textoCompleto.replace(/\n/g,'<br>')}`;
             document.getElementById('anamneseGerada').style.display = 'block';
             
-            const resultadoHTML = `<div class="tratamento-destaque"><h3>🎓 ORIENTAÇÃO DO PROFESSOR (Baseado em APA/CANMAT/NICE/Maudsley/Stahl/ABP/DSM-5-TR/CID-11)</h3><div class="professor-fala">
-📌 <strong>RESUMO CLÍNICO:</strong><br>
-Paciente com quadro sugestivo de Transtorno Depressivo Maior (TDM), conforme critérios DSM-5-TR e CID-11. Sintomas incluem anedonia, humor deprimido, alterações de sono e fadiga com duração >2 semanas, causando prejuízo funcional.<br><br>
-📌 <strong>HIPÓTESES DIAGNÓSTICAS:</strong><br>
-• Transtorno Depressivo Maior (85%) - critérios preenchidos<br>
-• Transtorno de Adaptação com humor deprimido (15%) - considerar gatilho estressor<br><br>
-📌 <strong>SINAIS DE ALERTA AVALIADOS:</strong><br>
+            const resultadoHTML = `<div class="tratamento-destaque"><div class="professor-fala">
+🎓 <strong>RESUMO DO PROFESSOR:</strong><br>
+Caro colega, analisando o caso com base nas diretrizes APA, CANMAT, NICE, Maudsley, Stahl, ABP, DSM-5-TR e CID-11, observo um quadro compatível com Transtorno Depressivo Maior, episódio atual de intensidade moderada a grave.<br><br>
+<strong>🎯 HIPÓTESE PRINCIPAL:</strong> Transtorno Depressivo Maior (85%)<br>
+<strong>📋 DIAGNÓSTICOS DIFERENCIAIS:</strong> Transtorno de Adaptação (15%), Transtorno de Ansiedade Generalizada (45%)<br><br>
+<strong>🚨 SINAIS DE ALERTA AVALIADOS:</strong><br>
 ✓ Risco suicida: não referido<br>
 ✓ Sintomas psicóticos: ausentes<br>
-✓ Virada maníaca: não identificada<br><br>
-📌 <strong>CONDUTA SUGERIDA (Baseada em diretrizes CANMAT 2023 e APA):</strong><br>
+✓ Virada maníaca: não identificada<br>
+✓ Interações medicamentosas: avaliar comorbidades<br><br>
+<strong>💊 CONDUTA SUGERIDA (Baseada em diretrizes):</strong><br>
 • Iniciar Escitalopram 10mg/dia (ISRS de 1ª linha)<br>
 • Reavaliar em 4-6 semanas<br>
 • Associar psicoterapia (TCC) - nível A de evidência<br>
 • Orientar atividade física regular (30 min/dia)<br><br>
-📌 <strong>EXAMES SUGERIDOS:</strong><br>
+<strong>🔬 EXAMES SUGERIDOS:</strong><br>
 • TSH, T4 livre - excluir disfunção tireoidiana<br>
 • Vitamina B12 e D - avaliar deficiências<br><br>
-📌 <strong>OBSERVAÇÕES DO PROFESSOR:</strong><br>
-Caro colega, o caso parece bem delineado. Lembre-se: a psicoterapia é tão importante quanto o medicamento. Exercício físico é a melhor receita de endorfina que há! 😉<br><br>
-📌 <strong>REFERÊNCIAS:</strong><br>
+<strong>😉 OBSERVAÇÕES DO PROFESSOR:</strong><br>
+Lembre-se: o cérebro do paciente pode estar em "greve de serotonina". Nossa missão é convencê-lo a voltar ao trabalho! Exercício físico é a melhor receita de endorfina que há. Paciente ansioso? A mente dele está no modo "alerta máximo" - vamos acalmar essa sirene interna.<br><br>
+<strong>📚 REFERÊNCIAS:</strong><br>
 • CANMAT 2023 Depression Guidelines<br>
 • APA Practice Guidelines<br>
 • NICE Depression in Adults<br>
@@ -300,7 +359,27 @@ Caro colega, o caso parece bem delineado. Lembre-se: a psicoterapia é tão impo
     function exemploAnamnese() { document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora.'; }
     function fecharResultado() { document.getElementById('resultado').classList.remove('show'); }
 
-    // PRESCRIÇÃO
+    // PRESCRIÇÃO COM QUANTIDADE E POSOLOGIA
+    const opcoesPosologia = [
+        "1 comprimido ao dia",
+        "1 comprimido 2x ao dia",
+        "1 comprimido 3x ao dia",
+        "1 comprimido em jejum",
+        "1 comprimido após refeição",
+        "1 comprimido antes de dormir",
+        "10 gotas 3x ao dia",
+        "15 gotas 2x ao dia",
+        "20 gotas ao dia",
+        "1 cápsula ao dia",
+        "1 cápsula 2x ao dia",
+        "1 colher de sopa ao dia",
+        "Uso contínuo",
+        "Uso por 30 dias",
+        "Uso por 60 dias",
+        "Uso por 90 dias",
+        "Conforme orientação médica"
+    ];
+    
     function buscarMedicamentoPrescricao() {
         const termo = document.getElementById('buscaMedicamento').value.toLowerCase();
         const container = document.getElementById('resultadoBuscaMed');
@@ -309,28 +388,55 @@ Caro colega, o caso parece bem delineado. Lembre-se: a psicoterapia é tão impo
         if(resultados.length) { container.style.display='block'; container.innerHTML = resultados.map(m => `<div class="search-result-item" onclick="adicionarMedicamentoPrescricao('${m}')">${m}</div>`).join(''); }
         else container.style.display='none';
     }
+    
     function adicionarMedicamentoPrescricao(med) {
-        listaPrescricao.push({ nome: med, dose: "", via: "Oral", observacao: "" });
+        listaPrescricao.push({ nome: med, dose: "", quantidade: "1", posologia: "1 comprimido ao dia" });
         renderizarListaPrescricao();
         document.getElementById('buscaMedicamento').value = '';
         document.getElementById('resultadoBuscaMed').style.display = 'none';
     }
+    
     function removerMedicamentoPrescricao(idx) { listaPrescricao.splice(idx,1); renderizarListaPrescricao(); }
-    function atualizarDose(idx, dose) { listaPrescricao[idx].dose = dose; renderizarListaPrescricao(); }
+    function atualizarCampoPrescricao(idx, campo, valor) { listaPrescricao[idx][campo] = valor; renderizarListaPrescricao(); }
+    
     function renderizarListaPrescricao() {
         const container = document.getElementById('listaPrescricao');
         if(!container) return;
         if(listaPrescricao.length === 0) { container.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-sec);">Nenhum medicamento adicionado. Busque acima.</div>'; }
-        else { container.innerHTML = listaPrescricao.map((m,idx) => `<div class="med-item-lista"><div><strong>${idx+1}. ${m.nome}</strong><br><input type="text" placeholder="Dose (ex: 10mg/dia)" value="${m.dose}" onchange="atualizarDose(${idx}, this.value)" style="width:150px; margin-top:5px;"></div><button class="btn-secondary" style="padding:5px 12px;" onclick="removerMedicamentoPrescricao(${idx})">Remover</button></div>`).join(''); }
+        else { 
+            container.innerHTML = listaPrescricao.map((m,idx) => `
+                <div class="med-item-lista">
+                    <strong>${idx+1}. ${m.nome}</strong>
+                    <div>
+                        <input type="text" placeholder="Dose (ex: 10mg)" value="${m.dose}" onchange="atualizarCampoPrescricao(${idx}, 'dose', this.value)" style="width:100px;">
+                        <input type="text" placeholder="Quantidade" value="${m.quantidade}" onchange="atualizarCampoPrescricao(${idx}, 'quantidade', this.value)" style="width:80px;">
+                        <select onchange="atualizarCampoPrescricao(${idx}, 'posologia', this.value)">
+                            ${opcoesPosologia.map(opt => `<option value="${opt}" ${m.posologia === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                        </select>
+                        <button class="btn-secondary" style="padding:5px 12px;" onclick="removerMedicamentoPrescricao(${idx})">Remover</button>
+                    </div>
+                </div>
+            `).join(''); 
+        }
         atualizarTextoPrescricao();
     }
+    
     function atualizarTextoPrescricao() {
         const data = new Date().toLocaleDateString('pt-BR');
         let texto = `VIA ORAL\n\n`;
-        listaPrescricao.forEach((m,idx) => { texto += `${idx+1}. ${m.nome}${m.dose ? ` ${m.dose}` : ''} - Tomar conforme orientação médica\n`; });
+        listaPrescricao.forEach((m,idx) => {
+            texto += `${idx+1}. ${m.nome}${m.dose ? ` ${m.dose}` : ''} - Tomar ${m.quantidade || '1'} ${m.posologia || 'conforme orientação'}\n`;
+        });
         texto += `\nData: ${data}\nDr. Marcelo Medeiros\nCRM-PR 47960`;
         document.getElementById('prescricaoEditavel').value = texto;
     }
+    
+    function copiarReceitaCompleta() {
+        const texto = document.getElementById('prescricaoEditavel').value;
+        navigator.clipboard.writeText(texto);
+        alert('✅ Receita copiada! Cole no Memed ou outro sistema.');
+    }
+    
     function gerarPrescricaoAtual() { if(ultimoTratamento) adicionarMedicamentoPrescricao(ultimoTratamento[0].descricao); }
     function ativarPrescricaoManual() { document.getElementById('prescricaoEditavel').focus(); }
     
@@ -350,10 +456,9 @@ Caro colega, o caso parece bem delineado. Lembre-se: a psicoterapia é tão impo
     function fecharModalCriarPaciente(){ document.getElementById('modalCriarPaciente').classList.remove('show'); document.getElementById('novoPacienteNome').value=''; document.getElementById('novoPacienteIdade').value=''; document.getElementById('novoPacienteCidade').value=''; }
     function confirmarCriarPaciente(){ const n=document.getElementById('novoPacienteNome').value.trim(); if(!n){ alert('Informe o nome'); return; } pacientes.push({id:Date.now(),nome:n,idade:document.getElementById('novoPacienteIdade').value,cidade:document.getElementById('novoPacienteCidade').value,anamneses:[]}); salvarPacientes(); fecharModalCriarPaciente(); alert(`Paciente ${n} criado!`); }
     
-    // CID Buscável
-    const cidData = [{cod:"F32.0",desc:"Episódio depressivo leve"},{cod:"F32.1",desc:"Episódio depressivo moderado"},{cod:"F32.2",desc:"Episódio depressivo grave"},{cod:"F41.1",desc:"Ansiedade generalizada"},{cod:"F43.1",desc:"TEPT"},{cod:"F31",desc:"Transtorno bipolar"},{cod:"F20.0",desc:"Esquizofrenia paranóide"}];
+    // CID COM BUSCA
     let cidSelecionado=null, pacienteTemp=null;
-    function abrirModalSalvar(){ if(!analiseAtual){ alert('Nenhuma análise'); return; } const modal=document.getElementById('modalSalvar'); const body=document.getElementById('modalBody'); body.innerHTML=`<div><label>🔍 Buscar paciente:</label><input type="text" id="buscaPacienteModal" class="search-box" placeholder="Digite o nome..."><div id="resultadoBuscaModal" class="search-results"></div></div><div style="text-align:center;margin:15px 0;">— ou —</div><div><label>➕ Novo paciente:</label><input type="text" id="novoNomeModal" placeholder="Nome completo *" style="width:100%;padding:10px;"><div style="display:flex;gap:10px;margin-top:10px;"><input type="text" id="novaIdadeModal" placeholder="Idade" style="flex:1;"><input type="text" id="novaCidadeModal" placeholder="Cidade" style="flex:2;"></div></div><div style="margin-top:15px;"><label>📋 Buscar CID:</label><input type="text" id="buscaCid" class="search-box" placeholder="Digite o código ou diagnóstico..." onkeyup="filtrarCid()"><div id="cidOptions" style="max-height:200px;overflow-y:auto;"></div></div><div style="display:flex;gap:10px;margin-top:20px;"><button class="btn-primary" style="flex:1;" onclick="confirmarSalvarModal()">Salvar</button><button class="btn-secondary" style="flex:1;" onclick="fecharModal()">Cancelar</button></div>`;
+    function abrirModalSalvar(){ if(!analiseAtual){ alert('Nenhuma análise'); return; } const modal=document.getElementById('modalSalvar'); const body=document.getElementById('modalBody'); body.innerHTML=`<div><label>🔍 Buscar paciente:</label><input type="text" id="buscaPacienteModal" class="search-box" placeholder="Digite o nome..."><div id="resultadoBuscaModal" class="search-results"></div></div><div style="text-align:center;margin:15px 0;">— ou —</div><div><label>➕ Novo paciente:</label><input type="text" id="novoNomeModal" placeholder="Nome completo *" style="width:100%;padding:10px;"><div style="display:flex;gap:10px;margin-top:10px;"><input type="text" id="novaIdadeModal" placeholder="Idade" style="flex:1;"><input type="text" id="novaCidadeModal" placeholder="Cidade" style="flex:2;"></div></div><div style="margin-top:15px;"><label>📋 Buscar CID (código ou diagnóstico):</label><input type="text" id="buscaCid" class="search-box" placeholder="Digite para buscar..." onkeyup="filtrarCid()"><div id="cidOptions" style="max-height:200px;overflow-y:auto;"></div></div><div style="display:flex;gap:10px;margin-top:20px;"><button class="btn-primary" style="flex:1;" onclick="confirmarSalvarModal()">Salvar</button><button class="btn-secondary" style="flex:1;" onclick="fecharModal()">Cancelar</button></div>`;
         document.getElementById('buscaPacienteModal').addEventListener('input',e=>{ const t=e.target.value.toLowerCase(); const r=pacientes.filter(p=>p.nome?.toLowerCase().includes(t)); document.getElementById('resultadoBuscaModal').innerHTML=r.map(p=>`<div class="search-result-item" onclick="selecionarPacienteTemp('${p.id}')">${p.nome}</div>`).join(''); });
         renderizarCidOptions();
         modal.classList.add('show');
