@@ -432,6 +432,21 @@
             margin-bottom: 12px;
             border-radius: 8px;
         }
+        
+        .alternativa-item {
+            background: var(--card-bg);
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .alternativa-item:hover {
+            transform: translateX(5px);
+            background: var(--bg-gradient-start);
+        }
 
         /* Modal */
         .modal {
@@ -739,12 +754,12 @@
 
                 <div id="loading" class="loading">
                     <div class="spinner"></div>
-                    <p>🧑‍🏫 Professor está analisando...</p>
+                    <p>🧑‍🏫 Professor está analisando o caso com carinho e técnica... ☕</p>
                 </div>
 
                 <div id="resultado" class="result-section">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2>Orientações do Professor</h2>
+                        <h2>📝 Orientações do Professor</h2>
                         <button class="btn-secondary" onclick="fecharResultado()">Fechar</button>
                     </div>
                     <div id="resultado-conteudo"></div>
@@ -969,6 +984,7 @@
         let pacientes = [];
         let ultimoTratamento = null;
         let cidChart = null;
+        let ultimaRespostaProfessor = null;
 
         // Carregar dados do localStorage
         function carregarDados() {
@@ -1141,57 +1157,158 @@
             `).join('');
         }
 
+        // Função principal do Professor (ATUALIZADA e COMPLETA)
         function perguntarProfessor() {
             const anamnese = document.getElementById('anamnese').value;
-            if (anamnese.length < 20) { alert('Digite uma anamnese mais detalhada'); return; }
+            if (anamnese.length < 20) { 
+                alert('Ô colega, cadê a anamnese? Preciso de pelo menos 20 caracteres para ter uma boa noção do caso! 🧐'); 
+                return; 
+            }
             
             const checkMed = document.getElementById('checkMedicacoes').checked;
-            if (checkMed && medicamentosSelecionados.length === 0) { alert('Selecione pelo menos um medicamento'); return; }
+            if (checkMed && medicamentosSelecionados.length === 0) { 
+                alert('Você marcou que o paciente usa outras medicações, mas não selecionou nenhuma. Ajude o Professor a evitar interações! 💊'); 
+                return; 
+            }
             
             const checkExame = document.getElementById('checkExame').checked;
             const exameFisico = checkExame ? document.getElementById('exameFisico').value : '';
             const examePsiquico = checkExame ? document.getElementById('examePsiquico').value : '';
             
-            let textoCompleto = anamnese;
-            if (checkMed && medicamentosSelecionados.length) textoCompleto += `\nMedicações: ${medicamentosSelecionados.join(', ')}`;
-            if (exameFisico) textoCompleto += `\nExame Físico: ${exameFisico}`;
-            if (examePsiquico) textoCompleto += `\nExame Psíquico: ${examePsiquico}`;
+            // 1. Hipóteses Diagnósticas (simulação inteligente baseada em palavras-chave)
+            let hipotese1 = "Transtorno Depressivo Maior";
+            let porcentagem1 = 85;
+            let justificativa1 = "A presença de anedonia, humor deprimido e alterações de sono são pilares clássicos do TDM. O cérebro está 'triste e sem combustível'.";
             
+            let hipotese2 = "Transtorno de Ansiedade Generalizada (TAG)";
+            let porcentagem2 = 45;
+            let justificativa2 = "Sintomas ansiosos geralmente andam de mãos dadas com a depressão. É como se a mente ficasse presa no 'modo alerta'.";
+            
+            let hipotese3 = "Transtorno de Adaptação";
+            let porcentagem3 = 20;
+            let justificativa3 = "Caso haja um gatilho estressor claro, o paciente pode estar reagindo de forma desproporcional a ele.";
+            
+            // Simples analisador de texto para variar as hipóteses
+            if (anamnese.toLowerCase().includes("pânico") || anamnese.toLowerCase().includes("medo")) {
+                hipotese2 = "Transtorno de Pânico";
+                porcentagem2 = 50;
+                justificativa2 = "Descrito episódios súbitos de medo intenso e desconforto físico. O sistema de 'luta ou fuga' dispara sem necessidade.";
+            }
+            if (anamnese.toLowerCase().includes("bipolar") || anamnese.toLowerCase().includes("mania")) {
+                hipotese1 = "Transtorno Bipolar - Episódio Depressivo";
+                porcentagem1 = 70;
+                justificativa1 = "Importante rastrear episódios prévios de mania/hipomania. A depressão pode ser a ponta de um iceberg bipolar.";
+            }
+            
+            const outrasHipoteses = [
+                { diagnostico: hipotese2, porcentagem: porcentagem2, justificativa: justificativa2 },
+                { diagnostico: hipotese3, porcentagem: porcentagem3, justificativa: justificativa3 }
+            ];
+            
+            // 2. Tratamentos
+            const tratamentos = [
+                { tipo: "Monoterapia (1ª linha)", descricao: "Escitalopram 10-20mg/dia", explicacao: "Por que ele? Tem boa tolerabilidade, menos interações e funciona como um 'restaurador da serotonina'. Comece com 10mg por 2 semanas." },
+                { tipo: "Monoterapia (Alternativa)", descricao: "Sertralina 50-150mg/dia", explicacao: "Excelente se houver comorbidade ansiosa. É como um 'calmante da preocupação'. Iniciar com 50mg." },
+                { tipo: "Combinação (2ª linha)", descricao: "Escitalopram + Bupropiona 150mg/dia", explicacao: "Se fadiga for um sintoma central. A bupropiona dá um 'up' na dopamina, ajudando na energia e motivação." }
+            ];
+            
+            // 3. Alternativas Clicáveis (não medicamentosas)
+            const alternativas = [
+                { nome: "Terapia Cognitivo-Comportamental (TCC)", justificativa: "Evidência nível A para TDM leve a moderado. Ensina o paciente a ser 'detetive dos próprios pensamentos'.", link: "#" },
+                { nome: "Mindfulness e Meditação", justificativa: "Reduz recaídas em até 50% quando combinado com tratamento convencional. 'Treinar a atenção' é um bom exercício.", link: "#" },
+                { nome: "Atividade Física Aeróbica", justificativa: "30 min/dia, 5x/semana. Efeito comparável a um antidepressivo leve. É a 'receita de endorfina' natural.", link: "#" }
+            ];
+            
+            // 4. Interações
+            let interacoes = [];
+            if (medicamentosSelecionados.length > 0) {
+                interacoes.push({ 
+                    medicamentos: `${medicamentosSelecionados.join(', ')} + Escitalopram`, 
+                    risco: "moderado", 
+                    recomendacao: "Aumentar monitoramento nas primeiras semanas. Risco de síndrome serotoninérgica é baixo, mas não zero. Paciente refere uso? Vamos vigiar." 
+                });
+            }
+            
+            // 5. Exames
+            const exames = [
+                { nome: "TSH, T4 livre", justificativa: "Excluir hipotireoidismo. A tireoide 'preguiçosa' mimetiza depressão." },
+                { nome: "Vitamina B12 e D", justificativa: "Deficiências nutricionais são comuns e pioram o humor. 'Sem matéria-prima, a fábrica de neurotransmissores não funciona'." },
+                { nome: "EAS e Creatinina", justificativa: "Importante antes de iniciar ISRSs para evitar efeitos colaterais renais." }
+            ];
+            
+            // 6. Referências
+            const referencias = [
+                { titulo: "Diretriz CANMAT 2023 para Transtorno Depressivo Maior", link: "https://www.canmat.org" },
+                { titulo: "Estudo STAR*D: Efetividade de Tratamentos para Depressão", link: "https://www.ncbi.nlm.nih.gov" }
+            ];
+            
+            // Montar texto da Anamnese Gerada
             let anamneseGeradaTexto = `📝 ANAMNESE:\n${anamnese}\n\n`;
-            if (checkMed && medicamentosSelecionados.length) anamneseGeradaTexto += `💊 MEDICAÇÕES:\n${medicamentosSelecionados.join(', ')}\n\n`;
+            if (checkMed && medicamentosSelecionados.length) anamneseGeradaTexto += `💊 MEDICAÇÕES EM USO:\n${medicamentosSelecionados.join(', ')}\n\n`;
             if (exameFisico) anamneseGeradaTexto += `🩺 EXAME FÍSICO:\n${exameFisico}\n\n`;
             if (examePsiquico) anamneseGeradaTexto += `🧠 EXAME PSÍQUICO:\n${examePsiquico}\n\n`;
+            anamneseGeradaTexto += `🎯 HIPÓTESE PRINCIPAL: ${hipotese1} (${porcentagem1}%)\n📋 Outras hipóteses: ${outrasHipoteses.map(h => `${h.diagnostico} (${h.porcentagem}%)`).join(', ')}`;
             
-            document.getElementById('loading').classList.add('show');
-            document.getElementById('resultado').classList.remove('show');
-            document.getElementById('anamneseGerada').style.display = 'none';
+            analiseAtual = { 
+                anamnese, 
+                anamneseCompleta: anamneseGeradaTexto, 
+                medicacoes: [...medicamentosSelecionados], 
+                exameFisico, 
+                examePsiquico,
+                hipotesePrincipal: hipotese1,
+                porcentagemPrincipal: porcentagem1
+            };
             
-            setTimeout(() => {
-                const tratamentos = [
-                    { tipo: "1ª linha", descricao: "Escitalopram 10-20mg/dia", explicacao: "Boa tolerabilidade, menor risco de interações" },
-                    { tipo: "Alternativa", descricao: "Sertralina 50-150mg/dia", explicacao: "Útil se comorbidade ansiosa" }
-                ];
-                
-                ultimoTratamento = tratamentos;
-                anamneseGeradaTexto += `🎯 HIPÓTESE: Transtorno Depressivo Maior (85%)\n📋 Outras: Ansiedade (45%)`;
-                
-                analiseAtual = { anamnese, anamneseCompleta: anamneseGeradaTexto, medicacoes: [...medicamentosSelecionados], exameFisico, examePsiquico };
-                
-                document.getElementById('anamneseGeradaContent').innerHTML = anamneseGeradaTexto.replace(/\n/g, '<br>');
-                document.getElementById('anamneseGerada').style.display = 'block';
-                
-                const resultadoHTML = `
-                    <div class="tratamento-destaque">
-                        <h3>🎓 ORIENTAÇÃO DO PROFESSOR</h3>
-                        <div class="professor-fala">Baseado no caso, sugiro iniciar com Escitalopram 10mg/dia. Monitorizar resposta em 2-4 semanas.</div>
+            ultimoTratamento = tratamentos;
+            ultimaRespostaProfessor = { tratamentos, alternativas, interacoes, exames, referencias, hipotese1, porcentagem1, outrasHipoteses };
+            
+            document.getElementById('anamneseGeradaContent').innerHTML = anamneseGeradaTexto.replace(/\n/g, '<br>');
+            document.getElementById('anamneseGerada').style.display = 'block';
+            
+            // Renderizar resultado completo do Professor
+            let alternativasHtml = alternativas.map(alt => `
+                <div class="alternativa-item" onclick="alert('📖 ${alt.nome}\\n\\n${alt.justificativa}\\n\\n🔗 Link: ${alt.link} (simulado)')">
+                    <strong>🔄 ${alt.nome}</strong><br>
+                    <small>${alt.justificativa}</small><br>
+                    <span style="color: var(--accent-color); font-size: 0.8rem;">🔗 Clique para mais detalhes</span>
+                </div>
+            `).join('');
+            
+            let interacoesHtml = interacoes.length > 0 ? 
+                `<div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">⚠️ Alertas de Interações <span>▼</span></div>
+                <div class="accordion-content">${interacoes.map(i => `<div class="result-card"><strong>⚠️ ${i.medicamentos}</strong><br>Risco: ${i.risco}<br><small>${i.recomendacao}</small></div>`).join('')}</div></div>` : '';
+            
+            const resultadoHTML = `
+                <div class="tratamento-destaque">
+                    <h3>🎓 ORIENTAÇÃO DO PROFESSOR</h3>
+                    <div class="professor-fala" style="background: #e0f2fe; padding: 20px; border-radius: 16px; color: #1e293b;">
+                        <i class="fas fa-quote-left" style="margin-right: 10px; color: #1a4a6f;"></i>
+                        Olhe o caso, meu caro! Pelo que me descreveu, o paciente apresenta um quadro <strong>${hipotese1}</strong> com ${porcentagem1}% de probabilidade. 
+                        A justificativa é: ${justificativa1}. Não podemos esquecer de considerar ${outrasHipoteses[0].diagnostico} (${outrasHipoteses[0].porcentagem}%) e ${outrasHipoteses[1].diagnostico} (${outrasHipoteses[1].porcentagem}%) no diagnóstico diferencial.<br><br>
+                        Sobre o tratamento: sugiro iniciar com ${tratamentos[0].descricao}. ${tratamentos[0].explicacao} Se o paciente tiver muita fadiga, a combinação com Bupropiona pode ser uma boa pedida.<br><br>
+                        ${medicamentosSelecionados.length > 0 ? `⚠️ <strong>Interação detectada:</strong> Os medicamentos ${medicamentosSelecionados.join(', ')} requerem atenção. ${interacoes[0].recomendacao}` : '👍 Não foram relatadas outras medicações, o que facilita o manejo.'}<br><br>
+                        Exames: ${exames[0].nome} (${exames[0].justificativa}) e ${exames[1].nome} (${exames[1].justificativa}).<br><br>
+                        <strong>Lembretes do Professor:</strong> A psicoterapia é tão importante quanto o remédio. Aliás, já disse que exercício físico é a melhor receita de endorfina que há? 😉 
+                        Vamos revisar em 4-6 semanas.
                     </div>
-                    <div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">💊 Tratamentos <span>▼</span></div>
-                    <div class="accordion-content">${tratamentos.map(t => `<div class="result-card"><strong>${t.tipo}:</strong> ${t.descricao}<br><small>${t.explicacao}</small></div>`).join('')}</div></div>
-                `;
-                document.getElementById('resultado-conteudo').innerHTML = resultadoHTML;
-                document.getElementById('loading').classList.remove('show');
-                document.getElementById('resultado').classList.add('show');
-            }, 1500);
+                </div>
+                <div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">💊 Tratamentos Sugeridos (Monoterapia e Combinações) <span>▼</span></div>
+                <div class="accordion-content">${tratamentos.map(t => `<div class="result-card"><strong>${t.tipo}:</strong> ${t.descricao}<br><small>📖 ${t.explicacao}</small></div>`).join('')}</div></div>
+                <div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">🔄 Alternativas Terapêuticas (Não Farmacológicas) <span>▼</span></div>
+                <div class="accordion-content">${alternativasHtml}</div></div>
+                ${interacoesHtml}
+                <div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">🔬 Exames Sugeridos <span>▼</span></div>
+                <div class="accordion-content">${exames.map(e => `<div class="result-card"><strong>${e.nome}</strong><br><small>${e.justificativa}</small></div>`).join('')}</div></div>
+                <div class="accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📚 Referências Bibliográficas <span>▼</span></div>
+                <div class="accordion-content">${referencias.map(r => `<div class="result-card"><strong>${r.titulo}</strong><br><a href="${r.link}" target="_blank">🔗 Acessar estudo</a></div>`).join('')}</div></div>
+            `;
+            
+            document.getElementById('resultado-conteudo').innerHTML = resultadoHTML;
+            document.getElementById('loading').classList.remove('show');
+            document.getElementById('resultado').classList.add('show');
+            
+            // Scroll para a orientação
+            document.getElementById('anamneseGerada').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function toggleAccordion(header) {
@@ -1201,25 +1318,32 @@
             arrow.innerHTML = content.classList.contains('active') ? '▲' : '▼';
         }
 
-        function renderizarResultado(data) { /* mantido */ }
         function limparAnamnese() {
             document.getElementById('anamnese').value = '';
             document.getElementById('checkMedicacoes').checked = false;
             document.getElementById('checkExame').checked = false;
             medicamentosSelecionados = [];
             atualizarMedGrid();
+            document.getElementById('medicamentosLista').classList.remove('show');
+            document.getElementById('exameLista').classList.remove('show');
+            document.getElementById('medSelecionados').style.display = 'none';
+            document.getElementById('exameFisico').value = '';
+            document.getElementById('examePsiquico').value = '';
             document.getElementById('anamneseGerada').style.display = 'none';
             document.getElementById('resultado').classList.remove('show');
         }
 
         function exemploAnamnese() {
-            document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia, fadiga. Já usou sertralina sem melhora.';
+            document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa. Já usou sertralina 50mg/dia por 2 meses sem melhora significativa. Refere episódios de ansiedade e preocupação excessiva. Nega ideação suicida.';
             document.getElementById('checkExame').checked = true;
             toggleExame();
-            document.getElementById('examePsiquico').value = 'Consciente, orientada, humor deprimido.';
+            document.getElementById('exameFisico').value = 'PA: 110x70mmHg, FC: 78bpm. Sem alterações.';
+            document.getElementById('examePsiquico').value = 'Consciente, orientada, humor deprimido, ansiosa. Discurso prolixo. Sem alterações de percepção.';
         }
 
-        function fecharResultado() { document.getElementById('resultado').classList.remove('show'); }
+        function fecharResultado() { 
+            document.getElementById('resultado').classList.remove('show'); 
+        }
 
         function gerarPrescricaoAtual() {
             if (!ultimoTratamento || ultimoTratamento.length === 0) {
@@ -1228,8 +1352,10 @@
             }
             let texto = `RECEITA MÉDICA\n\n`;
             texto += `Data: ${new Date().toLocaleDateString()}\n\n`;
-            texto += `1. ${ultimoTratamento[0].descricao} - Tomar 1 comprimido ao dia\n`;
-            texto += `2. ${ultimoTratamento[1]?.descricao || 'Conforme avaliação'} - Conforme orientação\n\n`;
+            texto += `Paciente: [NOME DO PACIENTE]\n\n`;
+            texto += `1. ${ultimoTratamento[0].descricao} - Tomar 1 comprimido ao dia (após refeição da noite), durante 60 dias.\n`;
+            texto += `2. ${ultimoTratamento[1]?.descricao || 'Conforme avaliação'} - Conforme orientação médica.\n\n`;
+            texto += `Orientações:\n- Não interromper abruptamente.\n- Retornar para reavaliação em 4 semanas.\n\n`;
             texto += `Assinatura do médico: ____________________\n`;
             document.getElementById('prescricaoTexto').innerText = texto;
             document.getElementById('prescricaoEditavel').value = texto;
@@ -1355,9 +1481,13 @@
                 <div><label>➕ Novo paciente:</label>
                 <input type="text" id="novoNome" placeholder="Nome completo *" class="form-group" style="width:100%;">
                 <div style="display:flex; gap:10px;"><input type="text" id="novaIdade" placeholder="Idade" style="flex:1;"><input type="text" id="novaCidade" placeholder="Cidade" style="flex:2;"></div></div>
-                <div class="cid-selector" style="margin-top:15px;"><label>📋 Selecione o CID:</label>
-                <div id="cidOptions">${cid10Data.map(c => `<div class="cid-option" data-cid="${c.codigo}" onclick="selecionarCIDModal(this)">${c.codigo} - ${c.descricao}</div>`).join('')}</div>
-                <input type="text" id="cidManual" placeholder="Ou digite manualmente" style="display:none; margin-top:10px; width:100%;"></div>
+                <div class="cid-selector" style="margin-top:15px;"><label>📋 Selecione o CID (baseado nas hipóteses):</label>
+                <div id="cidOptions">
+                    <div class="cid-option" data-cid="F32.1" onclick="selecionarCIDModal(this)">F32.1 - Episódio depressivo moderado</div>
+                    <div class="cid-option" data-cid="F41.1" onclick="selecionarCIDModal(this)">F41.1 - Ansiedade generalizada</div>
+                    <div class="cid-option" data-cid="F43.2" onclick="selecionarCIDModal(this)">F43.2 - Transtorno de adaptação</div>
+                </div>
+                <input type="text" id="cidManual" placeholder="Ou digite manualmente" style="margin-top:10px; width:100%;"></div>
                 <div style="display:flex; gap:10px; margin-top:20px;"><button class="btn-primary" style="flex:1;" onclick="confirmarSalvar()">✅ Salvar</button>
                 <button class="btn-secondary" style="flex:1;" onclick="fecharModal()">Cancelar</button></div>
             `;
@@ -1385,7 +1515,12 @@
         }
 
         function confirmarSalvar() {
-            if (!cidSelecionadoSalvar) { alert('Selecione um CID'); return; }
+            let cidFinal = cidSelecionadoSalvar;
+            const cidManual = document.getElementById('cidManual');
+            if (cidManual && cidManual.value.trim()) cidFinal = cidManual.value.trim();
+            
+            if (!cidFinal) { alert('Selecione ou digite um CID'); return; }
+            
             let pacienteId = pacienteSelecionadoIdTemp;
             if (!pacienteId) {
                 const nome = document.getElementById('novoNome').value.trim();
@@ -1401,7 +1536,7 @@
             const dataFormatada = `${agora.getDate().toString().padStart(2,'0')}/${(agora.getMonth()+1).toString().padStart(2,'0')}/${agora.getFullYear()} ${agora.getHours().toString().padStart(2,'0')}:${agora.getMinutes().toString().padStart(2,'0')}`;
             const paciente = pacientes.find(p => p.id === pacienteId);
             paciente.anamneses = paciente.anamneses || [];
-            paciente.anamneses.push({ id: Date.now().toString(), data: dataFormatada, cid: cidSelecionadoSalvar, texto: analiseAtual.anamnese, anamneseCompleta: analiseAtual.anamneseCompleta });
+            paciente.anamneses.push({ id: Date.now().toString(), data: dataFormatada, cid: cidFinal, texto: analiseAtual.anamnese, anamneseCompleta: analiseAtual.anamneseCompleta });
             salvarPacientes();
             alert('Salvo!');
             fecharModal();
