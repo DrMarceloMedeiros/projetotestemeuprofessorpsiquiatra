@@ -19,7 +19,7 @@
             --card-bg: #1e293b; --text: #f1f5f9; --text-sec: #94a3b8; --border: #334155;
             --accent: #38bdf8; --success: #065f46; --warning: #451a03;
         }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, var(--bg-start), var(--bg-end)); min-height: 100vh; color: var(--text); transition: all 0.3s; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, var(--bg-start), var(--bg-end)); min-height: 100vh; color: var(--text); transition: all 0.3s; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
         .header { background: var(--header-bg); color: white; padding: 20px 0; position: sticky; top: 0; z-index: 1001; }
         .container { max-width: 1400px; margin: 0 auto; padding: 0 30px; }
         .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
@@ -51,11 +51,12 @@
         .texto-livre { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
         .duas-colunas { display: flex; gap: 15px; flex-wrap: wrap; }
         .duas-colunas > div { flex: 1; }
-        .btn-primary, .btn-secondary, .btn-success { padding: 12px 24px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; border: none; }
+        .btn-primary, .btn-secondary, .btn-success, .btn-warning { padding: 12px 24px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; border: none; }
         .btn-primary { background: linear-gradient(135deg, #0f2b3d, #1a4a6f); color: white; }
         .btn-secondary { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
         .btn-success { background: #10b981; color: white; }
-        .btn-primary:hover, .btn-secondary:hover, .btn-success:hover { transform: translateY(-2px); }
+        .btn-warning { background: #fbbf24; color: #1e293b; }
+        .btn-primary:hover, .btn-secondary:hover, .btn-success:hover, .btn-warning:hover { transform: translateY(-2px); }
         .loading { text-align: center; padding: 60px; display: none; }
         .loading.show { display: block; }
         .spinner { width: 50px; height: 50px; border: 4px solid var(--border); border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
@@ -114,6 +115,11 @@
         body.dark .anamnese-box { background: linear-gradient(135deg, #451a03, #422006); }
         body.dark .professor-box { background: linear-gradient(135deg, #0f2b3d, #1a4a6f); }
         
+        .conduta-area { margin-top: 15px; border-top: 1px solid #f59e0b; padding-top: 15px; }
+        .conduta-textarea { width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 12px; background: var(--card-bg); color: var(--text); font-family: 'Inter', monospace; resize: vertical; margin-top: 8px; }
+        
+        .btn-salva-verde { background: #fbbf24; color: #1e293b; margin-top: 10px; width: 100%; justify-content: center; }
+        
         @media (max-width: 768px) { .container { padding: 0 20px; } .stats-grid-2 { grid-template-columns: 1fr; } .duas-colunas { flex-direction: column; } .floating-box { width: 95%; } }
     </style>
 </head>
@@ -163,10 +169,11 @@
                 <div class="form-section"><label class="checkbox-label"><input type="checkbox" id="checkExame" onchange="toggleSection('exame')"><span><i class="fas fa-stethoscope"></i> Adicionar Exame Físico e Psíquico?</span></label>
                 <div id="exameSection" class="section-content"><textarea id="exameFisico" class="textarea-anamnese" rows="2" placeholder="Exame Físico..."></textarea><textarea id="examePsiquico" class="textarea-anamnese" rows="2" placeholder="Exame Psíquico..."></textarea></div></div>
                 
-                <div class="button-group" style="display: flex; gap: 15px; margin-top: 20px;">
+                <div class="button-group" style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
                     <button class="btn-primary" onclick="perguntarProfessor()"><i class="fas fa-chalkboard-user"></i> PERGUNTE AO PROFESSOR</button>
                     <button class="btn-secondary" onclick="limparAnamnese()"><i class="fas fa-eraser"></i> Limpar</button>
                     <button class="btn-secondary" onclick="exemploAnamnese()"><i class="fas fa-file-alt"></i> Exemplo</button>
+                    <button id="btnReabrirProfessor" class="btn-success" style="display:none;" onclick="reabrirProfessor()"><i class="fas fa-comment-dots"></i> Ver Orientação do Professor</button>
                 </div>
             </div>
 
@@ -174,12 +181,22 @@
             <div id="anamneseBox" class="floating-box anamnese-box">
                 <button class="btn-fechar-box" onclick="fecharAnamneseBox()">&times;</button>
                 <div id="anamneseBoxContent"></div>
+                <div class="conduta-area">
+                    <label><strong>📝 CONDUTA (obrigatório):</strong></label>
+                    <textarea id="condutaTexto" class="conduta-textarea" rows="3" placeholder="Digite aqui sua conduta: medicamentos, terapias, retorno, etc..."></textarea>
+                    <button class="btn-warning btn-salva-verde" onclick="enviarConduta()"><i class="fas fa-paper-plane"></i> ENVIAR</button>
+                </div>
             </div>
 
             <!-- Caixa móvel da Resposta do Professor -->
             <div id="professorBox" class="floating-box professor-box">
                 <button class="btn-fechar-box" onclick="fecharProfessorBox()">&times;</button>
                 <div id="professorBoxContent"></div>
+            </div>
+
+            <!-- Botão para reabrir última anamnese salva -->
+            <div id="ultimaAnamneseSalva" style="margin-top: 20px; display: none;">
+                <button class="btn-warning" onclick="reabrirUltimaAnamnese()"><i class="fas fa-history"></i> Ver Última Anamnese Salva</button>
             </div>
 
             <div id="loading" class="loading"><div class="spinner"></div><p>Professor está analisando o caso...</p></div>
@@ -237,6 +254,8 @@
     let medicamentosSelecionados = [], comorbidadesSelecionadas = [], alergiasSelecionadas = [], historicoSelecionado = [], pacientes = [], analiseAtual = null, ultimoTratamento = null;
     let listaPrescricao = [];
     let viaSelecionada = "VIA ORAL";
+    let ultimaRespostaProfessorHTML = "";
+    let ultimaAnamneseSalva = null;
 
     function toggleSection(s) { let show = document.getElementById(`check${s.charAt(0).toUpperCase()+s.slice(1)}`)?.checked; document.getElementById(`${s}Section`).classList.toggle('show', show); }
     function filtrarLista(gridId, termo) { const items = document.querySelectorAll(`#${gridId} .checkbox-item`); items.forEach(i => { const label = i.querySelector('label')?.innerText.toLowerCase(); i.style.display = label?.includes(termo.toLowerCase()) ? 'flex' : 'none'; }); }
@@ -255,25 +274,33 @@
     function coletarSubstancias() {
         let substancias = [];
         habitosLista.forEach(s => { if(document.getElementById(`hab_${s.replace(/[^a-zA-Z]/g,'_')}`)?.checked) substancias.push(s); });
-        if(document.getElementById('outraSubstancia').value.trim()) substancias.push(document.getElementById('outraSubstancia').value.trim() + " (" + document.getElementById('freqOutraSubstancia').value + ")");
+        let outra = document.getElementById('outraSubstancia').value.trim();
+        let freq = document.getElementById('freqOutraSubstancia').value;
+        if(outra) substancias.push(outra + (freq ? ` (${freq})` : ''));
         return substancias;
     }
     
     function coletarDadosCompletos() {
         let texto = document.getElementById('anamnese').value;
         if(comorbidadesSelecionadas.length) texto += `\n\nCOMORBIDADES: ${comorbidadesSelecionadas.join(', ')}.`;
-        if(document.getElementById('outraComorbidade').value.trim()) texto += ` ${document.getElementById('outraComorbidade').value.trim()}.`;
+        let outraComorb = document.getElementById('outraComorbidade').value.trim();
+        if(outraComorb) texto += ` ${outraComorb}.`;
+        
         if(medicamentosSelecionados.length) texto += `\n\nMEDICAÇÕES EM USO: ${medicamentosSelecionados.join(', ')}.`;
-        if(document.getElementById('outraMedicacao').value.trim()) texto += ` ${document.getElementById('outraMedicacao').value.trim()}.`;
+        let outraMed = document.getElementById('outraMedicacao').value.trim();
+        if(outraMed) texto += ` ${outraMed}.`;
+        
         if(alergiasSelecionadas.length) texto += `\n\nALERGIAS: ${alergiasSelecionadas.join(', ')}.`;
-        if(document.getElementById('outraAlergia').value.trim()) texto += ` ${document.getElementById('outraAlergia').value.trim()}.`;
+        let outraAlerg = document.getElementById('outraAlergia').value.trim();
+        if(outraAlerg) texto += ` ${outraAlerg}.`;
         
         let substancias = coletarSubstancias();
         if(substancias.length) texto += `\n\nHÁBITOS/SUBSTÂNCIAS: ${substancias.join(', ')}.`;
         
         let historicoFamiliarTexto = [];
         if(historicoSelecionado.length) historicoFamiliarTexto.push(...historicoSelecionado);
-        if(document.getElementById('outroHistorico').value.trim()) historicoFamiliarTexto.push(document.getElementById('outroHistorico').value.trim());
+        let outroHist = document.getElementById('outroHistorico').value.trim();
+        if(outroHist) historicoFamiliarTexto.push(outroHist);
         let parentes = document.getElementById('historicoFamiliar').value.trim();
         if(historicoFamiliarTexto.length) texto += `\n\nHISTÓRICO FAMILIAR: ${historicoFamiliarTexto.join(', ')}${parentes ? ` (${parentes})` : ''}.`;
         
@@ -282,8 +309,7 @@
         return texto;
     }
 
-    function fecharAnamneseBox() { document.getElementById('anamneseBox').classList.remove('show'); }
-    function fecharProfessorBox() { document.getElementById('professorBox').classList.remove('show'); }
+    let professorResponseCache = "";
 
     function perguntarProfessor() {
         const anamnese = document.getElementById('anamnese').value;
@@ -300,42 +326,69 @@
             document.getElementById('anamneseBoxContent').innerHTML = `<strong>📝 ANAMNESE COMPLETA:</strong><br><br>${textoCompleto.replace(/\n/g,'<br>')}`;
             document.getElementById('anamneseBox').classList.add('show');
             
-            // RESPOSTA DO PROFESSOR - formato em parágrafos com opinião
+            // Resposta do Professor
             const respostaProfessor = `
 <p><strong>🎓 Opinião do Professor (Baseado em APA/CANMAT/NICE/Maudsley/Stahl/ABP/DSM-5-TR/CID-11)</strong></p>
-
 <p>Caro colega, após analisar o caso, temos um quadro depressivo bastante sugestivo de <strong>Transtorno Depressivo Maior (TDM)</strong>, episódio atual moderado.</p>
-
 <p>O paciente apresenta os critérios centrais: humor deprimido e anedonia, associados a alterações de sono, fadiga e prejuízo funcional. A duração superior a 2 semanas já nos permite firmar essa hipótese com boa confiança clínica.</p>
-
-<p><strong>📋 HIPÓTESES DIAGNÓSTICAS COM PROBABILIDADE:</strong><br>
-• Transtorno Depressivo Maior — 85%<br>
-• Transtorno de Ansiedade Generalizada (comorbidade) — 45%<br>
-• Transtorno de Adaptação com humor deprimido — 15%</p>
-
+<p><strong>📋 HIPÓTESES DIAGNÓSTICAS COM PROBABILIDADE:</strong><br>• Transtorno Depressivo Maior — 85%<br>• Transtorno de Ansiedade Generalizada (comorbidade) — 45%<br>• Transtorno de Adaptação com humor deprimido — 15%</p>
 <p><strong>⚠️ RED FLAGS avaliados:</strong> risco suicida ausente, psicose ausente, virada maníaca não identificada. Contudo, precisamos rastrear melhor bipolaridade oculta antes de qualquer antidepressivo.</p>
-
 <p><strong>💊 Quanto ao tratamento:</strong> pelas diretrizes CANMAT e APA, a primeira linha é um ISRS, com Escitalopram ou Sertralina sendo ótimas escolhas pela tolerabilidade. Inicie com Escitalopram 10mg/dia, reavalie em 4 semanas. Associar psicoterapia (TCC) sempre que possível — nível A de evidência.</p>
-
 <p><strong>🔬 Exames iniciais importantes:</strong> TSH, T4 livre, vitamina B12, vitamina D, glicemia e lipidograma. Hipotireoidismo e deficiências nutricionais mimetizam depressão e são causas reversíveis.</p>
-
 <p><strong>📊 Análise funcional:</strong> sono alterado, trabalho prejudicado, cognição comprometida — isso justifica a abordagem ativa precoce.</p>
-
-<p><strong>❓ Perguntas que faltaram:</strong><br>
-• "Já teve episódios de ficar extremamente animado, com redução do sono, por vários dias?" (rastrear TAB)<br>
-• "Faz uso de álcool, cannabis ou outras substâncias?"<br>
-• "Alguém na família tem transtorno bipolar ou depressão grave?"</p>
-
+<p><strong>❓ Perguntas que faltaram:</strong><br>• "Já teve episódios de ficar extremamente animado, com redução do sono, por vários dias?" (rastrear TAB)<br>• "Faz uso de álcool, cannabis ou outras substâncias?"<br>• "Alguém na família tem transtorno bipolar ou depressão grave?"</p>
 <p><strong>😉 Observação final:</strong> Lembre-se: o cérebro do paciente pode estar em "greve de serotonina". Nosso papel é convencê-lo a voltar ao trabalho! E atenção: ISRS isolado em bipolaridade oculta pode induzir virada maníaca — fique atento.</p>
-
-<p><strong>📝 Resumo para prontuário:</strong><br>
-Paciente com TDM moderado. Iniciado Escitalopram 10mg/dia. Orientado sobre efeitos colaterais e adesão. Solicitados exames laboratoriais. Retorno em 4 semanas para reavaliação. Sem ideação suicida ou psicose. Risco psicossocial controlado.</p>
+<p><strong>📝 Resumo para prontuário:</strong><br>Paciente com TDM moderado. Iniciado Escitalopram 10mg/dia. Orientado sobre efeitos colaterais e adesão. Solicitados exames laboratoriais. Retorno em 4 semanas para reavaliação. Sem ideação suicida ou psicose. Risco psicossocial controlado.</p>
 `;
+            professorResponseCache = respostaProfessor;
             document.getElementById('professorBoxContent').innerHTML = respostaProfessor;
             document.getElementById('professorBox').classList.add('show');
             
+            // Mostrar botão verde para reabrir orientação
+            document.getElementById('btnReabrirProfessor').style.display = 'inline-flex';
+            
             document.getElementById('loading').classList.remove('show');
         }, 1500);
+    }
+    
+    function reabrirProfessor() {
+        if(professorResponseCache) {
+            document.getElementById('professorBoxContent').innerHTML = professorResponseCache;
+            document.getElementById('professorBox').classList.add('show');
+        } else {
+            alert('Nenhuma orientação disponível. Faça uma nova pergunta ao Professor.');
+        }
+    }
+    
+    function fecharAnamneseBox() { document.getElementById('anamneseBox').classList.remove('show'); }
+    function fecharProfessorBox() { document.getElementById('professorBox').classList.remove('show'); }
+    
+    function enviarConduta() {
+        const conduta = document.getElementById('condutaTexto').value.trim();
+        if(!conduta) {
+            alert('Por favor, preencha a conduta antes de enviar.');
+            return;
+        }
+        if(!analiseAtual) {
+            alert('Nenhuma análise disponível. Clique em "PERGUNTE AO PROFESSOR" primeiro.');
+            return;
+        }
+        // Adicionar conduta à anamnese
+        const anamneseCompletaComConduta = analiseAtual.anamneseCompleta + `\n\n📋 CONDUTA DO MÉDICO:\n${conduta}`;
+        analiseAtual.anamneseCompleta = anamneseCompletaComConduta;
+        analiseAtual.conduta = conduta;
+        
+        // Salvar no prontuário (abrir modal)
+        abrirModalSalvar();
+    }
+    
+    function reabrirUltimaAnamnese() {
+        if(ultimaAnamneseSalva) {
+            document.getElementById('anamneseBoxContent').innerHTML = `<strong>📝 ANAMNESE COMPLETA (salva):</strong><br><br>${ultimaAnamneseSalva.replace(/\n/g,'<br>')}`;
+            document.getElementById('anamneseBox').classList.add('show');
+        } else {
+            alert('Nenhuma anamnese salva ainda.');
+        }
     }
     
     function toggleAccordion(header) { const content = header.nextElementSibling; content.classList.toggle('active'); const span = header.querySelector('span'); if(span) span.innerHTML = content.classList.contains('active') ? '▲' : '▼'; }
@@ -347,11 +400,12 @@ Paciente com TDM moderado. Iniciado Escitalopram 10mg/dia. Orientado sobre efeit
         document.querySelectorAll('#comorbidadesGrid input, #medicacoesGrid input, #alergiasGrid input, #historicoGrid input, #substanciasContainer input').forEach(cb=>cb.checked=false);
         document.getElementById('outraComorbidade').value=''; document.getElementById('outraMedicacao').value=''; document.getElementById('outraAlergia').value=''; document.getElementById('outroHistorico').value=''; document.getElementById('historicoFamiliar').value=''; document.getElementById('exameFisico').value=''; document.getElementById('examePsiquico').value=''; document.getElementById('outraSubstancia').value=''; document.getElementById('freqOutraSubstancia').value='';
         document.getElementById('anamneseBox').classList.remove('show'); document.getElementById('professorBox').classList.remove('show');
+        document.getElementById('condutaTexto').value = '';
         atualizarMedSelecionados();
     }
     function exemploAnamnese() { document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora.'; }
 
-    // PRESCRIÇÃO CORRIGIDA - SEM ESPAÇAMENTO EXCESSIVO
+    // PRESCRIÇÃO
     function buscarMedicamentoPrescricao() {
         const termo = document.getElementById('buscaMedicamento').value.toLowerCase();
         const container = document.getElementById('resultadoBuscaMed');
@@ -441,7 +495,12 @@ Paciente com TDM moderado. Iniciado Escitalopram 10mg/dia. Orientado sobre efeit
     function confirmarSalvarModal(){
         if(!cidSelecionado){ alert('Selecione um CID'); return; }
         let id=pacienteTemp; if(!id){ const nome=document.getElementById('novoNomeModal').value.trim(); if(!nome){ alert('Informe o nome'); return; } const novo={id:Date.now(),nome,idade:document.getElementById('novaIdadeModal').value,cidade:document.getElementById('novaCidadeModal').value,anamneses:[]}; pacientes.push(novo); id=novo.id; }
-        const p=pacientes.find(p=>p.id==id); if(p){ const d=new Date(); const ds=`${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`; p.anamneses=p.anamneses||[]; p.anamneses.push({id:Date.now(),data:ds,cid:cidSelecionado,texto:analiseAtual.texto,anamneseCompleta:analiseAtual.anamneseCompleta}); salvarPacientes(); alert('Salvo!'); fecharModal(); mudarAba('prontuario'); }
+        const p=pacientes.find(p=>p.id==id); if(p){ const d=new Date(); const ds=`${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`; p.anamneses=p.anamneses||[]; p.anamneses.push({id:Date.now(),data:ds,cid:cidSelecionado,texto:analiseAtual.texto,anamneseCompleta:analiseAtual.anamneseCompleta}); salvarPacientes(); 
+            // Salvar como última anamnese para reabrir
+            ultimaAnamneseSalva = analiseAtual.anamneseCompleta;
+            document.getElementById('ultimaAnamneseSalva').style.display = 'block';
+            alert('Salvo!'); fecharModal(); mudarAba('prontuario'); 
+        }
     }
     function fecharModal(){ document.getElementById('modalSalvar').classList.remove('show'); cidSelecionado=null; pacienteTemp=null; }
     
