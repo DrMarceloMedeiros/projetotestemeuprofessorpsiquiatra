@@ -1,4 +1,3 @@
-```css
 /* RESET */
 
 *{
@@ -7,10 +6,15 @@
   box-sizing:border-box;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   font-family:Arial, Helvetica, sans-serif;
   background:#f4f7fb;
   color:#1e293b;
+  overflow-x:hidden;
 }
 
 /* APP */
@@ -30,6 +34,9 @@ body{
   display:flex;
   flex-direction:column;
   border-right:1px solid rgba(255,255,255,0.05);
+  position:sticky;
+  top:0;
+  height:100vh;
 }
 
 .logo-area{
@@ -222,7 +229,7 @@ body{
   color:#64748b;
 }
 
-/* GRID DASHBOARD */
+/* DASHBOARD */
 
 .dashboard-grid{
   display:grid;
@@ -234,7 +241,7 @@ body{
   min-height:450px;
 }
 
-/* HEADER CARD */
+/* CARD HEADER */
 
 .card-header{
   display:flex;
@@ -337,12 +344,6 @@ body{
   margin-top:6px;
 }
 
-.activity-item p{
-  color:#64748b;
-  margin-top:4px;
-  font-size:14px;
-}
-
 /* FORMS */
 
 .form-grid{
@@ -360,12 +361,6 @@ body{
   border:1px solid #dbe4ee;
   background:#f8fafc;
   font-size:15px;
-}
-
-.form-grid input:focus,
-.search-input:focus{
-  outline:none;
-  border-color:#2563eb;
 }
 
 /* PATIENTS */
@@ -391,7 +386,7 @@ body{
   transform:translateX(4px);
 }
 
-/* MINI CARDS */
+/* MINI */
 
 .mini-card{
   background:#f8fafc;
@@ -405,7 +400,6 @@ body{
 
 .mini-card:hover{
   transform:translateY(-4px);
-  background:white;
 }
 
 /* SETTINGS */
@@ -424,6 +418,169 @@ body{
 
 .active-screen{
   display:block;
+  animation:fadeScreen 0.3s ease;
+}
+
+@keyframes fadeScreen{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* MODAL IA */
+
+.ia-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.75);
+  backdrop-filter:blur(6px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  padding:20px;
+}
+
+.ia-modal.show{
+  display:flex;
+}
+
+.ia-modal-content{
+  width:100%;
+  max-width:900px;
+  max-height:90vh;
+  overflow-y:auto;
+  background:white;
+  border-radius:30px;
+  padding:30px;
+  animation:modalShow 0.3s ease;
+  box-shadow:0 25px 60px rgba(0,0,0,0.25);
+}
+
+@keyframes modalShow{
+  from{
+    opacity:0;
+    transform:scale(0.95);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+/* HEADER IA */
+
+.ia-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.ia-title{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.ia-icon{
+  width:65px;
+  height:65px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:30px;
+}
+
+.close-modal{
+  border:none;
+  background:#f1f5f9;
+  width:45px;
+  height:45px;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:18px;
+}
+
+/* LOADING */
+
+.ia-loading{
+  text-align:center;
+  padding:60px 20px;
+}
+
+.loader{
+  width:60px;
+  height:60px;
+  border:6px solid #dbeafe;
+  border-top:6px solid #2563eb;
+  border-radius:50%;
+  margin:auto;
+  margin-bottom:20px;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+/* RESULT */
+
+.ia-result{
+  display:none;
+}
+
+.result-box{
+  background:#f8fafc;
+  border-left:5px solid #2563eb;
+  padding:20px;
+  border-radius:18px;
+  margin-bottom:20px;
+}
+
+.result-box h3{
+  margin-bottom:12px;
+}
+
+.blue-box{
+  border-left-color:#2563eb;
+}
+
+.orange-box{
+  border-left-color:#ea580c;
+}
+
+.green-box{
+  border-left-color:#16a34a;
+}
+
+.result-box ul{
+  padding-left:20px;
+}
+
+.result-box li{
+  margin-bottom:8px;
+}
+
+/* IA BUTTONS */
+
+.ia-buttons{
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-top:25px;
 }
 
 /* RESPONSIVO */
@@ -444,6 +601,8 @@ body{
 
   .sidebar{
     width:100%;
+    height:auto;
+    position:relative;
   }
 
   .main-content{
@@ -464,7 +623,8 @@ body{
     grid-template-columns:1fr;
   }
 
-  .button-group{
+  .button-group,
+  .ia-buttons{
     flex-direction:column;
   }
 
@@ -473,5 +633,8 @@ body{
     width:100%;
   }
 
+  .ia-modal-content{
+    padding:20px;
+  }
+
 }
-```
