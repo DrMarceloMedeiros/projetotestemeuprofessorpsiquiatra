@@ -1,13 +1,16 @@
-```javascript
-function mudarTela(id) {
+/* =========================
+   TROCAR TELAS
+========================= */
 
-  // REMOVE TELAS ATIVAS
+function mudarTela(id, elemento){
+
+  // REMOVE TELAS
   document.querySelectorAll('.screen')
     .forEach(screen => {
       screen.classList.remove('active-screen');
     });
 
-  // ABRE TELA SELECIONADA
+  // ABRE TELA
   const tela = document.getElementById(id);
 
   if(tela){
@@ -20,82 +23,80 @@ function mudarTela(id) {
       btn.classList.remove('active');
     });
 
-  // PEGA BOTÃO CLICADO
-  const botao = event.currentTarget;
-
-  if(botao){
-    botao.classList.add('active');
+  // ATIVA MENU CLICADO
+  if(elemento){
+    elemento.classList.add('active');
   }
 
 }
 
 /* =========================
-   ASSISTENTE PSIQUIÁTRICO IA
+   IA
 ========================= */
 
 function analisarCaso(){
 
-  const texto = document.getElementById('anamneseIA').value;
+  const texto =
+    document.getElementById('anamneseIA').value;
 
-  const resultado = document.getElementById('resultadoIA');
+  const resultado =
+    document.getElementById('resultadoIA');
 
-  if(!texto || texto.length < 15){
+  if(!texto || texto.length < 10){
 
     resultado.innerHTML = `
-      <div class="alert-box">
-        ⚠️ Digite uma anamnese mais detalhada.
+      <div class="result-box orange-box">
+        <h3>⚠️ Atenção</h3>
+        <p>Digite uma anamnese mais detalhada.</p>
       </div>
     `;
 
     return;
   }
 
-  // IA SIMULADA TEMPORÁRIA
-
-  let resposta = `
-    <div class="ia-box">
+  resultado.innerHTML = `
+  
+    <div class="result-box blue-box">
 
       <h3>🧠 Hipótese Diagnóstica</h3>
 
       <p>
-        Transtorno de Ansiedade Generalizada (TAG)
-        associado a sintomas depressivos leves.
+        Transtorno de Ansiedade Generalizada
+        com sintomas depressivos associados.
       </p>
 
-      <h3>💊 Conduta Inicial</h3>
+    </div>
+
+    <div class="result-box green-box">
+
+      <h3>💊 Sugestão Inicial</h3>
 
       <ul>
         <li>Escitalopram 10mg/dia</li>
-        <li>Psicoterapia TCC</li>
-        <li>Orientação higiene do sono</li>
+        <li>Psicoterapia</li>
+        <li>Higiene do sono</li>
       </ul>
+
+    </div>
+
+    <div class="result-box orange-box">
 
       <h3>⚠️ Perguntas Importantes</h3>
 
       <ul>
-        <li>Histórico de bipolaridade?</li>
-        <li>Uso de álcool ou substâncias?</li>
         <li>Ideação suicida?</li>
-      </ul>
-
-      <h3>📋 Exames Interessantes</h3>
-
-      <ul>
-        <li>TSH</li>
-        <li>T4 Livre</li>
-        <li>Vitamina B12</li>
-        <li>Vitamina D</li>
+        <li>Histórico bipolar?</li>
+        <li>Uso de substâncias?</li>
       </ul>
 
     </div>
-  `;
 
-  resultado.innerHTML = resposta;
+  `;
 
 }
 
 /* =========================
-   LIMPAR IA
+   LIMPAR
 ========================= */
 
 function limparIA(){
@@ -107,7 +108,7 @@ function limparIA(){
 }
 
 /* =========================
-   SALVAR CONSULTA
+   CONSULTA
 ========================= */
 
 function salvarConsulta(){
@@ -120,6 +121,7 @@ function salvarConsulta(){
     alert('Digite o nome do paciente');
 
     return;
+
   }
 
   alert('Consulta salva com sucesso!');
@@ -127,7 +129,7 @@ function salvarConsulta(){
 }
 
 /* =========================
-   BUSCA PACIENTE
+   BUSCA
 ========================= */
 
 function buscarPaciente(){
@@ -158,7 +160,7 @@ function buscarPaciente(){
 }
 
 /* =========================
-   GERAR RECEITA
+   RECEITA
 ========================= */
 
 function gerarReceita(){
@@ -171,14 +173,15 @@ function gerarReceita(){
     alert('Digite uma prescrição');
 
     return;
+
   }
 
-  alert('Receita gerada!');
+  alert('Receita gerada com sucesso!');
 
 }
 
 /* =========================
-   TEMA ESCURO
+   TEMA
 ========================= */
 
 function alternarTema(){
@@ -186,33 +189,3 @@ function alternarTema(){
   document.body.classList.toggle('dark-mode');
 
 }
-
-/* =========================
-   DASHBOARD ANIMADO
-========================= */
-
-window.onload = () => {
-
-  const cards =
-    document.querySelectorAll('.stats-card');
-
-  cards.forEach((card, index) => {
-
-    card.style.opacity = '0';
-
-    card.style.transform = 'translateY(20px)';
-
-    setTimeout(() => {
-
-      card.style.transition = '0.5s';
-
-      card.style.opacity = '1';
-
-      card.style.transform = 'translateY(0)';
-
-    }, index * 150);
-
-  });
-
-};
-```
