@@ -1,14 +1,12 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
 
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Meu Professor Psiquiatria IA</title>
+    <title>Meu Professor Psiquiatria</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -40,32 +38,32 @@
 
             <nav class="menu">
 
-                <button class="menu-item active" onclick="mudarTela('dashboard', this)">
+                <button class="menu-item active" onclick="mudarTela('dashboard')">
                     <i class="fas fa-home"></i>
                     Dashboard
                 </button>
 
-                <button class="menu-item" onclick="mudarTela('consulta', this)">
-                    <i class="fas fa-comments"></i>
-                    Assistente IA
+                <button class="menu-item" onclick="mudarTela('consulta')">
+                    <i class="fas fa-stethoscope"></i>
+                    Consulta
                 </button>
 
-                <button class="menu-item" onclick="mudarTela('prontuario', this)">
+                <button class="menu-item" onclick="mudarTela('prontuario')">
                     <i class="fas fa-folder-open"></i>
                     Prontuário
                 </button>
 
-                <button class="menu-item" onclick="mudarTela('prescricao', this)">
-                    <i class="fas fa-prescription-bottle-alt"></i>
+                <button class="menu-item" onclick="mudarTela('prescricao')">
+                    <i class="fas fa-prescription"></i>
                     Prescrição
                 </button>
 
-                <button class="menu-item" onclick="mudarTela('escalas', this)">
+                <button class="menu-item" onclick="mudarTela('escalas')">
                     <i class="fas fa-chart-line"></i>
                     Escalas
                 </button>
 
-                <button class="menu-item" onclick="mudarTela('config', this)">
+                <button class="menu-item" onclick="mudarTela('config')">
                     <i class="fas fa-cog"></i>
                     Configurações
                 </button>
@@ -81,13 +79,11 @@
             <header class="topbar">
 
                 <div>
-
                     <h1>Dashboard Médico</h1>
 
                     <p class="subtitle">
                         Plataforma inteligente de apoio psiquiátrico
                     </p>
-
                 </div>
 
                 <div class="user-area">
@@ -172,6 +168,7 @@
 
                 </div>
 
+                <!-- DASHBOARD GRID -->
                 <div class="dashboard-grid">
 
                     <!-- IA -->
@@ -181,34 +178,29 @@
 
                             <h2>
                                 <i class="fas fa-robot"></i>
-                                IA Clínica
+                                Assistente Psiquiátrico IA
                             </h2>
 
                         </div>
 
-                        <div class="chat-preview">
+                        <textarea
+                            id="anamneseIA"
+                            class="medical-textarea"
+                            placeholder="Digite a anamnese completa do paciente..."></textarea>
 
-                            <div class="message doctor-message">
-                                Paciente feminina, 34 anos, com humor deprimido há 2 meses, insônia inicial, anedonia e fadiga.
-                            </div>
+                        <div class="button-group">
 
-                            <div class="message ai-message">
+                            <button class="primary-btn" onclick="analisarCaso()">
+                                <i class="fas fa-brain"></i>
+                                Analisar Caso
+                            </button>
 
-                                <strong>Hipótese principal:</strong>
-                                Transtorno Depressivo Maior moderado.
-
-                                <br><br>
-
-                                <strong>Sugestão:</strong>
-                                Considerar ISRS de primeira linha + TCC.
-
-                            </div>
+                            <button class="secondary-btn" onclick="limparAnamnese()">
+                                <i class="fas fa-trash"></i>
+                                Limpar
+                            </button>
 
                         </div>
-
-                        <button class="primary-btn">
-                            Abrir Assistente IA
-                        </button>
 
                     </div>
 
@@ -267,96 +259,45 @@
 
             </section>
 
-            <!-- CONSULTA / IA -->
+            <!-- CONSULTA -->
             <section id="consulta" class="screen">
 
-                <div class="card ia-card">
+                <div class="card">
 
                     <div class="card-header">
 
                         <h2>
-                            <i class="fas fa-robot"></i>
-                            Assistente Psiquiátrico IA
+                            <i class="fas fa-stethoscope"></i>
+                            Nova Consulta
                         </h2>
 
                     </div>
 
-                    <!-- CHAT -->
-                    <div class="chat-container" id="chatContainer">
+                    <div class="form-grid">
 
-                        <div class="message doctor-message">
-                            Paciente masculino, 28 anos, ansiedade intensa, insônia e fadiga há 4 meses.
-                        </div>
+                        <input type="text" placeholder="Nome do paciente">
 
-                        <div class="message ai-message">
+                        <input type="text" placeholder="Idade">
 
-                            <strong>🧠 Hipótese Diagnóstica:</strong>
+                        <input type="text" placeholder="Cidade">
 
-                            <br><br>
-
-                            Transtorno de Ansiedade Generalizada.
-
-                            <br><br>
-
-                            <strong>💊 Conduta Inicial:</strong>
-
-                            <br>
-
-                            Escitalopram 10mg/dia.
-
-                            <br><br>
-
-                            <strong>⚠️ Perguntas Importantes:</strong>
-
-                            <br>
-
-                            • História de bipolaridade?
-                            <br>
-                            • Uso de substâncias?
-                            <br>
-                            • Ideação suicida?
-
-                        </div>
+                        <input type="text" placeholder="CID">
 
                     </div>
 
-                    <!-- INPUT -->
-                    <div class="chat-input-area">
+                    <textarea
+                        class="medical-textarea"
+                        placeholder="Digite a evolução médica..."></textarea>
 
-                        <textarea
-                            id="mensagemIA"
-                            class="medical-textarea"
-                            placeholder="Digite a anamnese do paciente..."></textarea>
-
-                        <div class="button-group">
-
-                            <button
-                                class="primary-btn"
-                                onclick="simularRespostaIA()">
-
-                                <i class="fas fa-paper-plane"></i>
-                                Enviar para IA
-
-                            </button>
-
-                            <button
-                                class="secondary-btn"
-                                onclick="limparChat()">
-
-                                <i class="fas fa-trash"></i>
-                                Limpar
-
-                            </button>
-
-                        </div>
-
-                    </div>
+                    <button class="primary-btn">
+                        Salvar Consulta
+                    </button>
 
                 </div>
 
             </section>
 
-            <!-- PRONTUARIO -->
+            <!-- PRONTUÁRIO -->
             <section id="prontuario" class="screen">
 
                 <div class="card">
@@ -365,7 +306,7 @@
 
                         <h2>
                             <i class="fas fa-folder-open"></i>
-                            Prontuário Inteligente
+                            Prontuário
                         </h2>
 
                     </div>
@@ -378,23 +319,13 @@
                     <div class="patient-list">
 
                         <div class="patient-card">
-
                             <strong>Maria Silva</strong>
-
                             <p>TDM moderado</p>
-
-                            <small>Última consulta: hoje</small>
-
                         </div>
 
                         <div class="patient-card">
-
                             <strong>João Souza</strong>
-
                             <p>TAG + Insônia</p>
-
-                            <small>Última consulta: ontem</small>
-
                         </div>
 
                     </div>
@@ -411,8 +342,8 @@
                     <div class="card-header">
 
                         <h2>
-                            <i class="fas fa-prescription-bottle-alt"></i>
-                            Prescrição Médica
+                            <i class="fas fa-prescription"></i>
+                            Prescrição
                         </h2>
 
                     </div>
@@ -421,17 +352,9 @@
                         class="medical-textarea"
                         placeholder="Digite a prescrição médica..."></textarea>
 
-                    <div class="button-group">
-
-                        <button class="primary-btn">
-                            Gerar Receita
-                        </button>
-
-                        <button class="secondary-btn">
-                            Copiar Receita
-                        </button>
-
-                    </div>
+                    <button class="primary-btn">
+                        Gerar Receita
+                    </button>
 
                 </div>
 
@@ -509,9 +432,110 @@
 
     </div>
 
+    <!-- MODAL IA -->
+    <div id="iaModal" class="ia-modal">
+
+        <div class="ia-modal-content">
+
+            <!-- HEADER -->
+            <div class="ia-header">
+
+                <div class="ia-title">
+
+                    <div class="ia-icon">
+                        🧠
+                    </div>
+
+                    <div>
+                        <h2>Assistente Psiquiátrico IA</h2>
+                        <small>Análise baseada em diretrizes</small>
+                    </div>
+
+                </div>
+
+                <button class="close-modal" onclick="fecharModalIA()">
+                    ✖
+                </button>
+
+            </div>
+
+            <!-- LOADING -->
+            <div id="iaLoading" class="ia-loading">
+
+                <div class="loader"></div>
+
+                <p>Analisando caso clínico...</p>
+
+            </div>
+
+            <!-- RESULTADO -->
+            <div id="iaResultado" class="ia-result">
+
+                <div class="result-box">
+
+                    <h3>🧠 Hipótese Diagnóstica</h3>
+
+                    <p>
+                        Transtorno de Ansiedade Generalizada.
+                    </p>
+
+                </div>
+
+                <div class="result-box blue-box">
+
+                    <h3>💊 Conduta Inicial</h3>
+
+                    <p>
+                        Escitalopram 10mg/dia.
+                    </p>
+
+                </div>
+
+                <div class="result-box orange-box">
+
+                    <h3>⚠️ Perguntas Importantes</h3>
+
+                    <ul>
+                        <li>História de bipolaridade?</li>
+                        <li>Uso de substâncias?</li>
+                        <li>Ideação suicida?</li>
+                    </ul>
+
+                </div>
+
+                <div class="result-box green-box">
+
+                    <h3>🧪 Exames Sugeridos</h3>
+
+                    <ul>
+                        <li>TSH</li>
+                        <li>Vitamina B12</li>
+                        <li>Vitamina D</li>
+                        <li>Hemograma</li>
+                    </ul>
+
+                </div>
+
+                <div class="ia-buttons">
+
+                    <button class="primary-btn">
+                        Salvar no Prontuário
+                    </button>
+
+                    <button class="secondary-btn">
+                        Copiar Resposta
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <script src="app.js"></script>
 
 </body>
 
 </html>
-```
