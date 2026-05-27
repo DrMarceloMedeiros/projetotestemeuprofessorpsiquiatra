@@ -1,15 +1,18 @@
 ```javascript
 function mudarTela(id) {
 
-  // ESCONDE TODAS AS TELAS
+  // REMOVE TELAS ATIVAS
   document.querySelectorAll('.screen')
     .forEach(screen => {
       screen.classList.remove('active-screen');
     });
 
-  // MOSTRA A TELA SELECIONADA
-  document.getElementById(id)
-    .classList.add('active-screen');
+  // ABRE TELA SELECIONADA
+  const tela = document.getElementById(id);
+
+  if(tela){
+    tela.classList.add('active-screen');
+  }
 
   // REMOVE MENU ATIVO
   document.querySelectorAll('.menu-item')
@@ -18,91 +21,88 @@ function mudarTela(id) {
     });
 
   // PEGA BOTÃO CLICADO
-  const botoes = document.querySelectorAll('.menu-item');
+  const botao = event.currentTarget;
 
-  botoes.forEach(botao => {
-
-    const onclick = botao.getAttribute('onclick');
-
-    if (onclick && onclick.includes(id)) {
-      botao.classList.add('active');
-    }
-
-  });
-
-}
-
-/* =========================
-   DASHBOARD DINÂMICO
-========================= */
-
-const stats = {
-  pacientes: 128,
-  consultas: 54,
-  tdm: 23,
-  prescricoes: 76
-};
-
-function atualizarDashboard() {
-
-  const numeros = document.querySelectorAll('.stats-card h3');
-
-  if(numeros.length >= 4){
-
-    numeros[0].innerText = stats.pacientes;
-    numeros[1].innerText = stats.consultas;
-    numeros[2].innerText = stats.tdm;
-    numeros[3].innerText = stats.prescricoes;
-
+  if(botao){
+    botao.classList.add('active');
   }
 
 }
 
 /* =========================
-   ASSISTENTE IA SIMULADO
+   ASSISTENTE PSIQUIÁTRICO IA
 ========================= */
 
 function analisarCaso(){
 
-  const textarea = document.querySelector('#dashboard .medical-textarea');
+  const texto = document.getElementById('anamneseIA').value;
 
-  const texto = textarea.value.trim();
+  const resultado = document.getElementById('resultadoIA');
 
-  if(texto.length < 15){
+  if(!texto || texto.length < 15){
 
-    alert('Digite uma anamnese mais completa.');
+    resultado.innerHTML = `
+      <div class="alert-box">
+        ⚠️ Digite uma anamnese mais detalhada.
+      </div>
+    `;
+
     return;
-
   }
 
-  const resposta = `
-HIPÓTESE DIAGNÓSTICA:
-• Transtorno Depressivo Maior
+  // IA SIMULADA TEMPORÁRIA
 
-CONDUTA:
-• Considerar ISRS
-• Solicitar exames laboratoriais
-• Avaliar risco suicida
-• Retorno em 30 dias
+  let resposta = `
+    <div class="ia-box">
 
-OBSERVAÇÕES:
-• Investigar bipolaridade oculta
-• Avaliar abuso de substâncias
-`;
+      <h3>🧠 Hipótese Diagnóstica</h3>
 
-  alert(resposta);
+      <p>
+        Transtorno de Ansiedade Generalizada (TAG)
+        associado a sintomas depressivos leves.
+      </p>
+
+      <h3>💊 Conduta Inicial</h3>
+
+      <ul>
+        <li>Escitalopram 10mg/dia</li>
+        <li>Psicoterapia TCC</li>
+        <li>Orientação higiene do sono</li>
+      </ul>
+
+      <h3>⚠️ Perguntas Importantes</h3>
+
+      <ul>
+        <li>Histórico de bipolaridade?</li>
+        <li>Uso de álcool ou substâncias?</li>
+        <li>Ideação suicida?</li>
+      </ul>
+
+      <h3>📋 Exames Interessantes</h3>
+
+      <ul>
+        <li>TSH</li>
+        <li>T4 Livre</li>
+        <li>Vitamina B12</li>
+        <li>Vitamina D</li>
+      </ul>
+
+    </div>
+  `;
+
+  resultado.innerHTML = resposta;
 
 }
 
 /* =========================
-   LIMPAR ANAMNESE
+   LIMPAR IA
 ========================= */
 
-function limparAnamnese(){
+function limparIA(){
 
-  const textarea = document.querySelector('#dashboard .medical-textarea');
+  document.getElementById('anamneseIA').value = '';
 
-  textarea.value = '';
+  document.getElementById('resultadoIA').innerHTML = '';
 
 }
 
@@ -112,26 +112,48 @@ function limparAnamnese(){
 
 function salvarConsulta(){
 
-  const inputs = document.querySelectorAll('#consulta input');
+  const nome =
+    document.getElementById('nomePaciente').value;
 
-  let vazio = false;
+  if(!nome){
 
-  inputs.forEach(input => {
+    alert('Digite o nome do paciente');
 
-    if(input.value.trim() === ''){
-      vazio = true;
-    }
-
-  });
-
-  if(vazio){
-
-    alert('Preencha todos os campos.');
     return;
-
   }
 
-  alert('Consulta salva com sucesso.');
+  alert('Consulta salva com sucesso!');
+
+}
+
+/* =========================
+   BUSCA PACIENTE
+========================= */
+
+function buscarPaciente(){
+
+  const termo =
+    document.getElementById('buscarPaciente')
+      .value
+      .toLowerCase();
+
+  document.querySelectorAll('.patient-card')
+    .forEach(card => {
+
+      const texto =
+        card.innerText.toLowerCase();
+
+      if(texto.includes(termo)){
+
+        card.style.display = 'block';
+
+      }else{
+
+        card.style.display = 'none';
+
+      }
+
+    });
 
 }
 
@@ -141,50 +163,17 @@ function salvarConsulta(){
 
 function gerarReceita(){
 
-  const texto = document.querySelector('#prescricao .medical-textarea');
+  const texto =
+    document.getElementById('prescricaoTexto').value;
 
-  if(texto.value.trim() === ''){
+  if(!texto){
 
-    alert('Digite uma prescrição.');
+    alert('Digite uma prescrição');
+
     return;
-
   }
 
-  alert('Receita gerada com sucesso.');
-
-}
-
-/* =========================
-   BUSCA PACIENTE
-========================= */
-
-function ativarBuscaPaciente(){
-
-  const busca = document.querySelector('.search-input');
-
-  busca.addEventListener('keyup', function(){
-
-    const termo = busca.value.toLowerCase();
-
-    const pacientes = document.querySelectorAll('.patient-card');
-
-    pacientes.forEach(card => {
-
-      const nome = card.innerText.toLowerCase();
-
-      if(nome.includes(termo)){
-
-        card.style.display = 'block';
-
-      } else {
-
-        card.style.display = 'none';
-
-      }
-
-    });
-
-  });
+  alert('Receita gerada!');
 
 }
 
@@ -192,103 +181,38 @@ function ativarBuscaPaciente(){
    TEMA ESCURO
 ========================= */
 
-let darkMode = false;
-
 function alternarTema(){
 
-  darkMode = !darkMode;
-
-  if(darkMode){
-
-    document.body.style.background = '#020617';
-    document.body.style.color = 'white';
-
-  } else {
-
-    document.body.style.background = '#f4f7fb';
-    document.body.style.color = '#1e293b';
-
-  }
+  document.body.classList.toggle('dark-mode');
 
 }
 
 /* =========================
-   EXPORTAR BACKUP SIMPLES
+   DASHBOARD ANIMADO
 ========================= */
 
-function exportarBackup(){
+window.onload = () => {
 
-  const dados = {
-    data: new Date(),
-    sistema: 'Meu Professor Psiquiatria'
-  };
+  const cards =
+    document.querySelectorAll('.stats-card');
 
-  const blob = new Blob(
-    [JSON.stringify(dados, null, 2)],
-    { type:'application/json' }
-  );
+  cards.forEach((card, index) => {
 
-  const a = document.createElement('a');
+    card.style.opacity = '0';
 
-  a.href = URL.createObjectURL(blob);
+    card.style.transform = 'translateY(20px)';
 
-  a.download = 'backup-meu-professor.json';
+    setTimeout(() => {
 
-  a.click();
+      card.style.transition = '0.5s';
 
-}
+      card.style.opacity = '1';
 
-/* =========================
-   EVENTOS DOS BOTÕES
-========================= */
+      card.style.transform = 'translateY(0)';
 
-document.addEventListener('DOMContentLoaded', () => {
+    }, index * 150);
 
-  atualizarDashboard();
+  });
 
-  ativarBuscaPaciente();
-
-  // BOTÃO ANALISAR
-  const analisarBtn = document.querySelectorAll('.primary-btn')[0];
-
-  if(analisarBtn){
-    analisarBtn.addEventListener('click', analisarCaso);
-  }
-
-  // BOTÃO LIMPAR
-  const limparBtn = document.querySelectorAll('.secondary-btn')[0];
-
-  if(limparBtn){
-    limparBtn.addEventListener('click', limparAnamnese);
-  }
-
-  // SALVAR CONSULTA
-  const salvarConsultaBtn = document.querySelector('#consulta .primary-btn');
-
-  if(salvarConsultaBtn){
-    salvarConsultaBtn.addEventListener('click', salvarConsulta);
-  }
-
-  // GERAR RECEITA
-  const receitaBtn = document.querySelector('#prescricao .primary-btn');
-
-  if(receitaBtn){
-    receitaBtn.addEventListener('click', gerarReceita);
-  }
-
-  // EXPORTAR BACKUP
-  const backupBtn = document.querySelectorAll('#config .secondary-btn')[0];
-
-  if(backupBtn){
-    backupBtn.addEventListener('click', exportarBackup);
-  }
-
-  // TEMA
-  const temaBtn = document.querySelectorAll('#config .secondary-btn')[1];
-
-  if(temaBtn){
-    temaBtn.addEventListener('click', alternarTema);
-  }
-
-});
+};
 ```
