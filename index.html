@@ -1,9 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
 
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Meu Professor Psiquiatria</title>
@@ -21,6 +23,7 @@
     <div class="app-container">
 
         <!-- SIDEBAR -->
+
         <aside class="sidebar">
 
             <div class="logo-area">
@@ -38,32 +41,32 @@
 
             <nav class="menu">
 
-                <button class="menu-item active" onclick="mudarTela('dashboard')">
+                <button class="menu-item active" onclick="mudarTela('dashboard', this)">
                     <i class="fas fa-home"></i>
                     Dashboard
                 </button>
 
-                <button class="menu-item" onclick="mudarTela('consulta')">
+                <button class="menu-item" onclick="mudarTela('consulta', this)">
                     <i class="fas fa-stethoscope"></i>
                     Consulta
                 </button>
 
-                <button class="menu-item" onclick="mudarTela('prontuario')">
+                <button class="menu-item" onclick="mudarTela('prontuario', this)">
                     <i class="fas fa-folder-open"></i>
                     Prontuário
                 </button>
 
-                <button class="menu-item" onclick="mudarTela('prescricao')">
+                <button class="menu-item" onclick="mudarTela('prescricao', this)">
                     <i class="fas fa-prescription"></i>
                     Prescrição
                 </button>
 
-                <button class="menu-item" onclick="mudarTela('escalas')">
+                <button class="menu-item" onclick="mudarTela('escalas', this)">
                     <i class="fas fa-chart-line"></i>
                     Escalas
                 </button>
 
-                <button class="menu-item" onclick="mudarTela('config')">
+                <button class="menu-item" onclick="mudarTela('config', this)">
                     <i class="fas fa-cog"></i>
                     Configurações
                 </button>
@@ -73,17 +76,21 @@
         </aside>
 
         <!-- MAIN -->
+
         <main class="main-content">
 
             <!-- HEADER -->
+
             <header class="topbar">
 
                 <div>
+
                     <h1>Dashboard Médico</h1>
 
                     <p class="subtitle">
                         Plataforma inteligente de apoio psiquiátrico
                     </p>
+
                 </div>
 
                 <div class="user-area">
@@ -110,6 +117,7 @@
             </header>
 
             <!-- DASHBOARD -->
+
             <section id="dashboard" class="screen active-screen">
 
                 <div class="cards-grid">
@@ -168,10 +176,10 @@
 
                 </div>
 
-                <!-- DASHBOARD GRID -->
                 <div class="dashboard-grid">
 
-                    <!-- IA -->
+                    <!-- ASSISTENTE IA -->
+
                     <div class="card large-card">
 
                         <div class="card-header">
@@ -195,16 +203,19 @@
                                 Analisar Caso
                             </button>
 
-                            <button class="secondary-btn" onclick="limparAnamnese()">
+                            <button class="secondary-btn" onclick="limparIA()">
                                 <i class="fas fa-trash"></i>
                                 Limpar
                             </button>
 
                         </div>
 
+                        <div id="resultadoIA" style="margin-top:25px;"></div>
+
                     </div>
 
                     <!-- ATIVIDADE -->
+
                     <div class="card">
 
                         <div class="card-header">
@@ -260,6 +271,7 @@
             </section>
 
             <!-- CONSULTA -->
+
             <section id="consulta" class="screen">
 
                 <div class="card">
@@ -275,13 +287,22 @@
 
                     <div class="form-grid">
 
-                        <input type="text" placeholder="Nome do paciente">
+                        <input
+                            id="nomePaciente"
+                            type="text"
+                            placeholder="Nome do paciente">
 
-                        <input type="text" placeholder="Idade">
+                        <input
+                            type="text"
+                            placeholder="Idade">
 
-                        <input type="text" placeholder="Cidade">
+                        <input
+                            type="text"
+                            placeholder="Cidade">
 
-                        <input type="text" placeholder="CID">
+                        <input
+                            type="text"
+                            placeholder="CID">
 
                     </div>
 
@@ -289,15 +310,20 @@
                         class="medical-textarea"
                         placeholder="Digite a evolução médica..."></textarea>
 
-                    <button class="primary-btn">
+                    <button
+                        class="primary-btn"
+                        onclick="salvarConsulta()">
+
                         Salvar Consulta
+
                     </button>
 
                 </div>
 
             </section>
 
-            <!-- PRONTUÁRIO -->
+            <!-- PRONTUARIO -->
+
             <section id="prontuario" class="screen">
 
                 <div class="card">
@@ -312,9 +338,11 @@
                     </div>
 
                     <input
+                        id="buscarPaciente"
                         type="text"
                         class="search-input"
-                        placeholder="Buscar paciente...">
+                        placeholder="Buscar paciente..."
+                        onkeyup="buscarPaciente()">
 
                     <div class="patient-list">
 
@@ -335,6 +363,7 @@
             </section>
 
             <!-- PRESCRIÇÃO -->
+
             <section id="prescricao" class="screen">
 
                 <div class="card">
@@ -349,11 +378,16 @@
                     </div>
 
                     <textarea
+                        id="prescricaoTexto"
                         class="medical-textarea"
                         placeholder="Digite a prescrição médica..."></textarea>
 
-                    <button class="primary-btn">
+                    <button
+                        class="primary-btn"
+                        onclick="gerarReceita()">
+
                         Gerar Receita
+
                     </button>
 
                 </div>
@@ -361,6 +395,7 @@
             </section>
 
             <!-- ESCALAS -->
+
             <section id="escalas" class="screen">
 
                 <div class="card">
@@ -399,6 +434,7 @@
             </section>
 
             <!-- CONFIG -->
+
             <section id="config" class="screen">
 
                 <div class="card">
@@ -418,8 +454,12 @@
                             Exportar Backup
                         </button>
 
-                        <button class="secondary-btn">
+                        <button
+                            class="secondary-btn"
+                            onclick="alternarTema()">
+
                             Tema Escuro
+
                         </button>
 
                     </div>
@@ -432,110 +472,9 @@
 
     </div>
 
-    <!-- MODAL IA -->
-    <div id="iaModal" class="ia-modal">
-
-        <div class="ia-modal-content">
-
-            <!-- HEADER -->
-            <div class="ia-header">
-
-                <div class="ia-title">
-
-                    <div class="ia-icon">
-                        🧠
-                    </div>
-
-                    <div>
-                        <h2>Assistente Psiquiátrico IA</h2>
-                        <small>Análise baseada em diretrizes</small>
-                    </div>
-
-                </div>
-
-                <button class="close-modal" onclick="fecharModalIA()">
-                    ✖
-                </button>
-
-            </div>
-
-            <!-- LOADING -->
-            <div id="iaLoading" class="ia-loading">
-
-                <div class="loader"></div>
-
-                <p>Analisando caso clínico...</p>
-
-            </div>
-
-            <!-- RESULTADO -->
-            <div id="iaResultado" class="ia-result">
-
-                <div class="result-box">
-
-                    <h3>🧠 Hipótese Diagnóstica</h3>
-
-                    <p>
-                        Transtorno de Ansiedade Generalizada.
-                    </p>
-
-                </div>
-
-                <div class="result-box blue-box">
-
-                    <h3>💊 Conduta Inicial</h3>
-
-                    <p>
-                        Escitalopram 10mg/dia.
-                    </p>
-
-                </div>
-
-                <div class="result-box orange-box">
-
-                    <h3>⚠️ Perguntas Importantes</h3>
-
-                    <ul>
-                        <li>História de bipolaridade?</li>
-                        <li>Uso de substâncias?</li>
-                        <li>Ideação suicida?</li>
-                    </ul>
-
-                </div>
-
-                <div class="result-box green-box">
-
-                    <h3>🧪 Exames Sugeridos</h3>
-
-                    <ul>
-                        <li>TSH</li>
-                        <li>Vitamina B12</li>
-                        <li>Vitamina D</li>
-                        <li>Hemograma</li>
-                    </ul>
-
-                </div>
-
-                <div class="ia-buttons">
-
-                    <button class="primary-btn">
-                        Salvar no Prontuário
-                    </button>
-
-                    <button class="secondary-btn">
-                        Copiar Resposta
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
     <script src="app.js"></script>
 
 </body>
 
 </html>
+```
