@@ -6,8 +6,8 @@
 }
 
 body{
-    background:#f3f6fb;
-    color:#1e293b;
+    background:#f1f5f9;
+    color:#0f172a;
 }
 
 .app-container{
@@ -18,8 +18,8 @@ body{
 /* SIDEBAR */
 
 .sidebar{
-    width:260px;
-    background:#111827;
+    width:270px;
+    background:#0f172a;
     color:white;
     padding:25px;
 }
@@ -32,18 +32,18 @@ body{
 }
 
 .logo-icon{
-    width:55px;
-    height:55px;
-    border-radius:14px;
+    width:60px;
+    height:60px;
+    border-radius:16px;
     background:#2563eb;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:24px;
+    font-size:28px;
 }
 
 .logo-area h2{
-    font-size:24px;
+    font-size:22px;
 }
 
 .logo-area small{
@@ -60,8 +60,8 @@ body{
     border:none;
     background:transparent;
     color:white;
-    padding:14px;
-    border-radius:12px;
+    padding:14px 16px;
+    border-radius:14px;
     text-align:left;
     cursor:pointer;
     transition:0.2s;
@@ -87,22 +87,43 @@ body{
 
 .topbar{
     background:white;
-    padding:20px;
-    border-radius:20px;
+    padding:25px;
+    border-radius:24px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    box-shadow:0 2px 10px rgba(0,0,0,0.05);
     margin-bottom:25px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.05);
 }
 
-.user-box{
+.subtitle{
+    color:#64748b;
+    margin-top:5px;
+}
+
+.user-area{
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:20px;
 }
 
-.avatar{
+.notification{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#f1f5f9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.doctor-profile{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.doctor-avatar{
     width:50px;
     height:50px;
     border-radius:50%;
@@ -116,7 +137,7 @@ body{
 
 /* CARDS */
 
-.cards{
+.cards-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
     gap:20px;
@@ -125,20 +146,42 @@ body{
 
 .card{
     background:white;
-    border-radius:20px;
+    border-radius:24px;
     padding:25px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+    box-shadow:0 4px 20px rgba(0,0,0,0.05);
 }
 
-.card h3{
-    color:#64748b;
-    font-size:15px;
-    margin-bottom:10px;
+.stats-card{
+    display:flex;
+    align-items:center;
+    gap:18px;
 }
 
-.card .numero{
-    font-size:34px;
-    font-weight:bold;
+.card-icon{
+    width:65px;
+    height:65px;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:24px;
+}
+
+.blue{
+    background:#2563eb;
+}
+
+.green{
+    background:#16a34a;
+}
+
+.orange{
+    background:#ea580c;
+}
+
+.red{
+    background:#dc2626;
 }
 
 /* GRID */
@@ -149,63 +192,137 @@ body{
     gap:25px;
 }
 
-.panel{
-    background:white;
-    border-radius:20px;
-    padding:25px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+.large-card{
+    min-height:420px;
 }
 
-.panel-title{
-    font-size:20px;
+/* TITLES */
+
+.card-header{
     margin-bottom:20px;
 }
 
-/* FORM */
+.card-header h2{
+    font-size:20px;
+}
 
-textarea{
+/* TEXTAREA */
+
+.medical-textarea{
     width:100%;
-    height:180px;
+    min-height:220px;
     border:1px solid #cbd5e1;
-    border-radius:14px;
-    padding:15px;
+    border-radius:18px;
+    padding:18px;
     resize:none;
-    margin-bottom:15px;
     font-size:15px;
+    margin-bottom:20px;
 }
 
-.action-buttons{
+/* BUTTONS */
+
+.button-group{
     display:flex;
-    gap:10px;
+    gap:12px;
 }
 
-.btn-primary{
+.primary-btn{
+    border:none;
     background:#2563eb;
     color:white;
-    border:none;
     padding:14px 22px;
-    border-radius:12px;
+    border-radius:14px;
     cursor:pointer;
     font-weight:bold;
 }
 
-.btn-secondary{
-    background:#e2e8f0;
+.secondary-btn{
     border:none;
+    background:#e2e8f0;
     padding:14px 22px;
-    border-radius:12px;
+    border-radius:14px;
     cursor:pointer;
 }
 
-/* LISTA */
+/* ACTIVITY */
 
-.activity-item{
-    padding:15px;
-    border-bottom:1px solid #e2e8f0;
+.activity-list{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
 }
 
-.activity-item:last-child{
-    border-bottom:none;
+.activity-item{
+    display:flex;
+    gap:15px;
+    align-items:flex-start;
+}
+
+.activity-dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#2563eb;
+    margin-top:5px;
+}
+
+/* FORM */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.form-grid input,
+.search-input{
+    padding:14px;
+    border-radius:14px;
+    border:1px solid #cbd5e1;
+}
+
+/* PATIENT */
+
+.patient-list{
+    margin-top:20px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.patient-card{
+    background:#f8fafc;
+    padding:18px;
+    border-radius:16px;
+}
+
+/* MINI CARDS */
+
+.mini-card{
+    background:#f8fafc;
+    padding:30px;
+    border-radius:18px;
+    text-align:center;
+    font-weight:bold;
+}
+
+/* SETTINGS */
+
+.settings-list{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+/* TELAS */
+
+.screen{
+    display:none;
+}
+
+.active-screen{
+    display:block;
 }
 
 /* RESPONSIVO */
@@ -217,6 +334,10 @@ textarea{
     }
 
     .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
         grid-template-columns:1fr;
     }
 
