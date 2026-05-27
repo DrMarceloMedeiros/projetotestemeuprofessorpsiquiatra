@@ -297,7 +297,7 @@
 <div class="footer"><div class="container"><p>Meu Professor Psiquiatra | Baseado em diretrizes internacionais | Dr. Marcelo Medeiros © 2025</p></div></div>
 
 <script>
-    // BANCOS DE DADOS
+    // ==================== BANCOS DE DADOS ====================
     const comorbidadesLista = ["Hipertensão Arterial","Diabetes Mellitus","Obesidade","Dislipidemia","Hipotireoidismo","Asma","DPOC","Apneia do Sono","Epilepsia","Enxaqueca","Parkinson","Insuficiência Cardíaca","AVC prévio","Doença Renal Crônica","Artrite Reumatoide","Fibromialgia","HIV/AIDS","COVID longa","Câncer","Menopausa","Glaucoma","Lúpus"];
     const medicamentosLista = ["Escitalopram","Sertralina","Fluoxetina","Paroxetina","Venlafaxina","Duloxetina","Bupropiona","Mirtazapina","Trazodona","Lítio","Valproato","Carbamazepina","Lamotrigina","Risperidona","Olanzapina","Quetiapina","Aripiprazol","Clozapina","Clonazepam","Alprazolam","Diazepam","Lorazepam","Zolpidem","Metilfenidato","Propranolol","Pregabalina","Gabapentina","Torval"];
     const historicoLista = ["Depressão","Transtorno Bipolar","Esquizofrenia","TAG","Síndrome do Pânico","TOC","TEPT","Borderline","TDAH","Autismo","Tentativa de suicídio","Dependência química","Surto psicótico"];
@@ -309,8 +309,7 @@
         {cod:"F41.0",desc:"Transtorno de pânico"},{cod:"F41.1",desc:"Transtorno de ansiedade generalizada"},{cod:"F41.2",desc:"Transtorno misto ansioso e depressivo"},
         {cod:"F43.0",desc:"Reação aguda ao estresse"},{cod:"F43.1",desc:"Transtorno de estresse pós-traumático (TEPT)"},{cod:"F43.2",desc:"Transtorno de adaptação"},
         {cod:"F31.0",desc:"Transtorno bipolar - episódio atual hipomaníaco"},{cod:"F31.1",desc:"Transtorno bipolar - episódio atual maníaco sem psicóticos"},{cod:"F31.2",desc:"Transtorno bipolar - episódio atual maníaco com psicóticos"},{cod:"F31.3",desc:"Transtorno bipolar - episódio atual depressivo leve/moderado"},{cod:"F31.4",desc:"Transtorno bipolar - episódio atual depressivo grave sem psicóticos"},{cod:"F31.5",desc:"Transtorno bipolar - episódio atual depressivo grave com psicóticos"},
-        {cod:"F20.0",desc:"Esquizofrenia paranóide"},{cod:"F20.1",desc:"Esquizofrenia hebefrênica"},{cod:"F20.2",desc:"Esquizofrenia catatônica"},{cod:"F20.3",desc:"Esquizofrenia indiferenciada"},{cod:"F20.5",desc:"Esquizofrenia residual"},{cod:"F20.6",desc:"Esquizofrenia simple
-                    {cod:"F20.6",desc:"Esquizofrenia simples"},{cod:"F20.9",desc:"Esquizofrenia não especificada"},
+        {cod:"F20.0",desc:"Esquizofrenia paranóide"},{cod:"F20.1",desc:"Esquizofrenia hebefrênica"},{cod:"F20.2",desc:"Esquizofrenia catatônica"},{cod:"F20.3",desc:"Esquizofrenia indiferenciada"},{cod:"F20.5",desc:"Esquizofrenia residual"},{cod:"F20.6",desc:"Esquizofrenia simples"},{cod:"F20.9",desc:"Esquizofrenia não especificada"},
         {cod:"F60.3",desc:"Transtorno de personalidade borderline"},{cod:"F90.0",desc:"TDAH - tipo desatento"},{cod:"F90.1",desc:"TDAH - tipo hiperativo/impulsivo"},
         {cod:"Z00.4",desc:"Exame psiquiátrico geral"},{cod:"Z03.2",desc:"Observação por suspeita de transtorno mental"},
         {cod:"Z04.6",desc:"Exame psiquiátrico geral requerido por autoridade"},{cod:"Z50.4",desc:"Psicoterapia"}
@@ -474,7 +473,7 @@
     }
     function exemploAnamnese() { document.getElementById('anamnese').value = 'Paciente feminina, 32 anos, há 3 meses com anedonia, insônia inicial, fadiga intensa, ideação de culpa. Sem ideação suicida ativa. Já usou sertralina 50mg/dia por 2 meses sem melhora.'; }
 
-    // PRESCRIÇÃO - SEM TRAÇOS
+    // PRESCRIÇÃO
     function buscarMedicamentoPrescricao() {
         const termo = document.getElementById('buscaMedicamento').value.toLowerCase();
         const container = document.getElementById('resultadoBuscaMed');
