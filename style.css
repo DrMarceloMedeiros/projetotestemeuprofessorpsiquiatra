@@ -1,0 +1,65 @@
+* {
+
+.btn-secondary {
+  background: #e2e8f0;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.mini-card {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.patient-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-radius: 18px;
+  background: #f8fafc;
+  margin-bottom: 15px;
+}
+
+.screen {
+  display: none;
+}
+
+.active-screen {
+  display: block;
+}
+
+.search-input {
+  padding: 12px 18px;
+  border-radius: 14px;
+  border: 1px solid #cbd5e1;
+}
+
+.between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media(max-width: 1000px) {
+
+  .sidebar {
+    width: 90px;
+  }
+
+  .logo-area h2,
+  .logo-area small,
+  .menu-item {
+    font-size: 0;
+  }
+
+  .content-grid,
+  .consulta-layout {
+    grid-template-columns: 1fr;
+  }
+
+}
