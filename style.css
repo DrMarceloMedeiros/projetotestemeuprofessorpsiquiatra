@@ -638,3 +638,161 @@ body{
   }
 
 }
+/* =========================
+   MODAL IA
+========================= */
+
+.ia-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.75);
+  backdrop-filter:blur(6px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  padding:20px;
+}
+
+.ia-modal.show{
+  display:flex;
+}
+
+.ia-modal-content{
+  width:100%;
+  max-width:900px;
+  max-height:90vh;
+  overflow-y:auto;
+  background:white;
+  border-radius:30px;
+  padding:30px;
+  animation:modalShow 0.3s ease;
+  box-shadow:0 25px 60px rgba(0,0,0,0.25);
+}
+
+@keyframes modalShow{
+  from{
+    opacity:0;
+    transform:scale(0.95);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+/* HEADER IA */
+
+.ia-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.ia-title{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.ia-icon{
+  width:65px;
+  height:65px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:30px;
+}
+
+.close-modal{
+  border:none;
+  background:#f1f5f9;
+  width:45px;
+  height:45px;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:18px;
+}
+
+/* LOADING */
+
+.ia-loading{
+  text-align:center;
+  padding:60px 20px;
+}
+
+.loader{
+  width:60px;
+  height:60px;
+  border:6px solid #dbeafe;
+  border-top:6px solid #2563eb;
+  border-radius:50%;
+  margin:auto;
+  margin-bottom:20px;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+/* RESULTADO IA */
+
+.ia-result{
+  display:none;
+}
+
+.result-box{
+  background:#f8fafc;
+  border-left:5px solid #2563eb;
+  padding:20px;
+  border-radius:18px;
+  margin-bottom:20px;
+}
+
+.result-box h3{
+  margin-bottom:12px;
+}
+
+.blue-box{
+  border-left-color:#2563eb;
+}
+
+.orange-box{
+  border-left-color:#ea580c;
+}
+
+.green-box{
+  border-left-color:#16a34a;
+}
+
+.result-box ul{
+  padding-left:20px;
+}
+
+.result-box li{
+  margin-bottom:8px;
+}
+
+/* RESPONSIVO MODAL */
+
+@media(max-width:700px){
+
+  .ia-modal-content{
+    padding:20px;
+  }
+
+  .ia-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:20px;
+  }
+
+}
