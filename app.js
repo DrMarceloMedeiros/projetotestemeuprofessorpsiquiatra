@@ -1,16 +1,16 @@
 /* =========================
-   TROCAR TELAS
+   TROCA DE TELAS
 ========================= */
 
-function mudarTela(id, elemento){
+function mudarTela(id, botao){
 
-  // REMOVE TODAS
+  // REMOVE TELAS
   document.querySelectorAll('.screen')
     .forEach(screen => {
       screen.classList.remove('active-screen');
     });
 
-  // ABRE A TELA
+  // ABRE TELA
   const tela = document.getElementById(id);
 
   if(tela){
@@ -19,19 +19,41 @@ function mudarTela(id, elemento){
 
   // REMOVE MENU ATIVO
   document.querySelectorAll('.menu-item')
-    .forEach(btn => {
-      btn.classList.remove('active');
+    .forEach(item => {
+      item.classList.remove('active');
     });
 
   // ATIVA MENU
-  if(elemento){
-    elemento.classList.add('active');
+  if(botao){
+    botao.classList.add('active');
   }
 
 }
 
 /* =========================
-   ASSISTENTE IA
+   MODAL IA
+========================= */
+
+function abrirModalIA(){
+
+  const modal =
+    document.getElementById('iaModal');
+
+  modal.classList.add('show');
+
+}
+
+function fecharModalIA(){
+
+  const modal =
+    document.getElementById('iaModal');
+
+  modal.classList.remove('show');
+
+}
+
+/* =========================
+   ANALISAR CASO
 ========================= */
 
 function analisarCaso(){
@@ -39,79 +61,100 @@ function analisarCaso(){
   const texto =
     document.getElementById('anamneseIA').value;
 
-  const resultado =
-    document.getElementById('resultadoIA');
+  if(!texto || texto.length < 15){
 
-  if(!texto || texto.length < 10){
+    alert('Digite uma anamnese mais detalhada.');
+
+    return;
+  }
+
+  // ABRE MODAL
+  abrirModalIA();
+
+  // LOADING
+  document.getElementById('iaLoading')
+    .style.display = 'block';
+
+  // RESULTADO
+  document.getElementById('iaResultado')
+    .style.display = 'none';
+
+  // SIMULA IA
+  setTimeout(() => {
+
+    document.getElementById('iaLoading')
+      .style.display = 'none';
+
+    const resultado =
+      document.getElementById('iaResultado');
+
+    resultado.style.display = 'block';
 
     resultado.innerHTML = `
 
-      <div class="result-box orange-box">
+      <div class="result-box blue-box">
 
-        <h3>⚠️ Atenção</h3>
+        <h3>🧠 Hipótese Diagnóstica</h3>
 
         <p>
-          Digite uma anamnese mais detalhada.
+          Transtorno de Ansiedade Generalizada (TAG)
+          associado a sintomas depressivos leves.
         </p>
+
+      </div>
+
+      <div class="result-box orange-box">
+
+        <h3>⚠️ Diagnósticos Diferenciais</h3>
+
+        <ul>
+          <li>Transtorno Bipolar</li>
+          <li>TDAH adulto</li>
+          <li>Burnout</li>
+        </ul>
+
+      </div>
+
+      <div class="result-box green-box">
+
+        <h3>💊 Conduta Inicial</h3>
+
+        <ul>
+          <li>Escitalopram 10mg/dia</li>
+          <li>Psicoterapia TCC</li>
+          <li>Higiene do sono</li>
+        </ul>
+
+      </div>
+
+      <div class="result-box">
+
+        <h3>🚨 Pontos de Atenção</h3>
+
+        <ul>
+          <li>Investigar risco suicida</li>
+          <li>Avaliar uso de substâncias</li>
+          <li>Pesquisar histórico familiar bipolar</li>
+        </ul>
+
+      </div>
+
+      <div class="result-box">
+
+        <h3>📋 Exames Interessantes</h3>
+
+        <ul>
+          <li>TSH</li>
+          <li>T4 Livre</li>
+          <li>Vitamina B12</li>
+          <li>Vitamina D</li>
+        </ul>
 
       </div>
 
     `;
 
-    return;
-  }
-
-  resultado.innerHTML = `
-
-    <div class="result-box blue-box">
-
-      <h3>🧠 Hipótese Diagnóstica</h3>
-
-      <p>
-        Transtorno de Ansiedade Generalizada
-        associado a sintomas depressivos.
-      </p>
-
-    </div>
-
-    <div class="result-box green-box">
-
-      <h3>💊 Sugestão Inicial</h3>
-
-      <ul>
-        <li>Escitalopram 10mg/dia</li>
-        <li>Psicoterapia TCC</li>
-        <li>Higiene do sono</li>
-      </ul>
-
-    </div>
-
-    <div class="result-box orange-box">
-
-      <h3>⚠️ Perguntas Importantes</h3>
-
-      <ul>
-        <li>Ideação suicida?</li>
-        <li>Uso de substâncias?</li>
-        <li>Histórico bipolar?</li>
-      </ul>
-
-    </div>
-
-    <div class="result-box blue-box">
-
-      <h3>📋 Exames Interessantes</h3>
-
-      <ul>
-        <li>TSH</li>
-        <li>T4 Livre</li>
-        <li>Vitamina B12</li>
-        <li>Vitamina D</li>
-      </ul>
-
-    </div>
-
-  `;
+  }, 2500);
 
 }
 
@@ -123,12 +166,10 @@ function limparIA(){
 
   document.getElementById('anamneseIA').value = '';
 
-  document.getElementById('resultadoIA').innerHTML = '';
-
 }
 
 /* =========================
-   SALVAR CONSULTA
+   CONSULTA
 ========================= */
 
 function salvarConsulta(){
@@ -138,7 +179,7 @@ function salvarConsulta(){
 
   if(!nome){
 
-    alert('Digite o nome do paciente');
+    alert('Digite o nome do paciente.');
 
     return;
   }
@@ -179,18 +220,17 @@ function buscarPaciente(){
 }
 
 /* =========================
-   GERAR RECEITA
+   RECEITA
 ========================= */
 
 function gerarReceita(){
 
   const texto =
-    document.getElementById('prescricaoTexto')
-      .value;
+    document.getElementById('prescricaoTexto').value;
 
   if(!texto){
 
-    alert('Digite uma prescrição');
+    alert('Digite uma prescrição.');
 
     return;
   }
@@ -200,7 +240,7 @@ function gerarReceita(){
 }
 
 /* =========================
-   TEMA ESCURO
+   TEMA
 ========================= */
 
 function alternarTema(){
@@ -210,11 +250,30 @@ function alternarTema(){
 }
 
 /* =========================
-   INICIALIZAÇÃO
+   ANIMAÇÃO
 ========================= */
 
-window.onload = function(){
+window.onload = () => {
 
-  console.log('Sistema iniciado com sucesso');
+  const cards =
+    document.querySelectorAll('.stats-card');
+
+  cards.forEach((card, index) => {
+
+    card.style.opacity = '0';
+
+    card.style.transform = 'translateY(20px)';
+
+    setTimeout(() => {
+
+      card.style.transition = '0.5s';
+
+      card.style.opacity = '1';
+
+      card.style.transform = 'translateY(0)';
+
+    }, index * 150);
+
+  });
 
 };
