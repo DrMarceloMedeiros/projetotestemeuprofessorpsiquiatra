@@ -456,7 +456,58 @@
   </main>
 
 </div>
+<!-- MODAL IA -->
 
+<div id="iaModal" class="ia-modal">
+
+    <div class="ia-modal-content">
+
+        <!-- HEADER -->
+
+        <div class="ia-header">
+
+            <div class="ia-title">
+
+                <div class="ia-icon">
+                    🧠
+                </div>
+
+                <div>
+                    <h2>Assistente Psiquiátrico IA</h2>
+                    <p>Análise clínica inteligente</p>
+                </div>
+
+            </div>
+
+            <button class="close-modal" onclick="fecharModalIA()">
+                ✕
+            </button>
+
+        </div>
+
+        <!-- LOADING -->
+
+        <div id="iaLoading" class="ia-loading">
+
+            <div class="loader"></div>
+
+            <h3>IA analisando caso clínico...</h3>
+
+            <p>
+                Avaliando sintomas, diagnósticos diferenciais e condutas.
+            </p>
+
+        </div>
+
+        <!-- RESULTADO -->
+
+        <div id="iaResultado" class="ia-result">
+
+        </div>
+
+    </div>
+
+</div>
 <script src="app.js"></script>
 
 </body>
