@@ -56,105 +56,65 @@ function fecharModalIA(){
    ANALISAR CASO
 ========================= */
 
-function analisarCaso(){
+async function analisarCaso() {
 
   const texto =
     document.getElementById('anamneseIA').value;
 
-  if(!texto || texto.length < 15){
+  const resultado =
+    document.getElementById('resultadoIA');
 
-    alert('Digite uma anamnese mais detalhada.');
+  if (!texto || texto.length < 10) {
+
+    resultado.innerHTML = `
+      <div class="alert-box">
+        ⚠️ Digite uma anamnese mais detalhada.
+      </div>
+    `;
 
     return;
   }
 
-  // ABRE MODAL
-  abrirModalIA();
+  resultado.innerHTML = `
+    <div class="ia-loading">
+      <div class="loader"></div>
+      <p>Analisando caso clínico...</p>
+    </div>
+  `;
 
-  // LOADING
-  document.getElementById('iaLoading')
-    .style.display = 'block';
+  try {
 
-  // RESULTADO
-  document.getElementById('iaResultado')
-    .style.display = 'none';
+    const resposta = await fetch('/api/chat', {
 
-  // SIMULA IA
-  setTimeout(() => {
+      method: 'POST',
 
-    document.getElementById('iaLoading')
-      .style.display = 'none';
+      headers: {
+        'Content-Type': 'application/json'
+      },
 
-    const resultado =
-      document.getElementById('iaResultado');
+      body: JSON.stringify({
+        mensagem: texto
+      })
 
-    resultado.style.display = 'block';
+    });
+
+    const dados = await resposta.json();
 
     resultado.innerHTML = `
-
-      <div class="result-box blue-box">
-
-        <h3>🧠 Hipótese Diagnóstica</h3>
-
-        <p>
-          Transtorno de Ansiedade Generalizada (TAG)
-          associado a sintomas depressivos leves.
-        </p>
-
+      <div class="ia-box">
+        ${dados.resposta.replace(/\n/g, '<br>')}
       </div>
-
-      <div class="result-box orange-box">
-
-        <h3>⚠️ Diagnósticos Diferenciais</h3>
-
-        <ul>
-          <li>Transtorno Bipolar</li>
-          <li>TDAH adulto</li>
-          <li>Burnout</li>
-        </ul>
-
-      </div>
-
-      <div class="result-box green-box">
-
-        <h3>💊 Conduta Inicial</h3>
-
-        <ul>
-          <li>Escitalopram 10mg/dia</li>
-          <li>Psicoterapia TCC</li>
-          <li>Higiene do sono</li>
-        </ul>
-
-      </div>
-
-      <div class="result-box">
-
-        <h3>🚨 Pontos de Atenção</h3>
-
-        <ul>
-          <li>Investigar risco suicida</li>
-          <li>Avaliar uso de substâncias</li>
-          <li>Pesquisar histórico familiar bipolar</li>
-        </ul>
-
-      </div>
-
-      <div class="result-box">
-
-        <h3>📋 Exames Interessantes</h3>
-
-        <ul>
-          <li>TSH</li>
-          <li>T4 Livre</li>
-          <li>Vitamina B12</li>
-          <li>Vitamina D</li>
-        </ul>
-
-      </div>
-
     `;
 
-  }, 2500);
+  } catch (erro) {
+
+    resultado.innerHTML = `
+      <div class="alert-box">
+        ❌ Erro ao conectar IA.
+      </div>
+    `;
+
+  }
 
 }
 
