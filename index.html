@@ -1,480 +1,463 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
 
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Meu Professor Psiquiatria</title>
+  <title>Meu Professor Psiquiatria</title>
 
-    <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 
-    <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="manifest.json">
 
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 </head>
 
 <body>
 
-    <div class="app-container">
+<div class="app-container">
 
-        <!-- SIDEBAR -->
+  <!-- SIDEBAR -->
 
-        <aside class="sidebar">
+  <aside class="sidebar">
 
-            <div class="logo-area">
+    <div class="logo-area">
 
-                <div class="logo-icon">
-                    🧠
-                </div>
+      <div class="logo-icon">
+        🧠
+      </div>
 
-                <div>
-                    <h2>Meu Professor</h2>
-                    <small>Psiquiatria IA</small>
-                </div>
-
-            </div>
-
-            <nav class="menu">
-
-                <button class="menu-item active" onclick="mudarTela('dashboard', this)">
-                    <i class="fas fa-home"></i>
-                    Dashboard
-                </button>
-
-                <button class="menu-item" onclick="mudarTela('consulta', this)">
-                    <i class="fas fa-stethoscope"></i>
-                    Consulta
-                </button>
-
-                <button class="menu-item" onclick="mudarTela('prontuario', this)">
-                    <i class="fas fa-folder-open"></i>
-                    Prontuário
-                </button>
-
-                <button class="menu-item" onclick="mudarTela('prescricao', this)">
-                    <i class="fas fa-prescription"></i>
-                    Prescrição
-                </button>
-
-                <button class="menu-item" onclick="mudarTela('escalas', this)">
-                    <i class="fas fa-chart-line"></i>
-                    Escalas
-                </button>
-
-                <button class="menu-item" onclick="mudarTela('config', this)">
-                    <i class="fas fa-cog"></i>
-                    Configurações
-                </button>
-
-            </nav>
-
-        </aside>
-
-        <!-- MAIN -->
-
-        <main class="main-content">
-
-            <!-- HEADER -->
-
-            <header class="topbar">
-
-                <div>
-
-                    <h1>Dashboard Médico</h1>
-
-                    <p class="subtitle">
-                        Plataforma inteligente de apoio psiquiátrico
-                    </p>
-
-                </div>
-
-                <div class="user-area">
-
-                    <div class="notification">
-                        <i class="fas fa-bell"></i>
-                    </div>
-
-                    <div class="doctor-profile">
-
-                        <div class="doctor-avatar">
-                            DM
-                        </div>
-
-                        <div>
-                            <strong>Dr. Marcelo</strong>
-                            <small>CRM-PR 47960</small>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </header>
-
-            <!-- DASHBOARD -->
-
-            <section id="dashboard" class="screen active-screen">
-
-                <div class="cards-grid">
-
-                    <div class="card stats-card">
-
-                        <div class="card-icon blue">
-                            <i class="fas fa-users"></i>
-                        </div>
-
-                        <div>
-                            <h3>128</h3>
-                            <p>Pacientes</p>
-                        </div>
-
-                    </div>
-
-                    <div class="card stats-card">
-
-                        <div class="card-icon green">
-                            <i class="fas fa-notes-medical"></i>
-                        </div>
-
-                        <div>
-                            <h3>54</h3>
-                            <p>Consultas</p>
-                        </div>
-
-                    </div>
-
-                    <div class="card stats-card">
-
-                        <div class="card-icon orange">
-                            <i class="fas fa-brain"></i>
-                        </div>
-
-                        <div>
-                            <h3>23</h3>
-                            <p>TDM</p>
-                        </div>
-
-                    </div>
-
-                    <div class="card stats-card">
-
-                        <div class="card-icon red">
-                            <i class="fas fa-prescription-bottle-alt"></i>
-                        </div>
-
-                        <div>
-                            <h3>76</h3>
-                            <p>Prescrições</p>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="dashboard-grid">
-
-                    <!-- ASSISTENTE IA -->
-
-                    <div class="card large-card">
-
-                        <div class="card-header">
-
-                            <h2>
-                                <i class="fas fa-robot"></i>
-                                Assistente Psiquiátrico IA
-                            </h2>
-
-                        </div>
-
-                        <textarea
-                            id="anamneseIA"
-                            class="medical-textarea"
-                            placeholder="Digite a anamnese completa do paciente..."></textarea>
-
-                        <div class="button-group">
-
-                            <button class="primary-btn" onclick="analisarCaso()">
-                                <i class="fas fa-brain"></i>
-                                Analisar Caso
-                            </button>
-
-                            <button class="secondary-btn" onclick="limparIA()">
-                                <i class="fas fa-trash"></i>
-                                Limpar
-                            </button>
-
-                        </div>
-
-                        <div id="resultadoIA" style="margin-top:25px;"></div>
-
-                    </div>
-
-                    <!-- ATIVIDADE -->
-
-                    <div class="card">
-
-                        <div class="card-header">
-
-                            <h2>
-                                <i class="fas fa-clock"></i>
-                                Atividade Recente
-                            </h2>
-
-                        </div>
-
-                        <div class="activity-list">
-
-                            <div class="activity-item">
-
-                                <div class="activity-dot"></div>
-
-                                <div>
-                                    <strong>Paciente salvo</strong>
-                                    <p>Há 5 minutos</p>
-                                </div>
-
-                            </div>
-
-                            <div class="activity-item">
-
-                                <div class="activity-dot"></div>
-
-                                <div>
-                                    <strong>Nova prescrição</strong>
-                                    <p>Há 12 minutos</p>
-                                </div>
-
-                            </div>
-
-                            <div class="activity-item">
-
-                                <div class="activity-dot"></div>
-
-                                <div>
-                                    <strong>PHQ-9 realizado</strong>
-                                    <p>Há 30 minutos</p>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-            <!-- CONSULTA -->
-
-            <section id="consulta" class="screen">
-
-                <div class="card">
-
-                    <div class="card-header">
-
-                        <h2>
-                            <i class="fas fa-stethoscope"></i>
-                            Nova Consulta
-                        </h2>
-
-                    </div>
-
-                    <div class="form-grid">
-
-                        <input
-                            id="nomePaciente"
-                            type="text"
-                            placeholder="Nome do paciente">
-
-                        <input
-                            type="text"
-                            placeholder="Idade">
-
-                        <input
-                            type="text"
-                            placeholder="Cidade">
-
-                        <input
-                            type="text"
-                            placeholder="CID">
-
-                    </div>
-
-                    <textarea
-                        class="medical-textarea"
-                        placeholder="Digite a evolução médica..."></textarea>
-
-                    <button
-                        class="primary-btn"
-                        onclick="salvarConsulta()">
-
-                        Salvar Consulta
-
-                    </button>
-
-                </div>
-
-            </section>
-
-            <!-- PRONTUARIO -->
-
-            <section id="prontuario" class="screen">
-
-                <div class="card">
-
-                    <div class="card-header">
-
-                        <h2>
-                            <i class="fas fa-folder-open"></i>
-                            Prontuário
-                        </h2>
-
-                    </div>
-
-                    <input
-                        id="buscarPaciente"
-                        type="text"
-                        class="search-input"
-                        placeholder="Buscar paciente..."
-                        onkeyup="buscarPaciente()">
-
-                    <div class="patient-list">
-
-                        <div class="patient-card">
-                            <strong>Maria Silva</strong>
-                            <p>TDM moderado</p>
-                        </div>
-
-                        <div class="patient-card">
-                            <strong>João Souza</strong>
-                            <p>TAG + Insônia</p>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-            <!-- PRESCRIÇÃO -->
-
-            <section id="prescricao" class="screen">
-
-                <div class="card">
-
-                    <div class="card-header">
-
-                        <h2>
-                            <i class="fas fa-prescription"></i>
-                            Prescrição
-                        </h2>
-
-                    </div>
-
-                    <textarea
-                        id="prescricaoTexto"
-                        class="medical-textarea"
-                        placeholder="Digite a prescrição médica..."></textarea>
-
-                    <button
-                        class="primary-btn"
-                        onclick="gerarReceita()">
-
-                        Gerar Receita
-
-                    </button>
-
-                </div>
-
-            </section>
-
-            <!-- ESCALAS -->
-
-            <section id="escalas" class="screen">
-
-                <div class="card">
-
-                    <div class="card-header">
-
-                        <h2>
-                            <i class="fas fa-chart-line"></i>
-                            Escalas Psiquiátricas
-                        </h2>
-
-                    </div>
-
-                    <div class="cards-grid">
-
-                        <div class="mini-card">
-                            PHQ-9
-                        </div>
-
-                        <div class="mini-card">
-                            GAD-7
-                        </div>
-
-                        <div class="mini-card">
-                            MDQ
-                        </div>
-
-                        <div class="mini-card">
-                            YMRS
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-            <!-- CONFIG -->
-
-            <section id="config" class="screen">
-
-                <div class="card">
-
-                    <div class="card-header">
-
-                        <h2>
-                            <i class="fas fa-cog"></i>
-                            Configurações
-                        </h2>
-
-                    </div>
-
-                    <div class="settings-list">
-
-                        <button class="secondary-btn">
-                            Exportar Backup
-                        </button>
-
-                        <button
-                            class="secondary-btn"
-                            onclick="alternarTema()">
-
-                            Tema Escuro
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-        </main>
+      <div>
+        <h2>Meu Professor</h2>
+        <small>Psiquiatria IA</small>
+      </div>
 
     </div>
 
-    <script src="app.js"></script>
+    <nav class="menu">
+
+      <button class="menu-item active" onclick="mudarTela('dashboard', this)">
+        <i class="fas fa-home"></i>
+        Dashboard
+      </button>
+
+      <button class="menu-item" onclick="mudarTela('consulta', this)">
+        <i class="fas fa-stethoscope"></i>
+        Consulta
+      </button>
+
+      <button class="menu-item" onclick="mudarTela('prontuario', this)">
+        <i class="fas fa-folder-open"></i>
+        Prontuário
+      </button>
+
+      <button class="menu-item" onclick="mudarTela('prescricao', this)">
+        <i class="fas fa-prescription"></i>
+        Prescrição
+      </button>
+
+      <button class="menu-item" onclick="mudarTela('escalas', this)">
+        <i class="fas fa-chart-line"></i>
+        Escalas
+      </button>
+
+      <button class="menu-item" onclick="mudarTela('config', this)">
+        <i class="fas fa-cog"></i>
+        Configurações
+      </button>
+
+    </nav>
+
+  </aside>
+
+  <!-- MAIN -->
+
+  <main class="main-content">
+
+    <!-- HEADER -->
+
+    <header class="topbar">
+
+      <div>
+
+        <h1>Dashboard Médico</h1>
+
+        <p class="subtitle">
+          Plataforma inteligente de apoio psiquiátrico
+        </p>
+
+      </div>
+
+      <div class="user-area">
+
+        <div class="notification">
+          <i class="fas fa-bell"></i>
+        </div>
+
+        <div class="doctor-profile">
+
+          <div class="doctor-avatar">
+            DM
+          </div>
+
+          <div>
+            <strong>Dr. Marcelo</strong>
+            <small>CRM-PR 47960</small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboard" class="screen active-screen">
+
+      <div class="cards-grid">
+
+        <div class="card stats-card">
+
+          <div class="card-icon blue">
+            <i class="fas fa-users"></i>
+          </div>
+
+          <div>
+            <h3>128</h3>
+            <p>Pacientes</p>
+          </div>
+
+        </div>
+
+        <div class="card stats-card">
+
+          <div class="card-icon green">
+            <i class="fas fa-notes-medical"></i>
+          </div>
+
+          <div>
+            <h3>54</h3>
+            <p>Consultas</p>
+          </div>
+
+        </div>
+
+        <div class="card stats-card">
+
+          <div class="card-icon orange">
+            <i class="fas fa-brain"></i>
+          </div>
+
+          <div>
+            <h3>23</h3>
+            <p>TDM</p>
+          </div>
+
+        </div>
+
+        <div class="card stats-card">
+
+          <div class="card-icon red">
+            <i class="fas fa-prescription-bottle-alt"></i>
+          </div>
+
+          <div>
+            <h3>76</h3>
+            <p>Prescrições</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="dashboard-grid">
+
+        <!-- IA -->
+
+        <div class="card large-card">
+
+          <div class="card-header">
+
+            <h2>
+              <i class="fas fa-robot"></i>
+              Assistente Psiquiátrico IA
+            </h2>
+
+          </div>
+
+          <textarea
+            id="anamneseIA"
+            class="medical-textarea"
+            placeholder="Digite a anamnese completa do paciente..."></textarea>
+
+          <div class="button-group">
+
+            <button class="primary-btn" onclick="analisarCaso()">
+              <i class="fas fa-brain"></i>
+              Analisar Caso
+            </button>
+
+            <button class="secondary-btn" onclick="limparIA()">
+              <i class="fas fa-trash"></i>
+              Limpar
+            </button>
+
+          </div>
+
+          <div id="resultadoIA" style="margin-top:25px;"></div>
+
+        </div>
+
+        <!-- ATIVIDADE -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <h2>
+              <i class="fas fa-clock"></i>
+              Atividade Recente
+            </h2>
+
+          </div>
+
+          <div class="activity-list">
+
+            <div class="activity-item">
+
+              <div class="activity-dot"></div>
+
+              <div>
+                <strong>Paciente salvo</strong>
+                <p>Há 5 minutos</p>
+              </div>
+
+            </div>
+
+            <div class="activity-item">
+
+              <div class="activity-dot"></div>
+
+              <div>
+                <strong>Nova prescrição</strong>
+                <p>Há 12 minutos</p>
+              </div>
+
+            </div>
+
+            <div class="activity-item">
+
+              <div class="activity-dot"></div>
+
+              <div>
+                <strong>PHQ-9 realizado</strong>
+                <p>Há 30 minutos</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- CONSULTA -->
+
+    <section id="consulta" class="screen">
+
+      <div class="card">
+
+        <div class="card-header">
+
+          <h2>
+            <i class="fas fa-stethoscope"></i>
+            Nova Consulta
+          </h2>
+
+        </div>
+
+        <div class="form-grid">
+
+          <input
+            id="nomePaciente"
+            type="text"
+            placeholder="Nome do paciente">
+
+          <input type="text" placeholder="Idade">
+
+          <input type="text" placeholder="Cidade">
+
+          <input type="text" placeholder="CID">
+
+        </div>
+
+        <textarea
+          class="medical-textarea"
+          placeholder="Digite a evolução médica..."></textarea>
+
+        <button
+          class="primary-btn"
+          onclick="salvarConsulta()">
+
+          Salvar Consulta
+
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- PRONTUARIO -->
+
+    <section id="prontuario" class="screen">
+
+      <div class="card">
+
+        <div class="card-header">
+
+          <h2>
+            <i class="fas fa-folder-open"></i>
+            Prontuário
+          </h2>
+
+        </div>
+
+        <input
+          id="buscarPaciente"
+          type="text"
+          class="search-input"
+          placeholder="Buscar paciente..."
+          onkeyup="buscarPaciente()">
+
+        <div class="patient-list">
+
+          <div class="patient-card">
+            <strong>Maria Silva</strong>
+            <p>TDM moderado</p>
+          </div>
+
+          <div class="patient-card">
+            <strong>João Souza</strong>
+            <p>TAG + Insônia</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PRESCRIÇÃO -->
+
+    <section id="prescricao" class="screen">
+
+      <div class="card">
+
+        <div class="card-header">
+
+          <h2>
+            <i class="fas fa-prescription"></i>
+            Prescrição
+          </h2>
+
+        </div>
+
+        <textarea
+          id="prescricaoTexto"
+          class="medical-textarea"
+          placeholder="Digite a prescrição médica..."></textarea>
+
+        <button
+          class="primary-btn"
+          onclick="gerarReceita()">
+
+          Gerar Receita
+
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- ESCALAS -->
+
+    <section id="escalas" class="screen">
+
+      <div class="card">
+
+        <div class="card-header">
+
+          <h2>
+            <i class="fas fa-chart-line"></i>
+            Escalas Psiquiátricas
+          </h2>
+
+        </div>
+
+        <div class="cards-grid">
+
+          <div class="mini-card">PHQ-9</div>
+
+          <div class="mini-card">GAD-7</div>
+
+          <div class="mini-card">MDQ</div>
+
+          <div class="mini-card">YMRS</div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- CONFIG -->
+
+    <section id="config" class="screen">
+
+      <div class="card">
+
+        <div class="card-header">
+
+          <h2>
+            <i class="fas fa-cog"></i>
+            Configurações
+          </h2>
+
+        </div>
+
+        <div class="settings-list">
+
+          <button class="secondary-btn">
+            Exportar Backup
+          </button>
+
+          <button
+            class="secondary-btn"
+            onclick="alternarTema()">
+
+            Tema Escuro
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script src="app.js"></script>
 
 </body>
-
 </html>
-```
