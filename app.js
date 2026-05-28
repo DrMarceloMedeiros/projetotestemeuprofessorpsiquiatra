@@ -4,13 +4,13 @@
 
 function mudarTela(id, elemento){
 
-  // REMOVE TELAS
+  // REMOVE TODAS
   document.querySelectorAll('.screen')
     .forEach(screen => {
       screen.classList.remove('active-screen');
     });
 
-  // ABRE TELA
+  // ABRE A TELA
   const tela = document.getElementById(id);
 
   if(tela){
@@ -23,7 +23,7 @@ function mudarTela(id, elemento){
       btn.classList.remove('active');
     });
 
-  // ATIVA MENU CLICADO
+  // ATIVA MENU
   if(elemento){
     elemento.classList.add('active');
   }
@@ -31,7 +31,7 @@ function mudarTela(id, elemento){
 }
 
 /* =========================
-   IA
+   ASSISTENTE IA
 ========================= */
 
 function analisarCaso(){
@@ -45,24 +45,31 @@ function analisarCaso(){
   if(!texto || texto.length < 10){
 
     resultado.innerHTML = `
+
       <div class="result-box orange-box">
+
         <h3>⚠️ Atenção</h3>
-        <p>Digite uma anamnese mais detalhada.</p>
+
+        <p>
+          Digite uma anamnese mais detalhada.
+        </p>
+
       </div>
+
     `;
 
     return;
   }
 
   resultado.innerHTML = `
-  
+
     <div class="result-box blue-box">
 
       <h3>🧠 Hipótese Diagnóstica</h3>
 
       <p>
         Transtorno de Ansiedade Generalizada
-        com sintomas depressivos associados.
+        associado a sintomas depressivos.
       </p>
 
     </div>
@@ -73,7 +80,7 @@ function analisarCaso(){
 
       <ul>
         <li>Escitalopram 10mg/dia</li>
-        <li>Psicoterapia</li>
+        <li>Psicoterapia TCC</li>
         <li>Higiene do sono</li>
       </ul>
 
@@ -85,8 +92,21 @@ function analisarCaso(){
 
       <ul>
         <li>Ideação suicida?</li>
-        <li>Histórico bipolar?</li>
         <li>Uso de substâncias?</li>
+        <li>Histórico bipolar?</li>
+      </ul>
+
+    </div>
+
+    <div class="result-box blue-box">
+
+      <h3>📋 Exames Interessantes</h3>
+
+      <ul>
+        <li>TSH</li>
+        <li>T4 Livre</li>
+        <li>Vitamina B12</li>
+        <li>Vitamina D</li>
       </ul>
 
     </div>
@@ -96,7 +116,7 @@ function analisarCaso(){
 }
 
 /* =========================
-   LIMPAR
+   LIMPAR IA
 ========================= */
 
 function limparIA(){
@@ -108,7 +128,7 @@ function limparIA(){
 }
 
 /* =========================
-   CONSULTA
+   SALVAR CONSULTA
 ========================= */
 
 function salvarConsulta(){
@@ -121,7 +141,6 @@ function salvarConsulta(){
     alert('Digite o nome do paciente');
 
     return;
-
   }
 
   alert('Consulta salva com sucesso!');
@@ -129,7 +148,7 @@ function salvarConsulta(){
 }
 
 /* =========================
-   BUSCA
+   BUSCAR PACIENTE
 ========================= */
 
 function buscarPaciente(){
@@ -160,20 +179,20 @@ function buscarPaciente(){
 }
 
 /* =========================
-   RECEITA
+   GERAR RECEITA
 ========================= */
 
 function gerarReceita(){
 
   const texto =
-    document.getElementById('prescricaoTexto').value;
+    document.getElementById('prescricaoTexto')
+      .value;
 
   if(!texto){
 
     alert('Digite uma prescrição');
 
     return;
-
   }
 
   alert('Receita gerada com sucesso!');
@@ -181,7 +200,7 @@ function gerarReceita(){
 }
 
 /* =========================
-   TEMA
+   TEMA ESCURO
 ========================= */
 
 function alternarTema(){
@@ -189,3 +208,13 @@ function alternarTema(){
   document.body.classList.toggle('dark-mode');
 
 }
+
+/* =========================
+   INICIALIZAÇÃO
+========================= */
+
+window.onload = function(){
+
+  console.log('Sistema iniciado com sucesso');
+
+};
