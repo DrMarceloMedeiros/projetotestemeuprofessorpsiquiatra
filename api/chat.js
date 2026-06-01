@@ -233,7 +233,6 @@ A linguagem deve ser:
 - semelhante a supervisão de residência médica
 
 Nunca responder de forma superficial.
-`
             },
 
             {
