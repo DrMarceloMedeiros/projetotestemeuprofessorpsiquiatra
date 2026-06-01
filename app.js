@@ -169,10 +169,6 @@ function salvarConsulta(){
 
 }
 
-  alert('Consulta salva com sucesso!');
-
-}
-
 /* =========================
    BUSCAR PACIENTE
 ========================= */
