@@ -3,32 +3,29 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdG51YmhheW5vaWFjZ2ppeHd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNzk3NjgsImV4cCI6MjA5NTg1NTc2OH0.SeUbjmkshCUi8XqMcoCqAOaoKzXDcYRaTtZjzTw1_yM';
+
 /* =========================
    TROCA DE TELAS
 ========================= */
 
 function mudarTela(id, botao){
 
-  // REMOVE TELAS
   document.querySelectorAll('.screen')
     .forEach(screen => {
       screen.classList.remove('active-screen');
     });
 
-  // ABRE TELA
   const tela = document.getElementById(id);
 
   if(tela){
     tela.classList.add('active-screen');
   }
 
-  // REMOVE MENU ATIVO
   document.querySelectorAll('.menu-item')
     .forEach(item => {
       item.classList.remove('active');
     });
 
-  // ATIVA MENU
   if(botao){
     botao.classList.add('active');
   }
@@ -58,7 +55,85 @@ function fecharModalIA(){
 }
 
 /* =========================
-   ANALISAR CASO
+   ANALISAR CASO IA
+========================= */
+
+async function analisarCaso() {
+
+  const texto =
+    document.getElementById('anamneseIA').value;
+
+  const resultado =
+    document.getElementById('resultadoIA');
+
+  if (!texto || texto.length < 10) {
+
+    resultado.innerHTML = `
+      <div class="alert-box">
+        ⚠️ Digite uma anamnese mais detalhada.
+      </div>
+    `;
+
+    return;
+  }
+
+  resultado.innerHTML = `
+    <div class="ia-loading">
+      <div class="loader"></div>
+      <p>Analisando caso clínico...</p>
+    </div>
+  `;
+
+  try {
+
+    const resposta = await fetch('/api/chat', {
+
+      method: 'POST',
+
+      headers: {
+        'Content-Type': 'application/json'
+      },
+
+      body: JSON.stringify({
+        mensagem: texto
+      })
+
+    });
+
+    const dados = await resposta.json();
+
+    resultado.innerHTML = `
+      <div class="ia-box">
+        ${dados.resposta.replace(/\n/g,'<br>')}
+      </div>
+    `;
+
+  } catch (erro) {
+
+    console.error(erro);
+
+    resultado.innerHTML = `
+      <div class="alert-box">
+        ❌ Erro ao conectar IA.
+      </div>
+    `;
+
+  }
+
+}
+
+/* =========================
+   LIMPAR IA
+========================= */
+
+function limparIA(){
+
+  document.getElementById('anamneseIA').value = '';
+
+}
+
+/* =========================
+   SALVAR CONSULTA
 ========================= */
 
 async function salvarConsulta(){
@@ -93,10 +168,10 @@ async function salvarConsulta(){
       {
         method: 'POST',
         headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
           'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
+          Prefer: 'return=representation'
         },
         body: JSON.stringify({
           nome,
@@ -110,11 +185,21 @@ async function salvarConsulta(){
 
     if(!resposta.ok){
 
-      throw new Error('Erro ao salvar');
+      const erro = await resposta.text();
+
+      console.error(erro);
+
+      throw new Error();
 
     }
 
     alert('Paciente salvo com sucesso!');
+
+    document.getElementById('nomePaciente').value = '';
+    document.getElementById('idadePaciente').value = '';
+    document.getElementById('cidadePaciente').value = '';
+    document.getElementById('cidPaciente').value = '';
+    document.getElementById('evolucaoPaciente').value = '';
 
   }catch(erro){
 
@@ -123,57 +208,6 @@ async function salvarConsulta(){
     alert('Erro ao salvar paciente.');
 
   }
-
-}
-
-/* =========================
-   LIMPAR IA
-========================= */
-
-function limparIA(){
-
-  document.getElementById('anamneseIA').value = '';
-
-}
-
-/* =========================
-   CONSULTA
-========================= */
-
-function salvarConsulta(){
-
-  const nome =
-    document.getElementById('nomePaciente').value;
-
-  const idade =
-    document.getElementById('idadePaciente').value;
-
-  const cidade =
-    document.getElementById('cidadePaciente').value;
-
-  const cid =
-    document.getElementById('cidPaciente').value;
-
-  const evolucao =
-    document.getElementById('evolucaoPaciente').value;
-
-  if(!nome){
-
-    alert('Digite o nome do paciente.');
-
-    return;
-
-  }
-
-  console.log({
-    nome,
-    idade,
-    cidade,
-    cid,
-    evolucao
-  });
-
-  alert('Consulta capturada com sucesso!');
 
 }
 
@@ -222,6 +256,7 @@ function gerarReceita(){
     alert('Digite uma prescrição.');
 
     return;
+
   }
 
   alert('Receita gerada com sucesso!');
