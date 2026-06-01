@@ -1,3 +1,8 @@
+const SUPABASE_URL =
+'https://cftnubhaynoiacgjixwy.supabase.co';
+
+const SUPABASE_KEY =
+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdG51YmhheW5vaWFjZ2ppeHd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNzk3NjgsImV4cCI6MjA5NTg1NTc2OH0.SeUbjmkshCUi8XqMcoCqAOaoKzXDcYRaTtZjzTw1_yM';
 /* =========================
    TROCA DE TELAS
 ========================= */
