@@ -137,12 +137,37 @@ function salvarConsulta(){
   const nome =
     document.getElementById('nomePaciente').value;
 
+  const idade =
+    document.getElementById('idadePaciente').value;
+
+  const cidade =
+    document.getElementById('cidadePaciente').value;
+
+  const cid =
+    document.getElementById('cidPaciente').value;
+
+  const evolucao =
+    document.getElementById('evolucaoPaciente').value;
+
   if(!nome){
 
     alert('Digite o nome do paciente.');
 
     return;
+
   }
+
+  console.log({
+    nome,
+    idade,
+    cidade,
+    cid,
+    evolucao
+  });
+
+  alert('Consulta capturada com sucesso!');
+
+}
 
   alert('Consulta salva com sucesso!');
 
