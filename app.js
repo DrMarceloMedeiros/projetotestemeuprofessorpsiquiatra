@@ -61,63 +61,66 @@ function fecharModalIA(){
    ANALISAR CASO
 ========================= */
 
-async function analisarCaso() {
+async function salvarConsulta(){
 
-  const texto =
-    document.getElementById('anamneseIA').value;
+  const nome =
+    document.getElementById('nomePaciente').value;
 
-  const resultado =
-    document.getElementById('resultadoIA');
+  const idade =
+    document.getElementById('idadePaciente').value;
 
-  if (!texto || texto.length < 10) {
+  const cidade =
+    document.getElementById('cidadePaciente').value;
 
-    resultado.innerHTML = `
-      <div class="alert-box">
-        ⚠️ Digite uma anamnese mais detalhada.
-      </div>
-    `;
+  const cid =
+    document.getElementById('cidPaciente').value;
+
+  const evolucao =
+    document.getElementById('evolucaoPaciente').value;
+
+  if(!nome){
+
+    alert('Digite o nome do paciente.');
 
     return;
+
   }
 
-  resultado.innerHTML = `
-    <div class="ia-loading">
-      <div class="loader"></div>
-      <p>Analisando caso clínico...</p>
-    </div>
-  `;
+  try{
 
-  try {
+    const resposta = await fetch(
+      `${SUPABASE_URL}/rest/v1/pacientes`,
+      {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          nome,
+          idade,
+          cidade,
+          cid,
+          evolucao
+        })
+      }
+    );
 
-    const resposta = await fetch('/api/chat', {
+    if(!resposta.ok){
 
-      method: 'POST',
+      throw new Error('Erro ao salvar');
 
-      headers: {
-        'Content-Type': 'application/json'
-      },
+    }
 
-      body: JSON.stringify({
-        mensagem: texto
-      })
+    alert('Paciente salvo com sucesso!');
 
-    });
+  }catch(erro){
 
-    const dados = await resposta.json();
+    console.error(erro);
 
-    resultado.innerHTML = `
-      <div class="ia-box">
-        ${dados.resposta.replace(/\n/g, '<br>')}
-      </div>
-    `;
-
-  } catch (erro) {
-
-    resultado.innerHTML = `
-      <div class="alert-box">
-        ❌ Erro ao conectar IA.
-      </div>
-    `;
+    alert('Erro ao salvar paciente.');
 
   }
 
